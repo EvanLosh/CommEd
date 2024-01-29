@@ -5,8 +5,7 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 2. User stories
    * User can post a math problem with an answer, a solution, and references.
-   * User can create diagrams to include in their posts.
-   * Post bodies can include styled equations and custom graphics.
+   * Post bodies can include markdown, styled equations, and links to graphics
    * User can edit their posts.
    * User can view other users' posts.
    * User can search for posts by substrings.
@@ -20,12 +19,16 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 6. A SCREENSHOT of your schema (includes relationships, columns, validations)
 
+<img width="830" alt="CommEd database schema" src="https://github.com/EvanLosh/CommEd/assets/134793412/ef0c5e95-34f3-44d1-8cd8-9f5d3077b2a2">
+
 7. A list of your API routes (HTTP Verb, Endpoint, Purpose, Response Structure)
 
 8. What new technologies you will use (Redux and useContext will count)
    * MathJax
-   * Vector.js
 
 9. Three stretch goals
+    * User can like posts and can see how many likes each post has.
+    * User can preview their post before submitting it
+    * User can make custom graphics (relevant to math problems) for their post
 
-10. A Kanban board
+11. A Kanban board
