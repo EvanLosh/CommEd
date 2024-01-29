@@ -3,6 +3,13 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 1. A SCREENSHOT of your wireframe
 
+<img width="848" alt="Phase-5-home" src="https://github.com/EvanLosh/CommEd/assets/134793412/7f27938a-543e-4a08-853c-d986c8c9736a">
+
+<img width="851" alt="Phase-5-new-post" src="https://github.com/EvanLosh/CommEd/assets/134793412/3e6c0e5b-b778-4933-96fe-a594bf76b91e">
+
+<img width="846" alt="Phase-5-view-post" src="https://github.com/EvanLosh/CommEd/assets/134793412/f613c0c4-7089-476a-b80d-e32332bafb62">
+
+
 2. User stories
    * User can post a math problem with an answer, a solution, and references.
    * Post bodies can include markdown, styled equations, and links to graphics
@@ -13,9 +20,9 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
    * User can reply to comments.
    * User can save playlists of posts.
 
-4. A SCREENSHOT of a React tree diagram
+3. A SCREENSHOT of a React tree diagram
 
-5. A list of your React Router ROUTES and the component it will go to
+4. A list of your React Router ROUTES and the component it will go to
 
 | React routes | component |
 |--- | --- |
