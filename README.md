@@ -17,11 +17,28 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 5. A list of your React Router ROUTES and the component it will go to
 
+| React routes | component |
+|--- | --- |
+| / | <Home /> |
+| /about | <About /> |
+
 6. A SCREENSHOT of your schema (includes relationships, columns, validations)
 
 <img width="830" alt="CommEd database schema" src="https://github.com/EvanLosh/CommEd/assets/134793412/ef0c5e95-34f3-44d1-8cd8-9f5d3077b2a2">
 
 7. A list of your API routes (HTTP Verb, Endpoint, Purpose, Response Structure)
+
+| Verb | Endpoint | Purpose | Response structure |
+| --- | --- | --- | --- |
+| GET| /users | | |
+| POST| /users| | |
+|GET|/posts/|||
+|GET|/posts/<int:id>|||
+|POST|/posts|||
+|PATCH|/posts/<int:id>|||
+|DELETE|/posts/<int:id>|||
+||/comments|||
+||/playlists|||
 
 8. What new technologies you will use (Redux and useContext will count)
    * MathJax
