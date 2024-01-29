@@ -30,7 +30,20 @@ class UsersResource(Resource):
     
     def post(self):
         form_data = request.get_json()
-        new_user = User(**form_data)
+        new_user = User(username=form_data['username'], email=form_data['email'], datetime_created=datetime.now())
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user, 201
+    
+class SignInResource(Resource):
+    # def get(self):
+    #     users = [u.to_dict() for u in User.query.all()]
+    #     print(users)
+    #     return users, 200
+    
+    def post(self):
+        form_data = request.get_json()
+        new_user = User(username=form_data['username'], email=form_data['email'], datetime_created=datetime.now())
         db.session.add(new_user)
         db.session.commit()
         return new_user, 201
@@ -38,17 +51,31 @@ class UsersResource(Resource):
 class PostsResource(Resource):
     def get(self):
         posts = [p.to_dict() for p in Post.query.all()]
-        return posts, 200   
+        return posts, 200  
 
 class PostResource(Resource):
     def get(self, id):
-        post = Post.query.filter_by(id = id).first().to_dict()
-        return post, 200    
+        post = Post.query.filter_by(id=id).first().to_dict()
+        return post, 200   
+
+class PlaylistResource(Resource):
+    def get(self):
+        playlists = [p.to_dict() for p in Playlist.query.all()]
+        return playlists, 200
+
+
+# class PostResource(Resource):
+#     def get(self, id):
+#         post = Post.query.filter_by(id = id).first().to_dict()
+#         return post, 200    
     
 
 api.add_resource(UsersResource, '/users')
 api.add_resource(PostsResource, '/posts')
 api.add_resource(PostResource, '/posts/<int:id>')
+api.add_resource(PlaylistResource, '/playlists')
+# api.add_resource(PostResource, '/posts/<int:id>')
+# api.add_resource(SignInResource, '/signin')
 
 
 if __name__ == "__main__":

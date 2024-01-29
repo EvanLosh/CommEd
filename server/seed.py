@@ -15,11 +15,13 @@ fake = Faker()
 
 # Function to generate fake users
 def generate_fake_user():
+    username=fake.name()
+    if len(username) > 20:
+        username = username[0:20]
     return User(
-        username=fake.name(),
+        username=username,
         email=fake.email(),
         datetime_created=datetime.now()
-        # Add other user-related fields as needed
     )
 
 def generate_fake_tag():
@@ -47,30 +49,37 @@ def generate_fake_playlist():
         datetime_created=datetime.now()
     )
 
-def generate_fake_comment():
-    post_id = random.choice(Post.query.all()).id, # if there are no posts, throws an error
-    parent_comment_id = -1
-    same_post_comments = Comment.query.filter_by(post_id = post_id).all()
-    if len(same_post_comments) > 0:
-        parent_comment_id = random.choice(same_post_comments).id
+def generate_fake_root_comment():
     return Comment(
         owner_id = random.choice(User.query.all()).id,
         body = fake.text(70),
-        post_id = post_id, 
-        parent_comment_id = random.choice([-1, parent_comment_id]), # -1 is for root level comments (no parent)
+        post_id = random.choice(Post.query.all()).id, # if there are no posts, throws an error
+        datetime_created = datetime.now()
+        )
+
+def generate_fake_child_comment():
+    return Comment(
+        owner_id = random.choice(User.query.all()).id,
+        body = fake.text(70),
+        parent_id = random.choice(Comment.query.all()).id, # if there are no posts, throws an error
         datetime_created = datetime.now()
         )
 
 def generate_fake_post_tag():
     # avoid duplicates
     is_duplicate = True
-    while is_duplicate:
-        post_tag = PostTag(
-            post_id = random.choice(Post.query.all()).id,
-            tag_id = random.choice(Tag.query.all()).id,
-            )
-        if PostTag.query.filter_by(post_id = post_tag.post_id, tag_id = post_tag.tag_id).first():
+    while is_duplicate:    
+        tag_id = random.choice(Tag.query.all()).id
+        post_id = random.choice(Post.query.all()).id
+        if not PostTag.query.filter_by(
+            post_id = post_id, 
+            tag_id = tag_id
+            ).first():
             is_duplicate = False
+            post_tag = PostTag(
+                tag_id = tag_id,
+                post_id = post_id
+                )
     return post_tag
 
 
@@ -78,12 +87,14 @@ def generate_fake_playlist_post():
     # avoid duplicates
     is_duplicate = True
     while is_duplicate:    
-        playlist_post = PlaylistPost(
-            playlist_id = random.choice(Playlist.query.all()).id,
-            post_id = random.choice(Post.query.all()).id,
-            )
-        if PlaylistPost.query.filter_by(post_id = playlist_post.post_id, playlist_id = playlist_post.playlist_id).first():
+        playlist_id = random.choice(Playlist.query.all()).id
+        post_id = random.choice(Post.query.all()).id
+        if not PlaylistPost.query.filter_by(post_id = post_id, playlist_id = playlist_id).first():
             is_duplicate = False
+            playlist_post = PlaylistPost(
+                playlist_id = playlist_id,
+                post_id = post_id
+                )
     return playlist_post
 
 
@@ -96,28 +107,35 @@ def seed_database():
         db.session.commit()
 
         # generate new users
-        for i in range(5):
+        for i in range(3):
             user = generate_fake_user()
             db.session.add(user)
+        db.session.add(User(username='dev', email='dev', datetime_created=datetime.now()))
         db.session.commit()
 
         # generate new posts
-        for i in range(10):
+        for i in range(5):
             post = generate_fake_post()
             db.session.add(post)
         db.session.commit()
 
         # generate new tags
-        for i in range(12):
+        for i in range(8):
             tag = generate_fake_tag()
             db.session.add(tag)
         db.session.commit()
 
-        # generate new comments
-        for i in range(40):
-            comment = generate_fake_comment()
+        # generate new root comments
+        for i in range(7):
+            comment = generate_fake_root_comment()
             db.session.add(comment)
-            # commit comments one at a time to generate replies to comments
+        db.session.commit()
+
+        # generate new child comments
+        for i in range(25):
+            comment = generate_fake_child_comment()
+            db.session.add(comment)
+            # commit comments one at a time to reply to replies
             db.session.commit()
         
         #generate new playlists
@@ -135,7 +153,7 @@ def seed_database():
 
         # add posts to playlists
         for i in range(20):
-            playlist_post = generate_fake_post_tag()
+            playlist_post = generate_fake_playlist_post()
             db.session.add(playlist_post)
             # commit one at a time to avoid making duplicates
             db.session.commit()
