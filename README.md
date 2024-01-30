@@ -22,8 +22,6 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 3. A SCREENSHOT of a React tree diagram
 
-<img width="790" alt="Phase-5-React-Tree" src="https://github.com/EvanLosh/CommEd/assets/134793412/2c6fb4f6-c9c4-4d5d-a4e6-ecab6a361083">
-
 
 4. A list of your React Router ROUTES and the component it will go to
 
@@ -34,6 +32,7 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 | /new-post | CreateAndEdit.js |
 | /view-post/:id | ViewPost.js |
 | /sign-in | SignUpOrSignIn.js |
+| /playlist/:id | Playlist.js |
 
 6. A SCREENSHOT of your schema (includes relationships, columns, validations)
 
@@ -43,15 +42,22 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 | Verb | Endpoint | Purpose | Response structure |
 | --- | --- | --- | --- |
-| GET| /users | | |
-| POST| /users| | |
-|GET|/posts/|||
-|GET|/posts/<int:id>|||
-|POST|/posts|||
-|PATCH|/posts/<int:id>|||
-|DELETE|/posts/<int:id>|||
-||/comments|||
-||/playlists|||
+| GET| /users | Get all usernames and ids | |
+| POST| /users| Create a new user account | |
+| GET| /users/int:id | Get a username | |
+| GET| /posts | Get all posts for front end post cards ||
+| GET| /posts/<int:id> | Get a post by its id ||
+| POST| /posts | Submit a new post ||
+| PATCH| /posts/<int:id> | Edit a post ||
+| DELETE| /posts/<int:id> | Delete a post ||
+| GET| /posts/int:id/comments | Get the comments on a post ||
+| POST| /post/int:id/comments | Submit a comment to a post||
+| PATCH | /posts/int:id/comments/int:id | Edit a comment ||
+| DELETE | /post/int:id/comments/int:id | Delete at comment ||
+| GET | /playlists | Get a list of playlists matching search and filter options ||
+| POST | /playlists | Create a new playlist ||
+| PATCH | /playlists/int:id | Alter a playlist ||
+| DELETE | /playlists/int:id | Delete a playlist ||
 
 8. What new technologies you will use (Redux and useContext will count)
    * MathJax
@@ -59,6 +65,6 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 9. Three stretch goals
     * User can like posts and can see how many likes each post has.
     * User can preview their post before submitting it
-    * User can make custom graphics (relevant to math problems) for their post
+    * User can make custom graphics (relevant to math problems) to include in their post
 
 11. A Kanban board
