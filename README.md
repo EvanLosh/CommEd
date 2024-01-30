@@ -29,8 +29,11 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 | React routes | component |
 |--- | --- |
-| / | <Home /> |
-| /about | <About /> |
+| / | Home.js |
+| /about | About.js |
+| /new-post | CreateAndEdit.js |
+| /view-post/:id | ViewPost.js |
+| /sign-in | SignUpOrSignIn.js |
 
 6. A SCREENSHOT of your schema (includes relationships, columns, validations)
 
