@@ -72,3 +72,6 @@ Write your own math problems and solutions with MathJax, share them with the wor
     * User can make custom graphics (relevant to math problems) and include them in their post.
 
 11. A Kanban board
+
+<img width="632" alt="Phase-5-kanban-board" src="https://github.com/EvanLosh/CommEd/assets/134793412/0719b7f0-644d-45bc-b90e-d84efbd5e771">
+
