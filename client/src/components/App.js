@@ -12,13 +12,43 @@ import CreateAndEdit from "./CreateAndEdit";
 
 
 const serverURL = "http://127.0.0.1:5000";
-const webpageURL = "http://127.0.0.1:3000/"
+const websiteURL = "http://127.0.0.1:3000/"
 const blankUser = {
   id: -1,
   username: '',
   email: '',
   datetimeCreated: ''
 }
+const blankComment = {
+  body: '',
+  owner: { username: '', id: -1 },
+  datetime_created: '',
+  datetime_last_edited: '',
+  children: [{}]
+}
+const blankPost = {
+  title: '',
+  id: -1,
+  datetime_created: '',
+  datetime_last_edited: '',
+  owner: { username: '', id: -1 },
+  problem_body: '',
+  answer_body: '',
+  solution_body: '',
+  references: '',
+  tags: [{ text: '', id: -1 }],
+  comments: [blankComment],
+  status: ''
+}
+const blankPlaylist = [{
+  title: '',
+  owner_id: -1,
+  owner: { username: '', id: -1 },
+  datetime_created: '',
+  datetime_last_edited: '',
+  posts: [blankPost],
+  status: ''
+}]
 
 function App() {
   const [users, setUsers] = useState([blankUser])
@@ -41,7 +71,6 @@ function App() {
     fetch(serverURL + '/users', { method: 'GET' })
       .then(r => r.json())
       .then((r) => {
-        console.log(r)
         if (r) {
           setUsers(r)
         }
@@ -53,10 +82,10 @@ function App() {
   function handleUserChange(id) {
     id = parseInt(id)
     const u = users.filter(u => u.id === id)[0]
-    console.log(u)
+    // console.log(u)
     if (u.id > 0) {
       setLoginSession({ user: u, loggedIn: true })
-      window.location.href = webpageURL
+      window.location.href = websiteURL
     }
   }
 
@@ -64,10 +93,35 @@ function App() {
     return <p key={`${u.id}`}>{u.username}</p>
   })
 
+  function renderDatetimeAndAuthor(x = { owner: { username: '' }, datetime_created: '' }) {
+    let edited = ''
+    const created = x.datetime_created
+    const name = 'x.owner.username cannot read properties of undefined. reading: username.'
+    if (x.datetime_last_edited) {
+      edited = 'Edited on ' + x.datetime_last_edited + ' | Published on '
+    }
+    return <div className="comment">
+      <p>{edited + created} | {name}</p>
+    </div>
+  }
+
+
+
+  const commonProps = {
+    serverURL: serverURL,
+    websiteURL: websiteURL,
+    blankUser: blankUser,
+    blankComment: blankComment,
+    blankPost: blankPost,
+    blankPlaylist: blankPlaylist,
+    loginSession: loginSession,
+    renderDatetimeAndAuthor: renderDatetimeAndAuthor,
+  }
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home loginSession={loginSession} users={users} serverURL={serverURL} usersList={usersList} />,
+      element: <Home users={users} usersList={usersList} commonProps={commonProps} />,
       children: [],
     },
     {
@@ -75,27 +129,31 @@ function App() {
       element: <About />
     },
     {
-      path: '/create-and-edit',
-      element: <CreateAndEdit serverURL={serverURL} />
+      path: '/create',
+      element: <CreateAndEdit commonProps={commonProps} />
+    },
+    {
+      path: '/edit/:post_id',
+      element: <CreateAndEdit commonProps={commonProps} />
     },
     {
       path: '/view-post/:post_id',
-      element: <ViewPost serverURL={serverURL} />
+      element: <ViewPost commonProps={commonProps} />
     },
     {
       path: '/view-playlist/:id',
-      element: <ViewPlaylist serverURL={serverURL} />
+      element: <ViewPlaylist commonProps={commonProps} />
     },
     {
       path: "/sign-in-or-sign-up",
-      element: <SignInOrSignUp users={users} handleUserChange={handleUserChange} serverURL={serverURL} loginSession={loginSession} login={login} logout={logout} addUser={addUser} webpageURL={webpageURL} />,
+      element: <SignInOrSignUp users={users} handleUserChange={handleUserChange} login={login} logout={logout} addUser={addUser} commonProps={commonProps} />,
     },
   ]);
 
 
   return (
     <div id="app">
-      <Header users={users} loginSession={loginSession} />
+      <Header users={users} commonProps={commonProps} />
       <RouterProvider router={router} />
       <Footer />
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 
-function SignInOrSignUp({ addUser, serverURL, loginSession, login, logout, handleUserChange, users }) {
+function SignInOrSignUp({ addUser, commonProps, login, logout, handleUserChange, users }) {
 
     const handleSelectChange = (event) => {
         console.log(`Signing in user ID = ${event.target.value}`)
@@ -25,7 +25,7 @@ function SignInOrSignUp({ addUser, serverURL, loginSession, login, logout, handl
         },
         onSubmit: values => {
             console.log(`Logging in: ${values}`)
-            fetch(`${serverURL}/users`, {
+            fetch(`${commonProps.serverURL}/users`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ function SignInOrSignUp({ addUser, serverURL, loginSession, login, logout, handl
         },
         onSubmit: values => {
             console.log(`Creating new user: ${values}`)
-            fetch(`${serverURL}/users`, {
+            fetch(`${commonProps.serverURL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ function SignInOrSignUp({ addUser, serverURL, loginSession, login, logout, handl
         </form>
     </div >
 
-    const loginForm = loginSession.loggedIn ? logoutForm : signInForm
+    const loginForm = commonProps.loginSession.loggedIn ? logoutForm : signInForm
 
     const signUpForm = <div>
         <p>Sign up</p>

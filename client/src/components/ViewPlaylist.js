@@ -2,7 +2,7 @@ import React from "react";
 
 
 
-function ViewPlaylist() {
+function ViewPlaylist({ commonProps }) {
     return <div id="view-playlist">
     </div>;
 }

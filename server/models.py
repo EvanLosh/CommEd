@@ -23,11 +23,7 @@ class User(db.Model, SerializerMixin):
         '-posts.solution_body',
         '-posts.references',
         '-posts.playlist_posts', 
-        '-comments',
-        # '-comments.owner', 
-        # '-comments.post', 
-        # '-comments.parent', 
-        # '-comments.children', 
+        '-comments', 
         '-playlists.owner', 
         '-playlists.playlist_posts',
         '-playlists.owner_id',
@@ -57,9 +53,11 @@ class Post(db.Model, SerializerMixin):
     references  = db.Column(db.String(10000))
     datetime_created = db.Column(db.DateTime, nullable=False)
     datetime_last_edited = db.Column(db.DateTime)
+    status = (db.Column(db.String(100))) # draft / published / hidden
 
     owner = db.relationship('User', backref="posts")
-    post_tags = db.relationship('PostTag', backref="post")
+
+    tags = db.relationship('Tag', secondary='post_tags', back_populates="posts")
     serialize_rules = (
         '-owner.posts',
         '-owner.playlists',
@@ -67,21 +65,17 @@ class Post(db.Model, SerializerMixin):
         '-owner_id',
         '-owner.datetime_created',
         '-owner.email',
-        '-playlist_posts.playlist', 
-        '-playlist_posts.post', 
+        '-tags.posts',
+        '-tags.datetime_created',
+        '-playlists',
         '-comments.post',
+        '-comments.parent_id',
         '-comments.owner_id',
         '-comments.owner.id',
         '-comments.owner.email',
         '-comments.owner.datetime_created',
-        '-comments.parent',
-        # '-comments.children', 
+        '-comments.parent', 
         '-comments.post_id',
-        '-post_tags.post',
-        '-post_tags.post_id',
-        '-post_tags.id',
-        '-post_tags.tag.datetime_created',
-        '-post_tags.tag_id',
         )
 
     def __repr__(self):
@@ -98,6 +92,7 @@ class Comment(db.Model, SerializerMixin):
     parent_id = db.Column(db.Integer,  db.ForeignKey('comments.id'))
     datetime_created = db.Column(db.DateTime, nullable=False)
     datetime_last_edited = db.Column(db.DateTime)
+    status = (db.Column(db.String(100))) # draft / published / hidden
 
     owner = db.relationship('User', backref='comments')
     post = db.relationship('Post', backref='comments')
@@ -108,16 +103,14 @@ class Comment(db.Model, SerializerMixin):
         '-owner.comments',
         '-owner.posts',
         '-owner.playlists',
-        '-owner.id',
         '-owner.datetime_created',
         '-owner.email',
-        '-post',
-        # '-post.owner' 
-        # '-post.comments',
-        # '-post.playlist_posts',
-        # '-post.post_tags', 
-        '-parent.children', 
-        '-children.parent')
+        '-post', 
+        '-children.parent',
+        '-children.parent_id',
+        '-children.owner_id',
+        '-children.post_id',
+        '-parent')
 
 
 
@@ -132,9 +125,12 @@ class Tag(db.Model, SerializerMixin):
     text = db.Column(db.String(40))
     datetime_created = db.Column(db.DateTime, nullable=False)
 
-    post_tags = db.relationship('PostTag', backref='tag')
 
-    serialize_rules = ('-posts_tags.tag',)
+    posts = db.relationship('Post', secondary='post_tags', back_populates='tags')
+
+
+
+    serialize_rules = ('-posts.tags',)
 
 
     def __repr__(self):
@@ -148,59 +144,75 @@ class Playlist(db.Model, SerializerMixin):
     title = db.Column(db.String(150))
     datetime_created = db.Column(db.DateTime, nullable=False)
     datetime_last_edited = db.Column(db.DateTime)
+    status = (db.Column(db.String(100))) # draft / published / hidden
 
     owner = db.relationship('User', backref='playlists')
-    # posts = db.relationship('Post', backref='playlists')
-    playlist_posts = db.relationship('PlaylistPost', backref="playlist")
+
+    posts = db.relationship('Post', secondary='playlist_posts', backref="playlists")
     serialize_rules = (
         '-owner.playlists', 
         '-owner.comments',
         '-owner.posts',
-        '-owner.id',
         '-owner.datetime_created',
+        '-owner_id',
         '-owner.email',
-        '-playlist_posts.playlist',
-        '-playlist_posts.playlist_id',
-        '-playlist_posts.id',
-        # '-playlist_posts.post'
+        '-posts.id',
+        '-posts.owner_id',
+        '-posts.problem_body',
+        '-posts.answer_body',
+        '-posts.solution_body',
+        '-posts.references',
+        '-posts.comments',
+        '-posts.playlists'
+        '-posts.datetime_created'
         )
     
     def __repr__(self):
         return f'Playlist(id={self.id})'
     
-class PostTag(db.Model, SerializerMixin):
-    __tablename__ = 'post_tags'
-
-    id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer,  db.ForeignKey('posts.id'), nullable=False)
-    tag_id = db.Column(db.Integer,  db.ForeignKey('tags.id'), nullable=False)
-
-    serialize_rules = (
-        '-post.post_tags', 
-        '-post.owner',
-        '-post.comments',
-        '-post.playlist_posts',
-        '-tag.post_tags')
-
-    def __repr__(self):
-        return f'Post_tag(id={self.id})'
+post_tag = db.Table(
+'post_tags', 
+db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+)
     
-class PlaylistPost(db.Model, SerializerMixin):
-    __tablename__ = 'playlist_posts'
+# class PostTag(db.Model, SerializerMixin):
+#     __tablename__ = 'post_tags'
 
+#     id = db.Column(db.Integer, primary_key=True)
+#     post_id = db.Column(db.Integer,  db.ForeignKey('posts.id'), nullable=False)
+#     tag_id = db.Column(db.Integer,  db.ForeignKey('tags.id'), nullable=False)
 
+#     serialize_rules = (
+#         '-post.post_tags', 
+#         '-post.owner',
+#         '-post.comments',
+#         '-post.playlist_posts',
+#         '-tag.post_tags')
 
-    id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer,  db.ForeignKey('posts.id'), nullable=False)
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'),  nullable=False)
+#     def __repr__(self):
+#         return f'Post_tag(id={self.id})'
+    
+playlist_post = db.Table(
+'playlist_posts', 
+db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+db.Column('playlist_id', db.Integer, db.ForeignKey('playlists.id'))
+)
 
-    serialize_rules = (
-        '-post.post_tags', 
-        '-post.owner',
-        '-post.comments',
-        '-post.playlist_posts', 
-        '-playlist.owner'
-        '-playlist.playlist_posts')
+# class PlaylistPost(db.Model, SerializerMixin):
+#     __tablename__ = 'playlist_posts'
 
-    def __repr__(self):
-        return f'Playlist_post(id={self.id})'
+#     id = db.Column(db.Integer, primary_key=True)
+#     post_id = db.Column(db.Integer,  db.ForeignKey('posts.id'), nullable=False)
+#     playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'),  nullable=False)
+
+#     serialize_rules = (
+#         # '-post.post_tags', 
+#         # '-post.owner',
+#         '-post.comments',
+#         '-post.playlist_posts', 
+#         '-playlist.owner'
+#         '-playlist.playlist_posts')
+
+    # def __repr__(self):
+    #     return f'Playlist_post(id={self.id})'

@@ -2,10 +2,9 @@ import React from "react";
 
 
 
-function PostCard({ post }) {
+function PostCard({ post, commonProps }) {
 
-    // console.log('PostCard is rendering: ')
-    // console.log(post)
+
 
     function renderDatetimeAndAuthor(x) {
         let edited = ''

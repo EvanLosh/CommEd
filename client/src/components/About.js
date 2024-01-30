@@ -2,7 +2,7 @@ import React from "react";
 
 
 
-function About() {
+function About({ commonProps }) {
     return <div id="about">
     </div>;
 }

@@ -2,25 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Browse from './Browse'
 
-function Home({ serverURL, loginSession }) {
+function Home({ commonProps }) {
 
-    const blankPosts = [{
-        title: '',
-        id: -1,
-        datetime_created: '',
-        datetime_last_edited: '',
-        owner: { username: '', id: -1 },
-        num_comments: 0,
-        post_tags: [{ tag: { text: '' } }]
-    }]
 
-    const [posts, setPosts] = useState(blankPosts)
+
+    const [posts, setPosts] = useState([commonProps.blankPost])
 
     function fetchPosts() {
-        fetch(serverURL + '/posts')
+        fetch(commonProps.serverURL + '/posts')
             .then(r => r.json())
             .then((r) => {
-                console.log(r)
+
                 if (r.length > 0) {
                     setPosts(r)
                 }
@@ -33,7 +25,7 @@ function Home({ serverURL, loginSession }) {
 
     return (
         <div id="home">
-            <Browse posts={posts} />
+            <Browse posts={posts} commonProps={commonProps} />
         </div>
     );
 }
