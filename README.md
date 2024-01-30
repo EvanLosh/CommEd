@@ -22,6 +22,9 @@ Write your own math problems and solutions with MathJax and vector graphics, sha
 
 3. A SCREENSHOT of a React tree diagram
 
+<img width="790" alt="Phase-5-React-Tree" src="https://github.com/EvanLosh/CommEd/assets/134793412/2c6fb4f6-c9c4-4d5d-a4e6-ecab6a361083">
+
+
 4. A list of your React Router ROUTES and the component it will go to
 
 | React routes | component |
