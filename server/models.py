@@ -81,6 +81,13 @@ class Post(db.Model, SerializerMixin):
     def __repr__(self):
         return f'Post(id={self.id} owner_id={self.owner_id} title={self.title})'
     
+    @validates('owner_id')
+    def validate_owner_id(slef, key, value):
+        if value > 0:
+            return value
+        else: 
+            raise ValueError('Invalid owner id')
+    
     
 class Comment(db.Model, SerializerMixin):
     __tablename__ = 'comments'
@@ -96,8 +103,8 @@ class Comment(db.Model, SerializerMixin):
 
     owner = db.relationship('User', backref='comments')
     post = db.relationship('Post', backref='comments')
-    children = db.relationship("Comment", back_populates="parent")
-    parent = db.relationship("Comment", back_populates="children", remote_side=[id])
+    comments = db.relationship("Comment", back_populates="parent")
+    parent = db.relationship("Comment", back_populates="comments", remote_side=[id])
 
     serialize_rules = (
         '-owner.comments',

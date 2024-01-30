@@ -12,11 +12,11 @@ import CreateAndEdit from "./CreateAndEdit";
 
 
 const serverURL = "http://127.0.0.1:5000";
-const websiteURL = "http://127.0.0.1:3000/"
+const websiteURL = "http://127.0.0.1:3000"
 const blankUser = {
-  id: -1,
-  username: '',
-  email: '',
+  id: 9,
+  username: 'dev',
+  email: 'dev',
   datetimeCreated: ''
 }
 const blankComment = {
@@ -49,6 +49,15 @@ const blankPlaylist = [{
   posts: [blankPost],
   status: ''
 }]
+function renderTags(listOfTags = []) {
+  let tagElements = listOfTags.map((tag) => {
+    return <p key={tag.id} className="tag">{tag.text}</p>
+  })
+  return <div className="tag-list">
+    <p>Tags: </p>
+    {tagElements}
+  </div>
+}
 
 function App() {
   const [users, setUsers] = useState([blankUser])
@@ -94,15 +103,16 @@ function App() {
   })
 
   function renderDatetimeAndAuthor(x = { owner: { username: '' }, datetime_created: '' }) {
+    console.log(x.owner)
     let edited = ''
     const created = x.datetime_created
-    const name = 'x.owner.username cannot read properties of undefined. reading: username.'
+    // const name = 'x.owner.username cannot read properties of undefined. reading: username.'
+    const name = x.owner.username
     if (x.datetime_last_edited) {
       edited = 'Edited on ' + x.datetime_last_edited + ' | Published on '
     }
-    return <div className="comment">
-      <p>{edited + created} | {name}</p>
-    </div>
+    return <p>{edited + created} | {name}</p>
+
   }
 
 
@@ -116,6 +126,7 @@ function App() {
     blankPlaylist: blankPlaylist,
     loginSession: loginSession,
     renderDatetimeAndAuthor: renderDatetimeAndAuthor,
+    renderTags: renderTags
   }
 
   const router = createBrowserRouter([
@@ -130,18 +141,18 @@ function App() {
     },
     {
       path: '/create',
-      element: <CreateAndEdit commonProps={commonProps} />
+      element: <CreateAndEdit commonProps={commonProps} child={'create'} />
     },
     {
       path: '/edit/:post_id',
-      element: <CreateAndEdit commonProps={commonProps} />
+      element: <CreateAndEdit commonProps={commonProps} child={'edit'} />
     },
     {
       path: '/view-post/:post_id',
       element: <ViewPost commonProps={commonProps} />
     },
     {
-      path: '/view-playlist/:id',
+      path: '/view-playlist/:playlist_id',
       element: <ViewPlaylist commonProps={commonProps} />
     },
     {
