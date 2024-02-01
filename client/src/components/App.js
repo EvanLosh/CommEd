@@ -117,7 +117,7 @@ function App() {
 
   function logout() {
     setSessionUser(blankUser)
-    setUser(blankUser)
+    setUser(getSessionUser())
 
     // fetch(serverURL + '/signout',
     //   {
@@ -265,7 +265,7 @@ function App() {
 
   return (
     <div id="app">
-      <Header commonProps={commonProps} getSessionUser={getSessionUser} />
+      <Header commonProps={commonProps} getSessionUser={getSessionUser} logout={logout} />
       <RouterProvider router={router} />
       <Footer />
     </div>
