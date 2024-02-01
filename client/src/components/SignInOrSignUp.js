@@ -1,47 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 
-function SignInOrSignUp({ addUser, commonProps, login, logout, handleUserChange, users }) {
+function SignInOrSignUp({ commonProps, login, logout, }) {
 
-    const handleSelectChange = (event) => {
-        console.log(`Signing in user ID = ${event.target.value}`)
-        handleUserChange(event.target.value);
-    }
-
-    const selectUser =
-        <select onChange={handleSelectChange}>
-            <option key='-1' value=''>Select user</option>
-            {users.map(user => (
-                <option key={user.id} value={user.id}>
-                    {user.username}
-                </option>
-            ))}
-        </select>
+    // const [justLoggedIn, setJustLoggedIn] = useState(false)
+    // useEffect(() => window.location.href = commonProps.websiteURL, [justLoggedIn])
 
     const formikSignIn = useFormik({
         initialValues: {
             username: '',
-            email: ''
+            email: '',
+            password: ''
         },
         onSubmit: values => {
-            console.log(`Logging in: ${values}`)
-            fetch(`${commonProps.serverURL}/users`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                    login(data)
-                    addUser(data);
-                    formikSignIn.resetForm(); // Reset the form after submit
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+            // console.log(`Logging in: `)
+            // console.log(values)
+            login(values)
         },
     });
 
@@ -62,7 +36,6 @@ function SignInOrSignUp({ addUser, commonProps, login, logout, handleUserChange,
                 .then(response => response.json())
                 .then(data => {
                     console.log('Success:', data);
-                    addUser(data);
                     formikSignUp.resetForm(); // Reset the form after submit
                 })
                 .catch((error) => {
@@ -80,24 +53,25 @@ function SignInOrSignUp({ addUser, commonProps, login, logout, handleUserChange,
                 name="username"
                 onChange={formikSignIn.handleChange}
                 value={formikSignIn.values.username}
-            />                <label htmlFor="username">Username:</label>
+            />
+            <label htmlFor="email">Email:</label>
             <input
                 type="text"
                 name="email"
                 onChange={formikSignIn.handleChange}
                 value={formikSignIn.values.email}
             />
-            <input type="submit" value="Sign In" />
+            <input type="submit" value="Sign in" />
         </form>
     </div>
 
-    const logoutForm = <div><p>You are already logged in.</p>
+    const logoutForm = <div><p>You are logged in as {commonProps.user.username}.</p>
         <form onSubmit={logout}>
             <input type="submit" value="Log out" />
         </form>
     </div >
 
-    const loginForm = commonProps.loginSession.loggedIn ? logoutForm : signInForm
+    const loginForm = commonProps.user.id > 0 ? logoutForm : signInForm
 
     const signUpForm = <div>
         <p>Sign up</p>
@@ -108,21 +82,23 @@ function SignInOrSignUp({ addUser, commonProps, login, logout, handleUserChange,
                 name="username"
                 onChange={formikSignUp.handleChange}
                 value={formikSignUp.values.username}
-            />                <label htmlFor="username">Username:</label>
+            />
+            <label htmlFor="email">email:</label>
             <input
                 type="text"
                 name="email"
                 onChange={formikSignUp.handleChange}
                 value={formikSignUp.values.email}
             />
-            <input type="submit" value="Sign In" />
+            <input type="submit" value="Sign up" />
         </form>
     </div>
 
 
     return (
         <div id="sign-in-or-sign-up">
-            {selectUser}
+            {loginForm}
+            <br></br>
             {signUpForm}
         </div>
     );

@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { createBrowserRouter, RouterProvider, useParams } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import About from './About'
 import SignInOrSignUp from "./SignInOrSignUp";
 import "./App.css";
 import Header from "./Header";
 import Footer from "./Footer";
-import ViewPlaylist from "./ViewPlaylist";
+import PlaylistFetcher from "./PlaylistFetcher";
 import ViewPost from "./ViewPost";
-import CreateAndEdit from "./CreateAndEdit";
+import CreateAndEditPost from "./CreateAndEditPost";
+import ErrorBoundary from "./ErrorBoundary";
+import EditPlaylist from './EditPlaylist'
+import Posts from "./Posts";
+import Playlists from "./Playlists";
+
 
 
 const serverURL = "http://127.0.0.1:5000";
 const websiteURL = "http://127.0.0.1:3000"
 const blankUser = {
-  id: 9,
-  username: 'dev',
-  email: 'dev',
+  id: -1,
+  username: '',
+  email: '',
   datetimeCreated: ''
 }
 const blankComment = {
@@ -24,7 +29,7 @@ const blankComment = {
   owner: { username: '', id: -1 },
   datetime_created: '',
   datetime_last_edited: '',
-  children: [{}]
+  children: []
 }
 const blankPost = {
   title: '',
@@ -36,9 +41,9 @@ const blankPost = {
   answer_body: '',
   solution_body: '',
   references: '',
-  tags: [{ text: '', id: -1 }],
-  comments: [blankComment],
-  status: ''
+  tags: [],
+  comments: [],
+  status: 'published'
 }
 const blankPlaylist = [{
   title: '',
@@ -46,76 +51,158 @@ const blankPlaylist = [{
   owner: { username: '', id: -1 },
   datetime_created: '',
   datetime_last_edited: '',
-  posts: [blankPost],
+  posts: [],
   status: ''
 }]
 function renderTags(listOfTags = []) {
-  let tagElements = listOfTags.map((tag) => {
-    return <p key={tag.id} className="tag">{tag.text}</p>
-  })
+  let tagElements = listOfTags
+    // .filter((tag) => {
+    //   return !(tag.text in )
+    // })
+    .map((tag) => {
+      if (!('id' in tag)) {
+        tag.id = tag.text
+      }
+      return <p key={tag.id} className="tag">{tag.text}</p>
+    })
   return <div className="tag-list">
-    <p>Tags: </p>
+    <p className='tag-label'>Tags: </p>
     {tagElements}
   </div>
 }
 
 function App() {
-  const [users, setUsers] = useState([blankUser])
-  const [loginSession, setLoginSession] = useState({ user: blankUser, loggedIn: false })
+
+  // User login session
+  const [user, setUser] = useState(blankUser)
+
+  function getSessionUser() {
+    const sessionUserString = sessionStorage.getItem('sessionUser');
+    const sessionUser = JSON.parse(sessionUserString);
+    // console.log('Got user from sessionStorage: ')
+    // console.log(sessionUser)
+    return sessionUser
+  }
+
+  function setSessionUser(user) {
+    // console.log('Setting user in sessionStorage: ')
+    // console.log(user)
+    sessionStorage.setItem('sessionUser', JSON.stringify(user))
+  }
 
   function login(user) {
-    setLoginSession({ user: user, loggedIn: true })
+    fetch(commonProps.serverURL + '/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+      .then(r => r.json())
+      .then(data => {
+        // console.log('Response from server: ')
+        // console.log(data)
+        if ('id' in data) {
+          setSessionUser(data)
+          setUser(data)
+        }
+        else {
+          console.log('login failed')
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 
   function logout() {
-    setLoginSession({ user: blankUser, loggedIn: false })
+    setSessionUser(blankUser)
+    setUser(blankUser)
+
+    // fetch(serverURL + '/signout',
+    //   {
+    //     method: 'DELETE',
+    //     header: { 'Content-Type': 'application/json', },
+    //   })
+    //   .then(r => r.json())
+    //   .then((r) => {
+    //     console.log('Current server session is ' + JSON.stringify(r))
+    //     setLoginSession({ user: { blankUser }, loggedIn: false })
+    //   })
+
   }
 
-  function addUser(user) {
-    setUsers([...users, user])
-  }
+  // function checkSession() {
+  //   fetch(serverURL + '/check_session')
+  //     .then(r => r.json())
+  //     .then((r) => {
+  //       console.log('Current server session is ' + JSON.stringify(r))
+  //       let loggedIn = false
+  //       if (r.id) {
+  //         loggedIn = true
+  //       }
+  //       setLoginSession({ user: r, loggedIn: loggedIn })
+  //     })
+  // }
 
-
-  function fetchUsers() {
-    fetch(serverURL + '/users', { method: 'GET' })
-      .then(r => r.json())
-      .then((r) => {
-        if (r) {
-          setUsers(r)
-        }
-      })
-  }
-
-  useEffect(fetchUsers, [])
-
-  function handleUserChange(id) {
-    id = parseInt(id)
-    const u = users.filter(u => u.id === id)[0]
-    // console.log(u)
-    if (u.id > 0) {
-      setLoginSession({ user: u, loggedIn: true })
-      window.location.href = websiteURL
+  useEffect(() => {
+    const sessionUser = getSessionUser()
+    console.log('Session user is ')
+    console.log(sessionUser)
+    if (sessionUser?.id > 0) {
+      setUser(sessionUser)
     }
-  }
-
-  const usersList = users.map((u) => {
-    return <p key={`${u.id}`}>{u.username}</p>
-  })
+  }, [])
 
   function renderDatetimeAndAuthor(x = { owner: { username: '' }, datetime_created: '' }) {
-    console.log(x.owner)
     let edited = ''
     const created = x.datetime_created
     // const name = 'x.owner.username cannot read properties of undefined. reading: username.'
-    const name = x.owner.username
+    let name = null
+    if (x && ('owner' in x) && ('username' in x.owner)) {
+      name = x.owner.username
+    }
     if (x.datetime_last_edited) {
       edited = 'Edited on ' + x.datetime_last_edited + ' | Published on '
     }
-    return <p>{edited + created} | {name}</p>
+    return <p className='datetime-and-author'>{edited + created} | {name}</p>
 
   }
 
+  function renderDelete(x) {
+    function onDelete(x) {
+      console.log('Deleteing: ')
+      console.log(x)
+      let route = ''
+      if ('problem_body' in x) {
+        route = '/posts/'
+      }
+      else if ('body' in x) {
+        route = '/comments/'
+      }
+      else if ('posts' in x) {
+        route = '/playlists/'
+      }
+      const url = serverURL + route + x.id
+      console.log('Requesting delete at ' + url)
+      fetch(url,
+        {
+          method: 'DELETE',
+        })
+        .then(() => {
+          if (route === 'posts') {
+            window.location.href = websiteURL
+          }
+          else {
+            window.location.reload()
+          }
+        })
+    }
+    return <div className={'delete'}>
+      <p onClick={() => onDelete(x)} >Delete</p>
+    </div>
 
+  }
 
   const commonProps = {
     serverURL: serverURL,
@@ -124,15 +211,26 @@ function App() {
     blankComment: blankComment,
     blankPost: blankPost,
     blankPlaylist: blankPlaylist,
-    loginSession: loginSession,
+    user: user,
     renderDatetimeAndAuthor: renderDatetimeAndAuthor,
-    renderTags: renderTags
+    renderTags: renderTags,
+    renderDelete: renderDelete
   }
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home users={users} usersList={usersList} commonProps={commonProps} />,
+      element: <Home commonProps={commonProps} />,
+      children: [],
+    },
+    {
+      path: "/posts",
+      element: <Posts commonProps={commonProps} />,
+      children: [],
+    },
+    {
+      path: "/playlists",
+      element: <Playlists commonProps={commonProps} />,
       children: [],
     },
     {
@@ -141,30 +239,33 @@ function App() {
     },
     {
       path: '/create',
-      element: <CreateAndEdit commonProps={commonProps} child={'create'} />
+      element: <CreateAndEditPost commonProps={commonProps} child={'create'} />
     },
     {
-      path: '/edit/:post_id',
-      element: <CreateAndEdit commonProps={commonProps} child={'edit'} />
+      path: '/edit-post/:post_id',
+      element: <CreateAndEditPost commonProps={commonProps} child={'edit'} />,
+      errorElement: < ErrorBoundary commonProps={commonProps} />
     },
     {
       path: '/view-post/:post_id',
-      element: <ViewPost commonProps={commonProps} />
+      element: <ViewPost commonProps={commonProps} />,
+      errorElement: < ErrorBoundary commonProps={commonProps} />
     },
     {
       path: '/view-playlist/:playlist_id',
-      element: <ViewPlaylist commonProps={commonProps} />
+      element: <PlaylistFetcher commonProps={commonProps} />,
+      errorElement: < ErrorBoundary commonProps={commonProps} />
     },
     {
       path: "/sign-in-or-sign-up",
-      element: <SignInOrSignUp users={users} handleUserChange={handleUserChange} login={login} logout={logout} addUser={addUser} commonProps={commonProps} />,
+      element: <SignInOrSignUp login={login} logout={logout} commonProps={commonProps} />,
     },
   ]);
 
 
   return (
     <div id="app">
-      <Header users={users} commonProps={commonProps} />
+      <Header commonProps={commonProps} getSessionUser={getSessionUser} />
       <RouterProvider router={router} />
       <Footer />
     </div>

@@ -34,11 +34,12 @@ def generate_fake_tag():
 def generate_fake_post():
     return Post(
         owner_id = random.choice(User.query.all()).id,
-        title = fake.text(50),
+        title = r'When $$a \ne 0$$, there are two solutions to $$ax^2 + bx + c = 0$$',
         problem_body = fake.text(max_nb_chars=100),
         answer_body = fake.text(max_nb_chars=100),
         solution_body = fake.text(max_nb_chars=100),
         references = fake.text(max_nb_chars=100),
+        status = 'punlished',
         datetime_created=datetime.now()
     )
 
@@ -83,8 +84,32 @@ def seed_database():
         db.session.add(User(username='dev', email='dev', datetime_created=datetime.now()))
         db.session.commit()
 
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r'<InlineTex texContent={ "This is inline $$\int_{a}^{b} f(x)dx = F(b) - F(a)$$ latex string"}/>',
+        problem_body = r'<Tex texContent={"\int_{a}^{b} f(x)dx = F(b) - F(a)"}/>',
+        answer_body = fake.text(max_nb_chars=100),
+        solution_body = fake.text(max_nb_chars=100),
+        references = fake.text(max_nb_chars=100),
+        status = 'punlished',
+        datetime_created=datetime.now()
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r'This is inline $$\int_{a}^{b} f(x)dx = F(b) - F(a)$$',
+        problem_body = r'\int_{a}^{b} f(x)dx = F(b) - F(a)',
+        answer_body = fake.text(max_nb_chars=100),
+        solution_body = fake.text(max_nb_chars=100),
+        references = fake.text(max_nb_chars=100),
+        status = 'punlished',
+        datetime_created=datetime.now()
+        )
+        db.session.add(post)
+        db.session.commit()
+
         # generate new posts
-        for i in range(12):
+        for i in range(8):
             post = generate_fake_post()
             db.session.add(post)
         db.session.commit()

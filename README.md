@@ -30,7 +30,7 @@ Write your own math problems and solutions with MathJax, share them with the wor
 |--- | --- |
 | / | Home.js |
 | /about | About.js |
-| /new-post | CreateAndEdit.js |
+| /new-post | CreateAndEditPost.js |
 | /view-post/:id | ViewPost.js |
 | /sign-in | SignUpOrSignIn.js |
 | /playlist/:id | Playlist.js |

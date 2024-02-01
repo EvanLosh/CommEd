@@ -9,12 +9,13 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
         {
             initialValues: {
                 body: '',
-                owner_id: 9,
+                owner_id: commonProps.user.id,
                 post_id: post_id, // for some crazy reason, post_id is not correct
                 parent_id: parent_id, // same problem
             },
             onSubmit: (values) => {
                 values.post_id = post_id // this post_id is correct
+                values.owner_id = commonProps.user.id
                 // values.parent_id = parent_id // this parent_id is NOT correct
                 console.log(values)
                 fetch(commonProps.serverURL + '/comments', {
@@ -41,7 +42,7 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
     const form = <div className='submit-comment'>
         <form onSubmit={formik.handleSubmit}>
             {/* <label htmlFor='body'>Comment: </label> */}
-            <input type='body' id='body' name='body' value={formik.values.body} onChange={formik.handleChange}></input>
+            <textarea type='body' id='body' name='body' value={formik.values.body} onChange={formik.handleChange}></textarea>
             <br></br>
             <input type="submit" value="Submit comment" />
         </form>

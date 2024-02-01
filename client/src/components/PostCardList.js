@@ -2,13 +2,17 @@ import React from "react";
 import PostCard from './PostCard'
 
 
-function PostCardList({ posts, commonProps }) {
+function PostCardList({ posts, commonProps, removable, renderRemoveButton }) {
+
+    if (!posts) {
+        posts = []
+    }
 
 
 
     const postCards = <div>
         {posts.map((post) => {
-            return <PostCard key={post.id} post={post} commonProps={commonProps} />
+            return <PostCard key={post.id} post={post} commonProps={commonProps} removable={removable} renderRemoveButton={renderRemoveButton} />
         })}
     </div>
 

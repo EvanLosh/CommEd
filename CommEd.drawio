@@ -37,7 +37,7 @@
         <mxCell id="SFf2Btg46Zuehb72WBfB-13" value="SearchFilterSort.js" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="130" y="380" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="SFf2Btg46Zuehb72WBfB-14" value="CreateAndEdit.js" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="SFf2Btg46Zuehb72WBfB-14" value="CreateAndEditPost.js" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="120" y="130" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="SFf2Btg46Zuehb72WBfB-15" value="PostCard.js" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
