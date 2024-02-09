@@ -1,0 +1,11 @@
+a {
+    padding: 10px;
+}
+
+#site-title {
+    font-size: 2em;
+}
+
+#header {
+    display: flex;
+}

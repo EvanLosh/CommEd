@@ -1,0 +1,10 @@
+.playlist-card {
+    border: solid;
+    border-color: green;
+    border-radius: 5px;
+    border-width: 3px;
+}
+
+.playlist-card-content {
+    padding: 10px;
+}

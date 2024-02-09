@@ -1,0 +1,10 @@
+.post-card {
+    border: solid;
+    border-color: green;
+    border-radius: 5px;
+    border-width: 3px;
+}
+
+.post-card-content {
+    padding: 10px;
+}
