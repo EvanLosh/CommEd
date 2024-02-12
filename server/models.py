@@ -16,6 +16,7 @@ class User(db.Model, SerializerMixin):
     
     serialize_rules = (
         "-posts.owner",  
+        '-posts.tags',
         '-posts.comments', 
         '-posts.post_tags', 
         '-posts.problem_body',
@@ -23,8 +24,12 @@ class User(db.Model, SerializerMixin):
         '-posts.solution_body',
         '-posts.references',
         '-posts.playlist_posts', 
+        '-posts.comments',
         '-comments', 
-        '-playlists.owner', 
+        '-playlists.posts.owner', 
+        '-playlists.posts.tags',
+        '-playlists.owner',
+        '-playlists.posts.owner',
         '-playlists.playlist_posts',
         '-playlists.owner_id',
         '-playlists.datetime_created',

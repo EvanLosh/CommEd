@@ -1,7 +1,18 @@
 #app {
     color: #333;
-    font-family: 'Arial', sans-serif;
+    /* font-family: 'Arial', sans-serif; */
     background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+#app p,
+a,
+ol,
+ul,
+li {
+    font-size: 16px;
 }
 
 /* #app * {
@@ -12,14 +23,73 @@
 
 .tag-list {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .tag-list .tag {
     padding: 5px;
     border-radius: 5px;
-    background-color: rgb(189, 189, 189);
+    background-color: rgb(222, 222, 222);
+    margin: 5px;
+    text-wrap: nowrap;
+}
+
+.tag-label {
+    margin-top: 10px;
 }
 
 .datetime-and-author {
     color: gray;
+}
+
+#space-at-the-bottom-of-the-webpage {
+    height: 600px;
+}
+
+#about {
+    margin: 20px;
+    padding: 10px;
+}
+
+.commed-style {
+    border-radius: 10px;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    padding-left: 20px;
+}
+
+.no-text-decoration {
+    text-decoration: none;
+}
+
+.post-title,
+.playlist-title {
+    font-weight: bold;
+}
+
+.form-line {
+    display: flex;
+}
+
+.form-line label {
+    text-wrap: nowrap;
+
+}
+
+.form-line input {
+    width: 100%;
+}
+
+.create-new-playlist-form {
+    display: flex;
+}
+
+.create-new-playlist-form label {
+    text-wrap: nowrap;
+}
+
+.create-new-playlist-input {
+    width: 100%;
 }

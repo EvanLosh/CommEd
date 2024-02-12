@@ -15,6 +15,7 @@ function Playlists({ commonProps }) {
 
 
     return <div id="playlists">
+        <h3 className="commed-style">Playlists</h3>
         <PlaylistCardList commonProps={commonProps} playlists={playlists} />
     </div>;
 }

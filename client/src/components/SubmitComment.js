@@ -49,7 +49,7 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
     </div>
 
 
-    return form
+    return commonProps.user.id > 0 ? form : <a href='/sign-in-or-sign-up'>Sign in to comment</a>
 }
 
 export default SubmitComment;

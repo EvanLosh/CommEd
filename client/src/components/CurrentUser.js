@@ -10,25 +10,31 @@ function CurrentUser({ commonProps, logout }) {
             case 'logout':
                 logout()
                 break;
+            case 'profile':
+                window.location.href = commonProps.websiteURL + '/profile'
+                break;
+            case '':
+                break;
             default:
-                return null
+                break;
         }
     }
 
-    const userMenu = <select onChange={handleChange}>
+    const userMenu = <select id='current-user-menu' onChange={handleChange}>
         <option value=''>User menu</option>
+        <option value='profile'>Profile</option>
         <option value='logout'>Logout</option>
     </select>
 
     const currentUserElement =
         loggedIn
             ?
-            <div><p>{commonProps.user.username}</p> {userMenu} </div>
+            <div><p id='current-user-name'>{commonProps.user.username}</p> {userMenu} </div>
             :
             <a href={commonProps.websiteURL + '/sign-in-or-sign-up'}>Sign in or sign up</a>
 
 
-    return <div id="CurrentUser">
+    return <div id="current-user">
         {currentUserElement}
     </div>;
 }

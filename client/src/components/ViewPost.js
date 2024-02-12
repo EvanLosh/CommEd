@@ -4,6 +4,7 @@ import SubmitComment from "./SubmitComment";
 import Comment from './Comment'
 import { Tex, InlineTex } from 'react-tex'
 import parse from 'html-react-parser'
+import Playlists from "./Playlists";
 
 
 
@@ -42,7 +43,28 @@ function ViewPost({ commonProps }) {
         }
     }
 
+    function addPostToPlayListElement(playlists) {
+        return <div>
+            <select>
+                {playlists.filter(p => /* return post is not already in playlist */ null).map(p =>
+                    <option>{p.title}</option>
+                )}
+            </select>
+        </div>
+    }
 
+    function addPostToPlaylist(post_id, playlist_id) {
+        fetch(commonProps.serverURL + '/playlists/' + playlist_id,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(post_id)
+            })
+            .then(r => r.json())
+            .then(r => console.log('Added post #' + post_id + ' to playlist #' + playlist_id))
+    }
 
 
 
@@ -62,6 +84,7 @@ function ViewPost({ commonProps }) {
             <div><InlineTex texContent={p.solution_body} /></div>
             <h3>Refernces:</h3>
             <p>{p.references}</p>
+            {/* <AddToPlaylist commonProps={commonProps} post={p} usersPlaylists={usersPlaylists} /> */}
             <h3>Comments:</h3>
             <SubmitComment commonProps={commonProps} parent_id={null} post_id={p.id} />
             {renderComments(p, 'post')}
