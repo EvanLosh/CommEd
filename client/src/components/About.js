@@ -10,7 +10,7 @@ function About({ commonProps }) {
         <p>On the front-end, I use React, Formik, react-tex, and markdownjs. On the back-end, I use Flask and SQLalchemy.</p>
         <p>Development to-do list:</p>
         <ul>
-            <li>Back end data validations and error handling</li>
+            <li>Add/improve Back-end data validations and error handling</li>
             <li>Add a button to each post while viewing a playlist to remove the post from the playlist</li>
             <li>Add a search and filter feature to lists of posts or playlists</li>
             <li>Add a guide for creating posts and comments</li>
@@ -30,9 +30,7 @@ function About({ commonProps }) {
         </ul>
         <p>Known issues:</p>
         <ul>
-            <li>Altering a playlist does not update the add-to-playlist select menu, even upon refreshing the page. This is because the user's playlists are loaded from sessionStorage which is updated only when the user logs in.</li>
             <li>In creating and editing posts, the 'save draft' and 'publish' radio options do not show the user's selection.</li>
-            <li>Adding tags to posts works while editing posts but not while creating posts.</li>
         </ul>
 
     </div>;

@@ -65,11 +65,26 @@ class PostsResource(Resource):
     def post(self):
         # create a new post
         form_data = request.get_json()
-        print(form_data)
         if form_data['owner_id'] < 1:
             return {'errors': 'Invalid user id'}, 500
+        # make a list of the Tag objects
+        tags = []
+        for t in form_data['tags']:
+            # check if a Tag object already exists
+            existing_tag = Tag.query.filter_by(text = t['text']).first()
+            if existing_tag:
+                tags.append(existing_tag)
+                # db.session.add(existing_tag)
+            else:
+                # if no Tag object already exists, create it
+                new_tag = Tag(text = t['text'], datetime_created = datetime.now())
+                tags.append(new_tag)
+                db.session.add(new_tag)
+                # commit one at a time to avoid duplicates
+                db.session.commit()
         try:
             newPost = Post(datetime_created = datetime.now(),
+                           tags = tags,
                            owner_id = form_data['owner_id'],
                            title = form_data['title'],
                            problem_body = form_data['problem_body'],
