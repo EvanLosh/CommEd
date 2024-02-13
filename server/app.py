@@ -241,21 +241,33 @@ class PlaylistResource(Resource):
     def patch(self, id):
         # Add or remove a post to a playlist
         form_data = request.get_json()
-
         playlist = Playlist.query.filter_by(id = id).first()
         if not playlist:
             return {}, 404
-        post_ids = [p.id for p in playlist.posts]
-        if form_data['post_id'] in post_ids:
-            return playlist.to_dict(), 200
-        new_post = Post.query.filter_by(id = form_data['post_id']).first()
-        if new_post:
-            playlist.posts.append(new_post)
-            db.session.add(playlist)
-            db.session.commit()
-            return playlist.to_dict(), 200
-        else:
-            return {}, 404
+        if form_data['action'] == 'add':
+            post_ids = [p.id for p in playlist.posts]
+            if form_data['post_id'] in post_ids:
+                return playlist.to_dict(), 200
+            new_post = Post.query.filter_by(id = form_data['post_id']).first()
+            if new_post:
+                playlist.posts.append(new_post)
+                db.session.add(playlist)
+                db.session.commit()
+                return playlist.to_dict(), 200
+            else:
+                return {}, 404
+        elif form_data['action'] == 'remove':
+            post_ids = [p.id for p in playlist.posts]
+            if form_data['post_id'] not in post_ids:
+                return {}, 404
+            post_to_be_removed = Post.query.filter_by(id = form_data['post_id']).first()
+            if post_to_be_removed:
+                playlist.posts.remove(post_to_be_removed)     
+                db.session.add(playlist)
+                db.session.commit()
+                return playlist.to_dict(), 200
+            else:
+                return {}, 404      
     
     def delete(self, id):
         # delete a playlist
