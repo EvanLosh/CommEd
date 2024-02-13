@@ -39,7 +39,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
             return null
         }
         else {
-            const values = { post_id: post.id }
+            const values = { post_id: post.id, action: 'add' }
             fetch(commonProps.serverURL + '/playlists/' + eTargetValue, {
                 method: 'PATCH',
                 headers: {

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useInsertionEffect } from "react";
 import PostCard from './PostCard'
 
 
-function PostCardList({ posts, commonProps, removable, }) {
+function PostCardList({ posts, commonProps, removable, renderRemoveButton }) {
 
     const [usersPlaylists, setUsersPlaylists] = useState([])
 
@@ -32,7 +32,7 @@ function PostCardList({ posts, commonProps, removable, }) {
 
     const postCards = <div>
         {posts.map((post) => {
-            return <PostCard key={post.id} post={post} commonProps={commonProps} removable={removable} usersPlaylists={usersPlaylists} />
+            return <PostCard key={post.id} post={post} commonProps={commonProps} removable={removable} usersPlaylists={usersPlaylists} renderRemoveButton={renderRemoveButton} />
         })}
     </div>
 

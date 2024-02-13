@@ -20,7 +20,7 @@ function PostCard({ post, commonProps, removable, renderRemoveButton, usersPlayl
         {commonProps.renderDatetimeAndAuthor(post)}
         {commonProps.renderTags(post.tags)}
         <AddToPlaylist commonProps={commonProps} post={post} usersPlaylists={usersPlaylists} />
-        {/* {renderRemoveButton()} */}
+        {renderRemoveButton(post)}
     </div>
 
     return <div className="post-card">

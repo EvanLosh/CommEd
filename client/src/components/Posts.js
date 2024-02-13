@@ -83,7 +83,10 @@ function Posts({ commonProps }) {
     const reverseSortButton = <button onClick={handleReverseSort}>Reverse sort</button>
 
 
-
+    function renderRemoveButton(post) {
+        // PostCardList expects this function as a prop, but the function should do nothing unless the user is viewing one of their own playlists
+        return null
+    }
 
 
     return <div id="posts">
@@ -97,7 +100,7 @@ function Posts({ commonProps }) {
                 {reverseSortButton}
             </div>
         </div>
-        <PostCardList commonProps={commonProps} posts={filteredPosts} removable={false} />
+        <PostCardList commonProps={commonProps} posts={filteredPosts} removable={false} renderRemoveButton={renderRemoveButton} />
     </div>;
 }
 
