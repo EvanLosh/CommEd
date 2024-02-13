@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import SubmitComment from "./SubmitComment";
 import Comment from './Comment'
 import { Tex, InlineTex } from 'react-tex'
-import parse from 'html-react-parser'
-import Playlists from "./Playlists";
 import AddToPlaylist from "./AddToPlaylist";
+import './ViewPost.css'
 
 
 
@@ -85,21 +84,21 @@ function ViewPost({ commonProps }) {
 
     function renderPost(p) {
         return <div id="view-post">
-            <div><InlineTex texContent={p.title} /></div>
+            <div id='view-post-title'><InlineTex texContent={p.title} /></div>
             {commonProps.renderDatetimeAndAuthor(p)}
             {commonProps.renderTags(p.tags)}
             <AddToPlaylist commonProps={commonProps} post={p} usersPlaylists={usersPlaylists} />
             {parseInt(commonProps.user.id) === parseInt(p.owner.id) ? <p onClick={() => window.location.href = commonProps.websiteURL + '/edit-post/' + p.id} className='commed-style'>Edit your post</p> : null}
-            <h3>Problem:</h3>
+            <h3 className='section-title'>Problem:</h3>
             <div><InlineTex texContent={p.problem_body} /></div>
-            <h3>Answer:</h3>
+            <h3 className='section-title'>Answer:</h3>
             <div><InlineTex texContent={p.answer_body} /></div>
-            <h3>Solution:</h3>
+            <h3 className='section-title'>Solution:</h3>
             <div><InlineTex texContent={p.solution_body} /></div>
-            <h3>Refernces:</h3>
+            <h3 className='section-title'>Refernces:</h3>
             <p>{p.references}</p>
             {p.owner.id === commonProps.user.id ? commonProps.renderDelete(p) : null}
-            <h3>Comments:</h3>
+            <h3 className='section-title'>Comments:</h3>
             <SubmitComment commonProps={commonProps} parent_id={null} post_id={p.id} />
             {renderComments(p, 'post')}
         </div>
