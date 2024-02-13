@@ -65,8 +65,8 @@ function renderTags(listOfTags = []) {
       }
       return <p key={tag.id} className="tag">{tag.text}</p>
     })
-  return <div className="tag-list">
-    <p className='tag-label'>Tags: </p>
+  return <div className="tag-list ">
+    <p className='tag-label commed-style'>Tags: </p>
     {tagElements}
   </div>
 }
@@ -75,8 +75,13 @@ function App() {
 
   function getSessionUser() {
     const sessionUserString = sessionStorage.getItem('sessionUser');
-    const sessionUser = JSON.parse(sessionUserString);
-    return sessionUser
+    if (sessionUserString) {
+      const sessionUser = JSON.parse(sessionUserString);
+      return sessionUser
+    }
+    else {
+      return blankUser
+    }
   }
   // User login session
   const [user, setUser] = useState(getSessionUser)

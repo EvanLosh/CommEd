@@ -1,0 +1,54 @@
+#filter-and-sort-forms {
+    border: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    border-color: green;
+    padding: 13px;
+}
+
+#filter-form input {
+    margin: 10px;
+}
+
+#filter-form .form-line {
+    align-items: baseline;
+}
+
+#sort-form {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: baseline;
+}
+
+#sort-form p {
+    margin: 0px;
+    margin-right: 20px;
+}
+
+#sort-form * {
+    margin-right: 20px;
+}
+
+#sort-form select {
+
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+    padding: 5px;
+}
+
+#sort-form button {
+    background-color: green;
+    color: white;
+    border: solid;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* select.add-to-playlist-select option {
+    font-size: 18px;
+    padding: 10px;
+    margin: 10px;
+    height: 30px;
+    font-family: "Computer Modern", serif;
+} */

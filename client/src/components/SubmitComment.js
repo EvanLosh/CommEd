@@ -47,6 +47,7 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
             <br></br>
             <input type="submit" value="Submit comment" />
         </form>
+        <div className="white-space"></div>
     </div>
 
 

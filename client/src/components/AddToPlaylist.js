@@ -91,10 +91,10 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         creatingNewPlaylist
             ?
             <form className='create-new-playlist-form' onSubmit={handleNewPlaylistSubmit}>
-                <label>New playlist title</label>
+                <label>New playlist title:</label>
                 <input className='create-new-playlist-input' name='New playlist title' value={newPlaylistTitle} onChange={handleNewTitleChange}></input>
-                <input type='submit' value='Submit'></input>
-                <button onClick={() => setCreatingNewPlaylist(false)}>Cancel</button>
+                <input className='create-new-playlist-submit button' type='submit' value='Submit'></input>
+                <button className='create-new-playlist-cancel button' onClick={() => setCreatingNewPlaylist(false)}>Cancel</button>
             </form>
             :
             null

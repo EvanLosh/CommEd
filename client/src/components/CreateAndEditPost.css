@@ -7,3 +7,23 @@
     width: 600px;
     height: 240px;
 }
+
+#draft-publish-line {
+    min-width: none;
+    margin-bottom: 20px;
+}
+
+#create-and-edit-submit {
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    border: solid;
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+}
+
+.create-and-edit-tips a {
+    text-decoration: underline;
+    color: purple;
+    font-size: 18px;
+}

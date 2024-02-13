@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import PostCardList from './PostCardList'
+import './ViewPlaylist.css'
 
 
 
@@ -14,12 +15,14 @@ function ViewPlaylist({ playlist, commonProps, }) {
         fetch(commonProps.serverURL + '/playlists/' + playlist.id, {
             method: 'DELETE'
         })
+            // .then(r => r.json())
+            .then(r => window.location.reload())
     }
 
     const deleteButton =
         commonProps.user.id === playlist.owner_id
             ?
-            <button onClick={handleDeleteClick}>Delete playlist</button>
+            <button className='button' onClick={handleDeleteClick}>Delete playlist</button>
             :
             null
 
@@ -43,7 +46,7 @@ function ViewPlaylist({ playlist, commonProps, }) {
                     })
             }
 
-            return <button onClick={handleRemoveClick}>Remove from playlist</button>
+            return <button className='button' onClick={handleRemoveClick}>Remove from playlist</button>
         }
     }
 
@@ -51,7 +54,7 @@ function ViewPlaylist({ playlist, commonProps, }) {
 
     console.log(playlist)
     return <div id="view-playlist">
-        {playlist.title ? <div><h3>{playlist.title}</h3>{commonProps.renderDatetimeAndAuthor(playlist)}</div> : <h3>Playlist not found</h3>}
+        {playlist.title ? <div><p id='view-playlist-title'>Playlist: {playlist.title}</p>{commonProps.renderDatetimeAndAuthor(playlist)}</div> : <div><h3>Playlist not found</h3> <button className='button' onClick={() => window.location.href = '/'}>Return home</button> </div>}
         {deleteButton}
         <PostCardList posts={playlist.posts} commonProps={commonProps} removable={commonProps.user.id === playlist.owner_id} renderRemoveButton={renderRemoveButton} />
     </div>;

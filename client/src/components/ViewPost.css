@@ -18,3 +18,16 @@ textarea {
     width: 90%;
     height: 50px;
 }
+
+#view-post a:-webkit-any-link,
+#view-post .katex-html * {
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#view-post-title .katex-html * {
+    color: black;
+    text-decoration: none;
+    font-size: 30px;
+}

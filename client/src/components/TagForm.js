@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './TagForm.css'
 
 
 
@@ -19,16 +20,16 @@ function TagForm({ commonProps, tags, addTag }) {
     function renderAddTagForm() {
         return <form onSubmit={handleTagSubmit} className='add-tag-form'>
             {/* <label htmlFor='tag'>Enter a tag:</label> */}
-            <input type='submit' value='Add tag' ></input>
             <input type='text' id='tag-input' name='tag' value={newTag} onChange={(e) => setNewTag(e.target.value)}></input>
+            <input type='submit' id='tag-submit' value='Add tag' ></input>
         </form>
     }
 
 
 
     return <div id="tag-form">
-        {renderAddTagForm()}
         {commonProps.renderTags(tags)}
+        {renderAddTagForm()}
     </div>;
 }
 

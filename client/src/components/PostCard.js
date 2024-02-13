@@ -16,7 +16,8 @@ function PostCard({ post, commonProps, removable, renderRemoveButton, usersPlayl
     }
 
     const postCard = <div className='post-card-content'>
-        <div onClick={handleClick} className='post-title'><InlineTex texContent={post.title} /></div>
+        <a href={'/view-post/' + post.id} className='post-title'><InlineTex texContent={post.title} /></a>
+        {/* <div onClick={handleClick} className='post-title'><InlineTex texContent={post.title} /></div> */}
         {commonProps.renderDatetimeAndAuthor(post)}
         {commonProps.renderTags(post.tags)}
         <AddToPlaylist commonProps={commonProps} post={post} usersPlaylists={usersPlaylists} />

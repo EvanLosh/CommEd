@@ -29,6 +29,14 @@ function CreateAndEditPost({ commonProps, child }) {
         }
 
         return <div className='create-and-edit-form'>
+            <div className='create-and-edit-tips'>
+
+                <p>New to TeX? Any text surrounded by double dollar signs is interpreted as TeX code after submitting. Try copying the following code into your post and see what it renders after you submit your post.</p>
+                <p className='code'>{"$$ \\int_a^b f(x) \\mathrm\{d\}x $$"}</p>
+                <p><a href='https://atomurl.net/math/'>https://atomurl.net/math/</a> can generate TeX code for you through a GUI.</p>
+                <p>A thorough guide to TeX code is available from <a href='https://mirror.math.princeton.edu/pub/CTAN/info/short-math-guide/short-math-guide.pdf'>The American Mathematical Society</a>.</p>
+                <p>Tip: Changes are NOT saved automatically. You can submit your post as a draft, making it hidden from other users until you publish it.</p>
+            </div>
 
             <TagForm commonProps={commonProps} tags={tags} addTag={addTag} removeTag={removeTag} />
             <form id='create-and-edit-post-form' onSubmit={formik.handleSubmit}>
@@ -51,14 +59,14 @@ function CreateAndEditPost({ commonProps, child }) {
                     <textarea type='references' id='references' name='references' value={formik.values.references} onChange={formik.handleChange}></textarea>
                     <br></br>
                 </div>
-                <div className='form-line'>
+                <div id='draft-publish-line'>
                     <input type='radio' id='draft' name='status' value={'draft'} onChange={handleStatusRadio}></input>
                     <label htmlFor='draft'>Save draft</label>
                     <input type='radio' id='publish' name='status' value={'publish'} onChange={handleStatusRadio}></input>
                     <label htmlFor='publish'>Publish (you can edit your post after publishing it)</label>
                     <br></br>
                 </div>
-                <input type="submit" value="Submit" />
+                <input id='create-and-edit-submit' className='button' type="submit" value="Submit" />
             </form>
         </div >
     }

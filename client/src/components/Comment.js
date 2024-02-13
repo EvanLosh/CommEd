@@ -14,11 +14,11 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
         return replying
             ?
             <div>
-                <p onClick={() => setReplying(false)} className='commed-style'>cancel</p>
+                <p onClick={() => setReplying(false)} className='commed-style button'>cancel</p>
                 <SubmitComment commonProps={commonProps} replying={replying} parent_id={comment.id} post_id={post_id} />
             </div>
             :
-            <p onClick={() => setReplying(true)} className='commed-style'>Reply</p>;
+            <p onClick={() => setReplying(true)} className='commed-style button'>Reply</p>;
     }
 
     function handleChange(e) {
@@ -46,8 +46,8 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
         <form className='edit-comment'>
             <label htmlFor='edit-comment'>edit comment</label>
             <textarea className='edit-comment' name='edit-comment' value={editField} onChange={handleChange}></textarea>
-            <button onClick={handleEditSubmit} >Submit</button>
-            <p onClick={() => setEditing(false)}>cancel</p>
+            <button onClick={handleEditSubmit} className='button'>Submit</button>
+            <p onClick={() => setEditing(false)} className='button'>cancel</p>
         </form>
         :
         <div><InlineTex texContent={comment.body} /></div>
@@ -56,7 +56,7 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
     const editButton = comment.owner.id === commonProps.user.id
         ?
         < div >
-            {comment.owner.id === commonProps.user.id ? <p onClick={() => setEditing(true)} className='commed-style'>Edit</p> : null}
+            {comment.owner.id === commonProps.user.id ? <p onClick={() => setEditing(true)} className='commed-style button'>Edit</p> : null}
         </ div>
         : null
 

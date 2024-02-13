@@ -7,13 +7,9 @@
     display: inline;
 }
 
-#app p,
-a,
-ol,
-ul,
-li {
+/* #app h1 {
     font-size: 16px;
-}
+} */
 
 /* #app * {
     border-style: solid;
@@ -34,8 +30,19 @@ li {
     text-wrap: nowrap;
 }
 
-.tag-label {
-    margin-top: 10px;
+.tag-label.commed-style {
+    /* margin-top: 10px; */
+    /* padding: 5px; */
+    line-height: 1em;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.tag-list p.tag-label.commed-style {
+    /* margin-top: 10px; */
+    padding: 7px;
+    line-height: 1em;
+    height: 1em;
 }
 
 .datetime-and-author {
@@ -115,4 +122,62 @@ li {
 
 .comment-options-line {
     display: flex;
+}
+
+#posts,
+#playlists,
+#home,
+#create-form,
+#edit-form,
+#view-post,
+#view-playlist,
+#about,
+#sign-in-or-sign-up {
+    width: 720px;
+    margin: auto;
+}
+
+.code {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.button {
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    /* box-shadow: 0 9px #999; */
+    border: none;
+    background-color: green;
+    color: white;
+    border: solid;
+    border-radius: 5px;
+    padding: 5px;
+    font-family: "Computer Modern", serif;
+    font-size: 18px;
+    margin: 0px;
+}
+
+.button:hover {
+    /* background-color: #3e8e41 */
+}
+
+.button:active {
+    /* background-color: #3e8e41; */
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+select {
+    cursor: pointer;
+}
+
+select option {
+    padding: 10px;
+}
+
+#about a {
+    text-decoration: underline;
+    color: purple;
+    font-size: 18px;
 }

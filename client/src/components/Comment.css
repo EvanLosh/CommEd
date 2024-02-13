@@ -1,6 +1,6 @@
 .comment {
-    padding-left: 20px;
-    border: solid;
+    padding-left: 15px;
+    border-left: solid;
 }
 
 textarea {
@@ -10,4 +10,15 @@ textarea {
 
 .comment-options-line {
     width: 100%;
+}
+
+p.datetime-and-author {
+    margin: 0;
+    padding: 10px;
+}
+
+.comment-options-line p.commed-style {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 10px;
 }
