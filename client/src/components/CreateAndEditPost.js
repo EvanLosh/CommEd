@@ -51,7 +51,7 @@ function CreateAndEditPost({ commonProps, child }) {
                     <textarea type='references' id='references' name='references' value={formik.values.references} onChange={formik.handleChange}></textarea>
                     <br></br>
                 </div>
-                <div clasName='form-line'>
+                <div className='form-line'>
                     <input type='radio' id='draft' name='status' value={'draft'} onChange={handleStatusRadio}></input>
                     <label htmlFor='draft'>Save draft</label>
                     <input type='radio' id='publish' name='status' value={'publish'} onChange={handleStatusRadio}></input>
