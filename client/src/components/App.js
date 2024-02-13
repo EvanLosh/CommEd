@@ -175,9 +175,19 @@ function App() {
           }
         })
     }
+    let item = ''
+    if ('problem_body' in x) {
+      item = 'post'
+    }
+    else if ('body' in x) {
+      item = 'comment'
+    }
+    else if ('posts' in x) {
+      item = 'playlist'
+    }
     return <div className={'delete'}>
-      <p onClick={() => onDelete(x)} >Delete</p>
-    </div>
+      <p onClick={() => onDelete(x)} className='commed-style'>Delete your {item}</p>
+    </div >
 
   }
 

@@ -17,10 +17,10 @@ function TagForm({ commonProps, tags, addTag }) {
     }
 
     function renderAddTagForm() {
-        return <form onSubmit={handleTagSubmit}>
-            <label htmlFor='tag'>Enter a tag:</label>
-            <input type='tag' id='tag' name='tag' value={newTag} onChange={(e) => setNewTag(e.target.value)}></input>
+        return <form onSubmit={handleTagSubmit} className='add-tag-form'>
+            {/* <label htmlFor='tag'>Enter a tag:</label> */}
             <input type='submit' value='Add tag' ></input>
+            <input type='text' id='tag-input' name='tag' value={newTag} onChange={(e) => setNewTag(e.target.value)}></input>
         </form>
     }
 
