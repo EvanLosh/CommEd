@@ -10,25 +10,27 @@ function About({ commonProps }) {
         <p>On the front-end, I use React, Formik, react-tex, and markdownjs. On the back-end, I use Flask and SQLalchemy.</p>
         <p>Development to-do list:</p>
         <ul>
-            <li>Add a select menu to posts to add the post to a playlist</li>
-            <li>Add a button to posts in playlists to remove the post from the playlist</li>
+            <li>Back end data validations and error handling</li>
+            <li>Add a button to each post while viewing a playlist to remove the post from the playlist</li>
             <li>Add a search and filter feature to lists of posts or playlists</li>
             <li>Add a guide for creating posts and comments</li>
             <li>Add live preview of posts and comments during creation and editing</li>
-            <li>Add a user profile page</li>
-            <li>Back end data validations</li>
-            <li>Render markdown of user-submitted strings</li>
+            <li>On the homepage, add a list of posts that the user recently viewed, so the user can easily view them again</li>
+            <li>Add a user profile page with a history of the user's posts, playlists, and comments</li>
+            <li>Render markdown in posts and comments</li>
             <li>Render block-style Tex (currently rendering only inline-style TeX)</li>
             <li>Enable users to show diagrams in their posts</li>
             <li>Enable users to show charts in their posts</li>
             <li>Add security and privacy to logging in</li>
             <li>Add a view-random-post button</li>
             <li>Add a 'like' feature to posts and playlists</li>
+            <li>Allow the user to view a list of posts that they liked</li>
             <li>Add a print button to posts that opens a new tab with a printer-friendly version of the post</li>
+            <li>Add notification to the user when a post or comment belonging to the user receives a reply</li>
         </ul>
         <p>Known issues:</p>
         <ul>
-            <li>Adding a post to a playlist does not update the add-to-playlist select menu, even upon refreshing the page. This is because the user's playlists are loaded from sessionStorage which is updated only when the user logs in.</li>
+            <li>Altering a playlist does not update the add-to-playlist select menu, even upon refreshing the page. This is because the user's playlists are loaded from sessionStorage which is updated only when the user logs in.</li>
             <li>In creating and editing posts, the 'save draft' and 'publish' radio options do not show the user's selection.</li>
             <li>Adding tags to posts works while editing posts but not while creating posts.</li>
         </ul>

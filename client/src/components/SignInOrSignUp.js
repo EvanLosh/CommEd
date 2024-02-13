@@ -4,8 +4,7 @@ import './SignInOrSignUp.css'
 
 function SignInOrSignUp({ commonProps, login, logout, }) {
 
-    // const [justLoggedIn, setJustLoggedIn] = useState(false)
-    // useEffect(() => window.location.href = commonProps.websiteURL, [justLoggedIn])
+    const [createdNewUser, setCreatedNewUser] = useState(false)
 
     const formikSignIn = useFormik({
         initialValues: {
@@ -14,8 +13,6 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
             password: ''
         },
         onSubmit: values => {
-            // console.log(`Logging in: `)
-            // console.log(values)
             login(values)
         },
     });
@@ -37,6 +34,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Success:', data);
+                    setCreatedNewUser(true)
                     formikSignUp.resetForm(); // Reset the form after submit
                 })
                 .catch((error) => {
@@ -56,7 +54,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 value={formikSignIn.values.username}
             />
             <br></br>
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email">Email (not required):</label>
             <input
                 type="text"
                 name="email"
@@ -77,8 +75,16 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
 
     const loginForm = commonProps.user.id > 0 ? logoutForm : signInForm
 
+    const signUpSuccessMessage = 
+    createdNewUser
+        ?
+        <p id='signup-success-message'>Successfully created new user. You may sign in.</p>
+        :
+        null
+
     const signUpForm = <div>
         <h3>Sign up</h3>
+
         <form onSubmit={formikSignUp.handleSubmit}>
             <label htmlFor="username">Username:</label>
             <input
@@ -88,7 +94,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 value={formikSignUp.values.username}
             />
             <br></br>
-            <label htmlFor="email">email:</label>
+            <label htmlFor="email">Email (required):</label>
             <input
                 type="text"
                 name="email"
@@ -96,6 +102,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 value={formikSignUp.values.email}
             />
             <br></br>
+            {signUpSuccessMessage}
             <input type="submit" value="Sign up" />
         </form>
     </div>

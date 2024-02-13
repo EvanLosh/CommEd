@@ -3,9 +3,9 @@ import React, { useState } from "react";
 
 
 function AddToPlaylist({ commonProps, usersPlaylists, post }) {
+
     const [creatingNewPlaylist, setCreatingNewPlaylist] = useState(false)
     const [newPlaylistTitle, setNewPlaylistTitle] = useState('')
-
 
     if (!usersPlaylists) {
         usersPlaylists = []
@@ -22,14 +22,6 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
     usersPlaylists.forEach(playlist => playlist.postIsInPlaylist = postIsInPlaylist(post, playlist))
 
 
-    // const usersPlaylistsList = usersPlaylists.map((playlist) => {
-    //     const x = playlist.posts.map((post) => {
-    //         return post.id
-    //     })
-
-    //     return { playlist: playlist, postIsInPlaylist: (x.includes(post.id)) }
-    // })
-
     function handleChange(e) {
         console.log('handleChange was called on event:')
         console.log(e)
@@ -42,9 +34,6 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         else if (eTargetValue === '') {
             return null
         }
-        // if (!('playlist' in eTargetValue && 'postIsInPlaylist' in eTargetValue)) {
-        //     return null
-        // }
         else if (eTargetValue.postIsInPlaylist) {
             console.log('That playlist already contains this post')
             return null
@@ -61,7 +50,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
                 .then(r => r.json())
                 .then((r) => {
                     console.log('Added post id = ' + post.id + ' to playlist id = ' + eTargetValue)
-                    // window.location.reload()
+                    window.location.reload()
                 })
         }
         // else {
@@ -72,7 +61,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
     const addToPlaylist = <select className='add-to-playlist-select' onChange={handleChange}>
         <option value=''>Add to playlist</option>
         {usersPlaylists.map((playlist) => {
-            return <option key={playlist.id} name='playlist' value={playlist.id}>{playlist.postIsInPlaylist ? '✓  ' : '◯ '} {playlist.title}</option>
+            return <option key={playlist.id} name='playlist' value={playlist.id}>{playlist.postIsInPlaylist ? '✓  ' : null} {playlist.title}</option>
         })}
         <option name='Create a new playlist' value='Create a new playlist'>+ Create a new playlist</option>
     </select>
@@ -93,6 +82,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
             .then(r => r.json())
             .then((r) => {
                 console.log(r)
+                window.location.reload()
             })
     }
 

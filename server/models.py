@@ -4,14 +4,13 @@ from sqlalchemy.orm import validates, backref
 
 db = SQLAlchemy()
 
-# Models 
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
    
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(1000), nullable=False)
     datetime_created = db.Column(db.DateTime, nullable=False)
     
     serialize_rules = (
@@ -39,11 +38,23 @@ class User(db.Model, SerializerMixin):
         return f'User(id={self.id}, username={self.username})'
 
     @validates('username')
-    def validates_username(self, key, value):
+    def validate_username(self, key, value):
         if not value:
             raise ValueError('Invalid username')
-        if len(value) > 20:
-            raise ValueError('Username cannot exceed 20 characters')
+        if 1 > len(value) > 20:
+            raise ValueError('Username must have 1 to 20 characters')
+        if ',' in value or '\\' in value or '/' in value:
+            return ValueError('Usernames cannot contain commas and slashes')
+        return value
+    
+    @validates('email')
+    def validate_email(self, key, value):
+        if not value:
+            raise ValueError('Invalid email')
+        if 5 > len(value) > 1000 or '@' not in value or '.' not in value:
+            raise ValueError('Email must have 5 to 1000 characters')
+        if ',' in value or '\\' in value or '/' in value:
+            return ValueError('Emails cannot contain commas and slashes')
         return value
     
 class Post(db.Model, SerializerMixin):
@@ -67,7 +78,6 @@ class Post(db.Model, SerializerMixin):
         '-owner.posts',
         '-owner.playlists',
         '-owner.comments',
-        # '-owner_id',
         '-owner.datetime_created',
         '-owner.email',
         '-tags.posts',
@@ -76,7 +86,6 @@ class Post(db.Model, SerializerMixin):
         '-comments.post',
         '-comments.parent_id',
         '-comments.owner_id',
-        # '-comments.owner.id',
         '-comments.owner.email',
         '-comments.owner.datetime_created',
         '-comments.parent', 
@@ -87,11 +96,19 @@ class Post(db.Model, SerializerMixin):
         return f'Post(id={self.id} owner_id={self.owner_id} title={self.title})'
     
     @validates('owner_id')
-    def validate_owner_id(slef, key, value):
+    def validate_owner_id(self, key, value):
         if value > 0:
             return value
         else: 
             raise ValueError('Invalid owner id')
+        
+    @validates('status')
+    def validate_status(self, key,value):
+        # status can have only two values
+        if value == 'draft' or value == 'published':
+            return value
+        else: 
+            raise ValueError('Status can only be draft or published')
     
     
 class Comment(db.Model, SerializerMixin):
@@ -128,13 +145,50 @@ class Comment(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'Comment(id={self.id} post_id={self.post_id} body={self.body})'
-  
+    
+    @validates('owner_id')
+    def validate_owner_id(self, key, value):
+        if value > 0:
+            return value
+        else: 
+            raise ValueError('Invalid owner id')
+        
+    @validates('post_id')
+    def validate_post_id(self, key, value):
+        # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
+        if value == None:
+            if self.parent_id == None:
+                raise ValueError('post_id and parent_id cannot both be None')
+            else:
+                return value
+        elif value > 0:
+            return value
+        else: 
+            raise ValueError('Invalid owner id')
+        
+    @validates('parent_id')
+    # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
+    def validate_parent_id(self, key, value):
+        if value == None:
+            return value
+        elif value > 0:
+            return value
+        else: 
+            raise ValueError('Invalid owner id')
+        
+    @validates('status')
+    def validate_status(self, key,value):
+        # status can have only two values
+        if value == 'draft' or value == 'published':
+            return value
+        else: 
+            raise ValueError('Status can only be draft or published')
     
 class Tag(db.Model, SerializerMixin):
     __tablename__ = 'tags'
 
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(40))
+    text = db.Column(db.String(40), nullable=False)
     datetime_created = db.Column(db.DateTime, nullable=False)
 
 
@@ -147,6 +201,14 @@ class Tag(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'Tag(id={self.id} tag={self.text})'
+    
+    @validates('text')
+    def validate_text(self, key, value):
+        # tags must have text
+        if value:
+            return value
+        else:
+            raise ValueError('Did not receive a value for text')
     
 class Playlist(db.Model, SerializerMixin):
     __tablename__ = 'playlists'
@@ -167,8 +229,6 @@ class Playlist(db.Model, SerializerMixin):
         '-owner.posts',
         '-owner.datetime_created',
         '-owner.email',
-        # '-posts.id',
-        # '-posts.owner_id',
         '-posts.problem_body',
         '-posts.answer_body',
         '-posts.solution_body',
@@ -181,49 +241,44 @@ class Playlist(db.Model, SerializerMixin):
     def __repr__(self):
         return f'Playlist(id={self.id})'
     
+    @validates('owner_id')
+    def validate_owner_id(self, key, value):
+        if value > 0:
+            return value
+        else: 
+            raise ValueError('Invalid owner id')
+        
+    @validates('title')
+    def validate_title(self, key, value):
+        # a title is required
+        if not value:
+            raise ValueError('Did not recieve a value for title')
+        elif len(value) < 1:
+            raise ValueError('Playlist title must be a string with at least one character')
+        else: 
+            return value
+        
+    @validates('status')
+    def validate_status(self, key,value):
+        # status can have only two values
+        if value == 'draft' or value == 'published':
+            return value
+        else: 
+            raise ValueError('Status can only be draft or published')
+        
+
+# post_tag table intermediates the many to many relationship between posts and tags 
 post_tag = db.Table(
 'post_tags', 
 db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
 db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
 )
     
-# class PostTag(db.Model, SerializerMixin):
-#     __tablename__ = 'post_tags'
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     post_id = db.Column(db.Integer,  db.ForeignKey('posts.id'), nullable=False)
-#     tag_id = db.Column(db.Integer,  db.ForeignKey('tags.id'), nullable=False)
-
-#     serialize_rules = (
-#         '-post.post_tags', 
-#         '-post.owner',
-#         '-post.comments',
-#         '-post.playlist_posts',
-#         '-tag.post_tags')
-
-#     def __repr__(self):
-#         return f'Post_tag(id={self.id})'
-    
+# playlist_post table intermediates the many to many relationship between playlists and posts    
 playlist_post = db.Table(
 'playlist_posts', 
 db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
 db.Column('playlist_id', db.Integer, db.ForeignKey('playlists.id'))
 )
 
-# class PlaylistPost(db.Model, SerializerMixin):
-#     __tablename__ = 'playlist_posts'
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     post_id = db.Column(db.Integer,  db.ForeignKey('posts.id'), nullable=False)
-#     playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'),  nullable=False)
-
-#     serialize_rules = (
-#         # '-post.post_tags', 
-#         # '-post.owner',
-#         '-post.comments',
-#         '-post.playlist_posts', 
-#         '-playlist.owner'
-#         '-playlist.playlist_posts')
-
-    # def __repr__(self):
-    #     return f'Playlist_post(id={self.id})'

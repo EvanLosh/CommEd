@@ -28,6 +28,7 @@ db.init_app(app)
 class SignInResource(Resource):
 
     def post(self):
+        # TODO: This is not RESTful. replace this endpoint with one that gets a user by using the username as a route parameter.
         form_data = request.get_json()
         print(form_data)
         user = User.query.filter_by(username = form_data['username']).first()
@@ -37,30 +38,11 @@ class SignInResource(Resource):
         else:
             return {}, 200
 
-# class SignOutResource(Resource):
-#     def delete(self):
-#         session['user_id'] = None
-#         return {}, 204
-    
-# class CheckSessionResource(Resource):
-#     def get(self):
-#         print(session['user_id'])
-#         if hasattr(session, 'user_id'):
-#             user = User.query.filter_by(id = session['user_id']).first()
-#             if user:
-#                 return user.to_dict(), 200
-#         return {}, 401
-
 
 class UsersResource(Resource):
-    def get(self):
-        # return a list of all users
-        users = [u.to_dict() for u in User.query.all()]
-        return users, 200
     
     def post(self):
         # create a new user
-        # form data includes: username, email
         form_data = request.get_json()
         new_user = User(username=form_data['username'], email=form_data['email'], datetime_created=datetime.now())
         db.session.add(new_user)
@@ -70,8 +52,8 @@ class UsersResource(Resource):
 class UserResource(Resource):
     # return full details of the specified user 
     def get(self, id):
-        users = [u.to_dict() for u in User.query.all()]
-        return users, 200
+        user = User.query.filter_by(id = id).first()
+        return user.to_dict(), 200
 
 
 class PostsResource(Resource):
@@ -116,19 +98,20 @@ class PostResource(Resource):
         post = Post.query.get_or_404(id)
         
         form_data = request.get_json()
-        
-        # make a list of Tag objects
+        # make a list of the Tag objects
         tags = []
         for t in form_data['tags']:
+            # check if a Tag object already exists
             existing_tag = Tag.query.filter_by(text = t['text']).first()
             if existing_tag:
                 tags.append(existing_tag)
                 db.session.add(existing_tag)
             else:
+                # if no Tag object already exists, create it
                 new_tag = Tag(text = t['text'], datetime_created = datetime.now())
                 tags.append(new_tag)
                 db.session.add(new_tag)
-            # commit one by one to avoid duplicates
+            # commit one at a time to avoid duplicates
             db.session.commit()
         
         # post = Post.query.filter_by(id = id).first()
@@ -156,13 +139,15 @@ class PostResource(Resource):
 
     def delete(self, id):
         post = Post.query.filter_by(id = id).first()
-        db.session.delete(post)
-        db.session.commit() 
-        return {}, 204
+        if post:
+            db.session.delete(post)
+            db.session.commit() 
+            return {}, 204
+        else: 
+            return {}, 404
 
 class CommentsResource(Resource):
     def post(self):
-        print(request)
         # create a new comment
         form_data = request.get_json()
         print(form_data)
@@ -170,6 +155,8 @@ class CommentsResource(Resource):
             return {'errors': 'Invalid user id'}, 500
         try:
             if form_data['parent_id']:
+                # a comment must have either a parent_id or a post_id, not both
+                # a not-None parent_id makes the comment a child of another comment
                 newComment = Comment(datetime_created = datetime.now(),
                            owner_id = form_data['owner_id'],
                            body = form_data['body'],
@@ -219,6 +206,7 @@ class PlaylistsResource(Resource):
         return playlists, 200
     
     def post(self):
+        # Create a new playlist
         form_data = request.get_json()
         first_post = Post.query.filter_by(id = form_data['post_id']).first()
         new_playlist = Playlist(owner_id = form_data['owner_id'], title = form_data['title'], posts = [first_post], datetime_created = datetime.now())
@@ -228,7 +216,7 @@ class PlaylistsResource(Resource):
 
 class PlaylistResource(Resource):
     def get(self, id):
-    # return complete details of a specified playlist
+        # return complete details of a specified playlist
         playlist = Playlist.query.filter_by(id = id).first()
         if playlist:
             return playlist.to_dict(), 200
@@ -236,9 +224,9 @@ class PlaylistResource(Resource):
             return {}, 404
     
     def patch(self, id):
-        # update a playlist
+        # Add or remove a post to a playlist
         form_data = request.get_json()
-        print(form_data)
+
         playlist = Playlist.query.filter_by(id = id).first()
         if not playlist:
             return {}, 404
@@ -255,6 +243,7 @@ class PlaylistResource(Resource):
             return {}, 404
     
     def delete(self, id):
+        # delete a playlist
         playlist = Playlist.query.filter_by(id = id).first()
         if playlist:
             db.session.delete(playlist)
@@ -268,24 +257,21 @@ class TagsResource(Resource):
         tags = [t.to_dict() for t in Tag.query.all()]
         return tags, 200
     
-    def post(self):
-        # create a new tag
-        return {}
+    # Tags are created when creating or editing posts
+
     
 
 api.add_resource(UsersResource, '/users') # Post
-api.add_resource(UserResource, '/users/<int:id>') #?
+api.add_resource(UserResource, '/users/<int:id>') # Get
 api.add_resource(PostsResource, '/posts') # Get, Post
 api.add_resource(PostResource, '/posts/<int:id>') # Get, Patch, Delete
 api.add_resource(CommentsResource, '/comments') # Post
 api.add_resource(CommentResource, '/comments/<int:id>') # Patch, Delete
 api.add_resource(PlaylistsResource, '/playlists') # Get, Post
-api.add_resource(PlaylistResource, '/playlists/<int:id>') # Patch, Delete
-api.add_resource(TagsResource, '/tags') # Get, Post
-# api.add_resource(Comment, '/comment/<string:root>/<int:id>') #
+api.add_resource(PlaylistResource, '/playlists/<int:id>') # Get, Patch, Delete
+api.add_resource(TagsResource, '/tags') # Get
 api.add_resource(SignInResource, '/signin') # Post
-# api.add_resource(SignOutResource, '/signout') # Delete
-# api.add_resource(CheckSessionResource, '/check_session') # Get
+
 
 if __name__ == "__main__":
     app.run(debug=True)

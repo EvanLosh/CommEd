@@ -6,8 +6,6 @@ import { prepareDataForValidation } from "formik";
 function Posts({ commonProps }) {
 
 
-
-
     const [posts, setPosts] = useState([])
     const [filterCriteria, setFilterCriteria] = useState({
         title: '',
@@ -32,9 +30,7 @@ function Posts({ commonProps }) {
             })
     }
 
-    function fetchPlaylists() {
-        // need to get the user's playlists for the add-to-playlist select element
-    }
+
 
     useEffect(fetchPosts, [])
 
@@ -46,31 +42,30 @@ function Posts({ commonProps }) {
     const filteredPosts = posts
         .filter((p) => p.title.toUpperCase().includes(filterCriteria.title.toUpperCase()))
         .filter((p) => p.owner.username.toUpperCase().includes(filterCriteria.author.toUpperCase()))
-    // .filter((p) => )
 
 
 
 
     const searchAndFilterForm = <form>
         <div className='form-line'>
-            <label>Title contains</label>
+            <label>Title contains:</label>
             <input name='title' value={filterCriteria.title} onChange={handleChange} ></input>
         </div>
         <div className='form-line'>
-            <label>Author contains</label>
+            <label>Author contains:</label>
             <input name='author' value={filterCriteria.author} onChange={handleChange}></input>
         </div>
         <div className='form-line'>
-            <label>Published after</label>
-            <input></input>
+            <label>Published after:</label>
+            <input value='Work in progress'></input>
         </div>
         <div className='form-line'>
-            <label>Published before</label>
-            <input></input>
+            <label>Published before:</label>
+            <input value='Work in progress'></input>
         </div>
         <div className='form-line'>
-            <label>Tags (separated by commas)</label>
-            <input></input>
+            <label>Tags (separated by commas):</label>
+            <input value='Work in progress'></input>
         </div>
     </form>
 
@@ -87,16 +82,20 @@ function Posts({ commonProps }) {
 
     const reverseSortButton = <button onClick={handleReverseSort}>Reverse sort</button>
 
-    
+
 
 
 
     return <div id="posts">
         <h2 className="commed-style">Posts</h2>
-        {searchAndFilterForm}
-        <div>
-            {sortForm}
-            {reverseSortButton}
+        <div id='filter-and-sort'>
+            <p>Filter options:</p>
+            {searchAndFilterForm}
+            <p>Sort options:</p>
+            <div>
+                {sortForm}
+                {reverseSortButton}
+            </div>
         </div>
         <PostCardList commonProps={commonProps} posts={filteredPosts} removable={false} />
     </div>;
