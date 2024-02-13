@@ -1,11 +1,123 @@
-a {
-    padding: 10px;
+#header {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: green;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
+
+/* a {
+    padding: 10px;
+    color: white;
+} */
 
 #site-title {
-    font-size: 2em;
+    font-weight: bold;
+    border: solid;
+    border-color: white;
+    border-radius: 10px;
 }
 
-#header {
+#site-title-text {
+    font-size: 3em;
+    padding: 10px;
+    color: white;
+}
+
+#site-title * {
+    text-decoration: none;
+}
+
+
+#dashboard {
     display: flex;
+    align-items: flex-end;
+
+}
+
+#dashboard-links {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#dashboard-links a {
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+}
+
+#current-user {
+    padding: 10px;
+    padding-left: 0;
+    margin-left: 20px;
+    border: solid;
+    border-color: white;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 10px;
+
+}
+
+#current-user a {
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    text-decoration: none;
+}
+
+#current-user div {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+
+/* #current-user>p,
+a {
+    text-decoration: none;
+    color: white;
+} */
+
+#current-user * {
+    text-wrap: nowrap;
+}
+
+#current-user-name {
+    color: white;
+    border-right: solid;
+    border-color: white;
+    padding: 10px;
+    margin: 0;
+}
+
+select {
+    background: green;
+    color: white;
+    border: none;
+    padding-left: 10px;
+    font-size: 16px;
+    /* line-height: 20px; */
+    /* display: none; */
+    /*hide original SELECT element: */
+
+}
+
+select * {
+    background: green;
+    color: white;
+
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
 }

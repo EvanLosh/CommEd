@@ -10,9 +10,9 @@ import PlaylistFetcher from "./PlaylistFetcher";
 import ViewPost from "./ViewPost";
 import CreateAndEditPost from "./CreateAndEditPost";
 import ErrorBoundary from "./ErrorBoundary";
-import EditPlaylist from './EditPlaylist'
 import Posts from "./Posts";
 import Playlists from "./Playlists";
+import Profile from './Profile'
 
 
 
@@ -79,14 +79,12 @@ function App() {
   function getSessionUser() {
     const sessionUserString = sessionStorage.getItem('sessionUser');
     const sessionUser = JSON.parse(sessionUserString);
-    // console.log('Got user from sessionStorage: ')
-    // console.log(sessionUser)
+
     return sessionUser
   }
 
   function setSessionUser(user) {
-    // console.log('Setting user in sessionStorage: ')
-    // console.log(user)
+
     sessionStorage.setItem('sessionUser', JSON.stringify(user))
   }
 
@@ -100,8 +98,7 @@ function App() {
     })
       .then(r => r.json())
       .then(data => {
-        // console.log('Response from server: ')
-        // console.log(data)
+
         if ('id' in data) {
           setSessionUser(data)
           setUser(data)
@@ -117,34 +114,8 @@ function App() {
 
   function logout() {
     setSessionUser(blankUser)
-    setUser(blankUser)
-
-    // fetch(serverURL + '/signout',
-    //   {
-    //     method: 'DELETE',
-    //     header: { 'Content-Type': 'application/json', },
-    //   })
-    //   .then(r => r.json())
-    //   .then((r) => {
-    //     console.log('Current server session is ' + JSON.stringify(r))
-    //     setLoginSession({ user: { blankUser }, loggedIn: false })
-    //   })
-
+    setUser(getSessionUser())
   }
-
-  // function checkSession() {
-  //   fetch(serverURL + '/check_session')
-  //     .then(r => r.json())
-  //     .then((r) => {
-  //       console.log('Current server session is ' + JSON.stringify(r))
-  //       let loggedIn = false
-  //       if (r.id) {
-  //         loggedIn = true
-  //       }
-  //       setLoginSession({ user: r, loggedIn: loggedIn })
-  //     })
-  // }
-
   useEffect(() => {
     const sessionUser = getSessionUser()
     console.log('Session user is ')
@@ -153,6 +124,7 @@ function App() {
       setUser(sessionUser)
     }
   }, [])
+
 
   function renderDatetimeAndAuthor(x = { owner: { username: '' }, datetime_created: '' }) {
     let edited = ''
@@ -256,6 +228,11 @@ function App() {
       element: <PlaylistFetcher commonProps={commonProps} />,
       errorElement: < ErrorBoundary commonProps={commonProps} />
     },
+    // {
+    //   path: '/profile',
+    //   element: <Profile commonProps={commonProps} />,
+    //   errorElement: < ErrorBoundary commonProps={commonProps} />
+    // },
     {
       path: "/sign-in-or-sign-up",
       element: <SignInOrSignUp login={login} logout={logout} commonProps={commonProps} />,
@@ -265,9 +242,10 @@ function App() {
 
   return (
     <div id="app">
-      <Header commonProps={commonProps} getSessionUser={getSessionUser} />
+      <Header commonProps={commonProps} getSessionUser={getSessionUser} logout={logout} />
       <RouterProvider router={router} />
       <Footer />
+      <div id='space-at-the-bottom-of-the-webpage'></div>
     </div>
   );
 }

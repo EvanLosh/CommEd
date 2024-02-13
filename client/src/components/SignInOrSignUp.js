@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import './SignInOrSignUp.css'
 
 function SignInOrSignUp({ commonProps, login, logout, }) {
 
@@ -45,7 +46,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
     });
 
     const signInForm = <div>
-        <p>Sign in</p>
+        <h3>Sign in</h3>
         <form onSubmit={formikSignIn.handleSubmit}>
             <label htmlFor="username">Username:</label>
             <input
@@ -54,6 +55,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 onChange={formikSignIn.handleChange}
                 value={formikSignIn.values.username}
             />
+            <br></br>
             <label htmlFor="email">Email:</label>
             <input
                 type="text"
@@ -61,6 +63,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 onChange={formikSignIn.handleChange}
                 value={formikSignIn.values.email}
             />
+            <br></br>
             <input type="submit" value="Sign in" />
         </form>
     </div>
@@ -69,12 +72,13 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
         <form onSubmit={logout}>
             <input type="submit" value="Log out" />
         </form>
+        <button onClick={() => window.location.href = commonProps.websiteURL}>Return home</button>
     </div >
 
     const loginForm = commonProps.user.id > 0 ? logoutForm : signInForm
 
     const signUpForm = <div>
-        <p>Sign up</p>
+        <h3>Sign up</h3>
         <form onSubmit={formikSignUp.handleSubmit}>
             <label htmlFor="username">Username:</label>
             <input
@@ -83,6 +87,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 onChange={formikSignUp.handleChange}
                 value={formikSignUp.values.username}
             />
+            <br></br>
             <label htmlFor="email">email:</label>
             <input
                 type="text"
@@ -90,6 +95,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 onChange={formikSignUp.handleChange}
                 value={formikSignUp.values.email}
             />
+            <br></br>
             <input type="submit" value="Sign up" />
         </form>
     </div>

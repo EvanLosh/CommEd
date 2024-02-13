@@ -39,8 +39,6 @@ function Edit({ commonProps, originalPost, renderCreateAndEditPostForm, tags }) 
 
 
 
-
-
     return <div id="edit-form">
         {renderCreateAndEditPostForm(formik)}
     </div>;

@@ -219,8 +219,12 @@ class PlaylistsResource(Resource):
         return playlists, 200
     
     def post(self):
-        # create a new playlist
-        return {}
+        form_data = request.get_json()
+        first_post = Post.query.filter_by(id = form_data['post_id']).first()
+        new_playlist = Playlist(owner_id = form_data['owner_id'], title = form_data['title'], posts = [first_post], datetime_created = datetime.now())
+        db.session.add(new_playlist)
+        db.session.commit()
+        return new_playlist.to_dict(), 201
 
 class PlaylistResource(Resource):
     def get(self, id):
@@ -234,6 +238,7 @@ class PlaylistResource(Resource):
     def patch(self, id):
         # update a playlist
         form_data = request.get_json()
+        print(form_data)
         playlist = Playlist.query.filter_by(id = id).first()
         if not playlist:
             return {}, 404
@@ -250,8 +255,12 @@ class PlaylistResource(Resource):
             return {}, 404
     
     def delete(self, id):
-        # delete a playlist
-        return {}
+        playlist = Playlist.query.filter_by(id = id).first()
+        if playlist:
+            db.session.delete(playlist)
+            db.session.commit()
+            return {}, 204
+        return {}, 404
   
 class TagsResource(Resource):
     def get(self):

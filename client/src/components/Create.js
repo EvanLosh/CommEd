@@ -36,7 +36,7 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
 
 
     return <div id="create-form">
-        {renderCreateAndEditPostForm(formik)}
+        {commonProps.user.id > 0 ? renderCreateAndEditPostForm(formik) : <a href='/sign-in-or-sign-up'>Sign in to create posts</a>}
     </div>;
 }
 

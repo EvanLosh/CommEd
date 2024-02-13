@@ -5,3 +5,7 @@
     flex-direction: column;
     padding: 20px;
 }
+
+#home-playlists {
+    width: 100%;
+}

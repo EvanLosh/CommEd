@@ -2,3 +2,9 @@
     padding-left: 20px;
     border: solid;
 }
+
+textarea {
+    width: 400px;
+    height: 240px;
+}
+

@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
+import CurrentUser from "./CurrentUser";
 import "./Header.css"
 
 
-function Header({ commonProps, getSessionUser }) {
+function Header({ commonProps, getSessionUser, logout }) {
     return <div id="header">
-        <a id='site-title' href={commonProps.websiteURL} >CommEd</a>
-        <p>Current user = {commonProps.user.username}, id = {commonProps.user.id}.</p>
-        <a href={commonProps.websiteURL + '/sign-in-or-sign-up'}>Sign in or sign up</a>
-        <button onClick={() => getSessionUser()}>who is user</button>
-        <a href={commonProps.websiteURL + '/posts'}>Posts</a>
-        <a href={commonProps.websiteURL + '/playlists'}>Playlists</a>
-        <a href={commonProps.websiteURL + '/create'}>Create</a>
-        <a href={commonProps.websiteURL + '/about'}>About</a>
+        <div id='site-title'>
+
+            <a id='site-title-text' href={commonProps.websiteURL} >CommEd</a>
+        </div>
+        <div id='dashboard'>
+
+            {/* <a href={commonProps.websiteURL + '/sign-in-or-sign-up'}>Sign in or sign up</a> */}
+            {/* <button onClick={() => getSessionUser()}>who is user</button> */}
+            <div id='dashboard-links'>
+
+                <a href={commonProps.websiteURL + '/posts'}>Posts</a>
+                <a href={commonProps.websiteURL + '/playlists'}>Playlists</a>
+                <a href={commonProps.websiteURL + '/create'}>Create</a>
+                <a href={commonProps.websiteURL + '/about'}>About</a>
+            </div>
+            <CurrentUser commonProps={commonProps} logout={logout} />
+        </div>
     </div>;
 }
 

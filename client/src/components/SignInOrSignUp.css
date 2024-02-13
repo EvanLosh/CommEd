@@ -1,0 +1,10 @@
+#sign-in-or-sign-up {
+    margin: 20px;
+    padding: 10px;
+}
+
+form * {
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+}
