@@ -14,11 +14,11 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
         return replying
             ?
             <div>
-                <p onClick={() => setReplying(false)}>cancel</p>
+                <p onClick={() => setReplying(false)} className='commed-style'>cancel</p>
                 <SubmitComment commonProps={commonProps} replying={replying} parent_id={comment.id} post_id={post_id} />
             </div>
             :
-            <p onClick={() => setReplying(true)}>reply</p>;
+            <p onClick={() => setReplying(true)} className='commed-style'>Reply</p>;
     }
 
     function handleChange(e) {
@@ -50,10 +50,15 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
             <p onClick={() => setEditing(false)}>cancel</p>
         </form>
         :
-        <div>
-            <div><InlineTex texContent={comment.body} /></div>
-            {comment.owner.id === commonProps.user.id ? <p onClick={() => setEditing(true)}>Edit</p> : null}
-        </div>
+        <div><InlineTex texContent={comment.body} /></div>
+
+
+    const editButton = comment.owner.id === commonProps.user.id
+        ?
+        < div >
+            {comment.owner.id === commonProps.user.id ? <p onClick={() => setEditing(true)} className='commed-style'>Edit</p> : null}
+        </ div>
+        : null
 
 
     let commentElement
@@ -63,8 +68,11 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
         commentElement = <div className="comment" >
             {commonProps.renderDatetimeAndAuthor(comment)}
             {editCommentForm}
-            {parseInt(comment.owner.id) === parseInt(commonProps.user.id) ? commonProps.renderDelete(comment) : null}
-            {renderReplyElement()}
+            <div className='comment-options-line'>
+                {renderReplyElement()}
+                {editButton}
+                {parseInt(comment.owner.id) === parseInt(commonProps.user.id) ? commonProps.renderDelete(comment) : null}
+            </div>
             {renderComments(comment, 'comment')}
         </div>
     }

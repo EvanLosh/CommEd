@@ -24,10 +24,7 @@ function CreateAndEditPost({ commonProps, child }) {
         }
 
         return <div className='create-and-edit-form'>
-            <p>
-                Create new post
 
-            </p>
             <TagForm commonProps={commonProps} tags={tags} addTag={addTag} />
             <form id='create-and-edit-post-form' onSubmit={formik.handleSubmit}>
                 <div className='text-form'>
@@ -49,11 +46,13 @@ function CreateAndEditPost({ commonProps, child }) {
                     <textarea type='references' id='references' name='references' value={formik.values.references} onChange={formik.handleChange}></textarea>
                     <br></br>
                 </div>
-                <input type='radio' id='draft' name='draft' value={'draft'} checked={formik.values.status === 'draft'} onChange={handleStatusRadio}></input>
-                <label htmlFor='draft'>Save draft</label>
-                <input type='radio' id='publish' name='publish' value={'publish'} checked={formik.values.status === 'publish'} onChange={handleStatusRadio}></input>
-                <label htmlFor='publish'>Publish (you can edit your post after publishing it)</label>
-                <br></br>
+                <div clasName='form-line'>
+                    <input type='radio' id='draft' name='status' value={'draft'} onChange={handleStatusRadio}></input>
+                    <label htmlFor='draft'>Save draft</label>
+                    <input type='radio' id='publish' name='status' value={'publish'} onChange={handleStatusRadio}></input>
+                    <label htmlFor='publish'>Publish (you can edit your post after publishing it)</label>
+                    <br></br>
+                </div>
                 <input type="submit" value="Submit" />
             </form>
         </div >

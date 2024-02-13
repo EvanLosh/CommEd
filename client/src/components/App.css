@@ -56,8 +56,12 @@ li {
     background-color: green;
     color: white;
     text-decoration: none;
+    display: inline-block;
     padding: 10px;
     padding-left: 20px;
+    padding-right: 20px;
+    /* margin-left: 10px; */
+
 }
 
 .no-text-decoration {
@@ -99,4 +103,16 @@ li {
     border-color: green;
     border-radius: 10px;
     padding: 10px;
+}
+
+.add-tag-form {
+    display: flex;
+}
+
+.add-tag-form #tag-input {
+    width: 100%;
+}
+
+.comment-options-line {
+    display: flex;
 }

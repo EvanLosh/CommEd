@@ -40,6 +40,8 @@ function Edit({ commonProps, originalPost, renderCreateAndEditPostForm, tags }) 
 
 
     return <div id="edit-form">
+        <h3 className='commed-style'>Edit your post</h3>
+        <p>Tip: Changes are NOT saved automatically. You can submit your post as a draft, making it hidden from other users until you publish it.</p>
         {renderCreateAndEditPostForm(formik)}
     </div>;
 }
