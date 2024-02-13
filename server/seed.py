@@ -39,7 +39,7 @@ def generate_fake_post():
         answer_body = fake.text(max_nb_chars=100),
         solution_body = fake.text(max_nb_chars=100),
         references = fake.text(max_nb_chars=100),
-        status = 'punlished',
+        status = 'published',
         datetime_created=datetime.now()
     )
 
@@ -81,7 +81,7 @@ def seed_database():
         for i in range(8):
             user = generate_fake_user()
             db.session.add(user)
-        db.session.add(User(username='dev', email='dev', datetime_created=datetime.now()))
+        db.session.add(User(username='dev', email='dev@example.com', datetime_created=datetime.now()))
         db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
@@ -90,7 +90,7 @@ def seed_database():
         answer_body = fake.text(max_nb_chars=100),
         solution_body = fake.text(max_nb_chars=100),
         references = fake.text(max_nb_chars=100),
-        status = 'punlished',
+        status = 'published',
         datetime_created=datetime.now()
         )
         db.session.add(post)
@@ -102,7 +102,7 @@ def seed_database():
         answer_body = fake.text(max_nb_chars=100),
         solution_body = fake.text(max_nb_chars=100),
         references = fake.text(max_nb_chars=100),
-        status = 'punlished',
+        status = 'published',
         datetime_created=datetime.now()
         )
         db.session.add(post)

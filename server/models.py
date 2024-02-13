@@ -51,9 +51,13 @@ class User(db.Model, SerializerMixin):
     def validate_email(self, key, value):
         if not value:
             raise ValueError('Invalid email')
-        if 5 > len(value) > 1000 or '@' not in value or '.' not in value:
+        elif (5 > len(value) > 1000):
             raise ValueError('Email must have 5 to 1000 characters')
-        if ',' in value or '\\' in value or '/' in value:
+        elif ('@' not in value):
+            raise ValueError('Emails must contain @')
+        elif ('.' not in value):
+            raise ValueError('Emails must contain .')
+        elif ',' in value or '\\' in value or '/' in value:
             return ValueError('Emails cannot contain commas and slashes')
         return value
     
@@ -105,8 +109,10 @@ class Post(db.Model, SerializerMixin):
     @validates('status')
     def validate_status(self, key,value):
         # status can have only two values
-        if value == 'draft' or value == 'published':
+        if (value == 'draft') or (value == 'published') or (value == None):
             return value
+        # if value:
+        #     return value
         else: 
             raise ValueError('Status can only be draft or published')
     
@@ -179,7 +185,7 @@ class Comment(db.Model, SerializerMixin):
     @validates('status')
     def validate_status(self, key,value):
         # status can have only two values
-        if value == 'draft' or value == 'published':
+        if value == 'draft' or value == 'published' or value == None:
             return value
         else: 
             raise ValueError('Status can only be draft or published')
@@ -261,7 +267,7 @@ class Playlist(db.Model, SerializerMixin):
     @validates('status')
     def validate_status(self, key,value):
         # status can have only two values
-        if value == 'draft' or value == 'published':
+        if value == 'draft' or value == 'published' or value == None:
             return value
         else: 
             raise ValueError('Status can only be draft or published')
