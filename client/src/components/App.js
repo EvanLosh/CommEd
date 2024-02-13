@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forceUpdate } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import About from './About'
@@ -73,18 +73,16 @@ function renderTags(listOfTags = []) {
 
 function App() {
 
-  // User login session
-  const [user, setUser] = useState(blankUser)
-
   function getSessionUser() {
     const sessionUserString = sessionStorage.getItem('sessionUser');
     const sessionUser = JSON.parse(sessionUserString);
-
     return sessionUser
   }
+  // User login session
+  const [user, setUser] = useState(getSessionUser)
+
 
   function setSessionUser(user) {
-
     sessionStorage.setItem('sessionUser', JSON.stringify(user))
   }
 
@@ -122,6 +120,13 @@ function App() {
     console.log(sessionUser)
     if (sessionUser?.id > 0) {
       setUser(sessionUser)
+      // if (sessionUser === user) {
+      //   // App.js must rerender after 
+      //   forceUpdate()
+      // }
+      // else {
+      //   setUser(sessionUser)
+      // }
     }
   }, [])
 
