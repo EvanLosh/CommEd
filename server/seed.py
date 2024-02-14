@@ -81,29 +81,82 @@ def seed_database():
         for i in range(8):
             user = generate_fake_user()
             db.session.add(user)
-        db.session.add(User(username='dev', email='dev@example.com', datetime_created=datetime.now()))
+        # db.session.add(User(username='dev', email='dev@example.com', datetime_created=datetime.now()))
         db.session.commit()
 
+        tag_proofs = Tag(text = 'Proofs', datetime_created = datetime.now())
+        tag_number_theory = Tag(text = 'Number theory', datetime_created = datetime.now())
+        tag_integers = Tag(text = 'Integers', datetime_created = datetime.now())
+        tag_vectors = Tag(text = 'Vectors', datetime_created = datetime.now())
+        tag_optics = Tag(text = 'Optics', datetime_created = datetime.now())
+        tag_focal_length = Tag(text = 'Focal length', datetime_created = datetime.now())
+        tag_lenses = Tag(text = 'Lenses', datetime_created = datetime.now())
+        tag_current = Tag(text = 'Current', datetime_created = datetime.now())
+        tag_circuits = Tag(text = 'Circuits', datetime_created = datetime.now())
+        tag_v_equals_ir = Tag(text = 'V = IR', datetime_created = datetime.now())
+
+
         post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r'<InlineTex texContent={ "This is inline $$\int_{a}^{b} f(x)dx = F(b) - F(a)$$ latex string"}/>',
-        problem_body = r'<Tex texContent={"\int_{a}^{b} f(x)dx = F(b) - F(a)"}/>',
-        answer_body = fake.text(max_nb_chars=100),
-        solution_body = fake.text(max_nb_chars=100),
-        references = fake.text(max_nb_chars=100),
+        title = r"Prove that there are no integers between 0 and 1",
+        problem_body = r"Theorem: There are no integers between 0 and 1. Is the theorem true?",
+        answer_body = r"The theorem is true.",
+        solution_body = r"Let $$S = \{ n \in \mathbb{Z} | n > 0 \}$$. Let $$a$$ be the smallest element in $$S$$. Assume for the sake of contradiction that $$a < 1$$. Multiplying both sides of the inquality by $$a$$ does not affect the validity of the inequality. Thus $$a^2 < a $$, and $$a^2 \in S$$, which is a contradiction. Therefore, the smallest positive integer is not less than one.",
+        references = r"https://www.scijournal.org/articles/integer-number-symbol-in-latex#:~:text=Integer%20Number%20in%20LaTeX,takes%20one%20value%20as%20argument.&text=As%20you%20can%20see%2C%20you,%7D%2C%20it%20accepts%20any%20letter.",
         status = 'published',
-        datetime_created=datetime.now()
+        datetime_created=datetime.now(),
+        tags = [tag_proofs, tag_number_theory, tag_integers]
         )
         db.session.add(post)
         db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r'This is inline $$\int_{a}^{b} f(x)dx = F(b) - F(a)$$',
-        problem_body = r'\int_{a}^{b} f(x)dx = F(b) - F(a)',
-        answer_body = fake.text(max_nb_chars=100),
-        solution_body = fake.text(max_nb_chars=100),
-        references = fake.text(max_nb_chars=100),
+        title = r"Show that $$ |\vec{u} \times \vec{v} |^{2}+ (\vec{u} \cdot \vec{v})^{2} = u^{2}v^{2} $$.",
+        problem_body = r"Show that $$ |\vec{u} \times \vec{v} |^{2} + (\vec{u} \cdot \vec{v})^{2} =  u^{2}v^{2} $$.",
+        answer_body = r"Express the products in terms of the magnitudes of $$ \vec{u}$$ and $$\vec{v}$$ and the angle between them.",
+        solution_body = r"Let $$\theta$$ be the the angle between $$\vec{u}$$ and $$\vec{v}$$. Then $$ |\vec{u} \times \vec{v} |^{2} = u^{2} v^{2} \sin^{2} \theta$$. And $$(\vec{u} \cdot \vec{v})^{2} = u^{2} v^{2} \cos^{2} \theta$$. The sum is $$u^{2} v^{2} (\cos^{2} \theta + \sin^{2} \theta)$$ which simplifies to $$ u^{2} v^{2}$$",
+        references = "https://www-users.cse.umn.edu/~akhmedov/samplem1",
         status = 'published',
-        datetime_created=datetime.now()
+        datetime_created=datetime.now(),
+        tags = [tag_vectors]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Calculate the focal length of a lens",
+        problem_body = r"An object is placed $$5 \mathrm{cm}$$ away from a lens, and its image is in focus at a distance of $$20 \mathrm{cm}$$ on the other side of the lens. What is the focal length of the lens? ",
+        answer_body = r"The focal length of the lens is $$4 \mathrm{cm} $$.",
+        solution_body = r"The formula for the focal length $$f$$ of a lens in terms of object distance $$d_o$$ and image distance $$d_i$$ is $$f = d_o d_i / (d_o + d_i)$$. $$d_o = 5 \mathrm{cm}$$ and $$d_i = 20 \mathrm{cm}$$. Thus, $$f = (5 \mathrm{cm}) (20\mathrm{cm}) / (5\mathrm{cm} + 20\mathrm{cm}) = 4 \mathrm{cm}$$." ,
+        references = "https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-physics-2-q3.pdf",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_optics, tag_lenses, tag_focal_length]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"What is the current through two parallel resistors?",
+        problem_body = r"Two resistors $$R_1$$ and $$R_2$$ are connected in parallel with a voltage $$V$$ across them. In terms of these variables, what is the total current through the resistors? ",
+        answer_body = r"$$ I = V (R_1 + R_2) / (R_1 R_2)$$",
+        solution_body = r"The current through each resistor is found by applying $$ V = IR$$. Thus $$ I_1 = V / R_1 $$ and $$ I_2 = V / R_2 $$. Adding the two currents together yeilds the answer above." ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_circuits, tag_v_equals_ir, tag_current]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"What is the probability of drawing certain marbles from a bag?",
+        problem_body = r"A bag contains 6 red marbles and 5 blue marbles. If you draw two marbles sequentially, what is the probability they are different colors?",
+        answer_body = r"$$ P = ",
+        solution_body = r"The current through each resistor is found by applying $$ V = IR$$. Thus $$ I_1 = V / R_1 $$ and $$ I_2 = V / R_2 $$. Adding the two currents together yeilds the answer above." ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_circuits, tag_v_equals_ir, tag_current]
         )
         db.session.add(post)
         db.session.commit()

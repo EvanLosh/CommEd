@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 
 
 function CurrentUser({ commonProps, logout }) {
+    if (!commonProps || !commonProps.user) {
+        commonProps = { user: { username: '', id: -1 } }
+    }
+
     let loggedIn = commonProps.user.id > 0
 
     const handleChange = (e) => {
