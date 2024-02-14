@@ -15,6 +15,11 @@ function CreateAndEditPost({ commonProps, child }) {
         setTags([...tags, tag])
     }
 
+    function removeTag(tag) {
+        const remainingTags = tags.remove(tag)
+        setTags(remainingTags)
+    }
+
 
     function renderCreateAndEditPostForm(formik) {
         const handleStatusRadio = (e) => {
@@ -25,7 +30,7 @@ function CreateAndEditPost({ commonProps, child }) {
 
         return <div className='create-and-edit-form'>
 
-            <TagForm commonProps={commonProps} tags={tags} addTag={addTag} />
+            <TagForm commonProps={commonProps} tags={tags} addTag={addTag} removeTag={removeTag} />
             <form id='create-and-edit-post-form' onSubmit={formik.handleSubmit}>
                 <div className='text-form'>
 

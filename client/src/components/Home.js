@@ -39,9 +39,13 @@ function Home({ commonProps }) {
 
     const postsElement = <div id='home-posts'>
         <h2 className='commed-style'>Featured posts</h2>
-        {posts.length > 0 ? <PostCardList commonProps={commonProps} posts={[posts[0], posts[1], posts[2]]} removable={false} /> : null}
+        {posts.length > 0 ? <PostCardList commonProps={commonProps} renderRemoveButton={renderRemoveButton} posts={[posts[0], posts[1], posts[2]]} removable={false} /> : null}
         <a href='/posts' className='no-text-decoration'><h3 className="commed-style">{'> View more posts'}</h3></a>
     </div>
+
+    function renderRemoveButton(post) {
+        return null
+    }
 
     const playlistsElement = <div id='home-playlists'>
         <h2 className='commed-style'>Featured playlists</h2>

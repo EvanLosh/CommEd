@@ -11,7 +11,6 @@ function About({ commonProps }) {
         <p>Development to-do list:</p>
         <ul>
             <li>Add/improve Back-end data validations and error handling</li>
-            <li>Add a button to each post while viewing a playlist to remove the post from the playlist</li>
             <li>Add a search and filter feature to lists of posts or playlists</li>
             <li>In Create/Edit posts, add a button to each tag to remove the tag</li>
             <li>Add a guide for creating posts and comments</li>
@@ -31,7 +30,7 @@ function About({ commonProps }) {
         </ul>
         <p>Known issues:</p>
         <ul>
-            <li>In creating and editing posts, the 'save draft' and 'publish' radio options do not show the user's selection.</li>
+            
         </ul>
 
     </div>;
