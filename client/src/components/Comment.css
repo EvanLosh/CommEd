@@ -22,3 +22,7 @@ p.datetime-and-author {
     border-radius: 5px;
     margin: 10px;
 }
+
+.edit-comment-cancel.button {
+    margin: auto;
+}

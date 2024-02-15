@@ -1,0 +1,17 @@
+1. flux surface integral
+$$ \Phi_E = \int \vec{E} \mathrm{d} \vec{A} ; \quad \Phi_B = \int \vec{B} \mathrm{d} \vec{A}  $$
+
+2. Ampere's law
+$$ \vec \nabla \times \vec B = \mu_{0} \epsilon_{0} \frac{\partial \vec{E}}{\partial t} + \mu_{0} \vec{J}$$
+
+3. a chemical reaction
+$$ 2H_2  + O_2  \rightarrow 2H_2 O $$
+
+4. another chemical reaction
+$$  2 Na + 2 H_2 O \rightarrow 2 NaOH + H_2 $$
+
+5. radioactive decay
+$$ A(t) = A_0 e^{-t/\tau} $$
+
+6. Schroedinger equation
+$$ \psi = \left(  \frac{\gnabla^2 \si}{2m} + V \psi  \right) $$

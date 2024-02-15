@@ -101,6 +101,8 @@ def seed_database():
         tag_Fourrier = Tag(text = 'Fourrier Transform', datetime_created = datetime.now())
         tag_euler_identity = Tag(text = 'Euler identity', datetime_created = datetime.now())
         tag_complex_numbers = Tag(text = 'Complex numbers', datetime_created = datetime.now())
+        tag_chemistry = Tag(text = 'Chemistry', datetime_created = datetime.now())
+        tag_decay = Tag(text = 'Decay', datetime_created = datetime.now())
         
 
 
@@ -120,6 +122,19 @@ def seed_database():
         db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Rate of chemical reaction $$  2 Na + 2 H_2 O \rightarrow 2 NaOH + H_2 $$ ?",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_chemistry]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"Prove that there are no integers between 0 and 1",
         problem_body = r"Theorem: There are no integers between 0 and 1. Is the theorem true?",
         answer_body = r"The theorem is true.",
@@ -128,6 +143,19 @@ def seed_database():
         status = 'published',
         datetime_created=datetime.now(),
         tags = [tag_proofs, tag_number_theory, tag_integers]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"$$ f(x) = \sum_{n=0}^\infty \left( a_n \cos (n \pi x) + b_n \sin(n \pi x) \right) $$",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_series, tag_Fourrier]
         )
         db.session.add(post)
         db.session.commit()
@@ -184,21 +212,9 @@ def seed_database():
         db.session.add(post)
         db.session.commit()
 
-        post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r"$$ f(x) = \sum_{n=0}^\infty \left( a_n \cos (n \pi x) + b_n \sin(n \pi x) \right) $$",
-        problem_body = r"",
-        answer_body = r"",
-        solution_body = r""  ,
-        references = "",
-        status = 'published',
-        datetime_created=datetime.now(),
-        tags = [tag_series, tag_Fourrier]
-        )
-        db.session.add(post)
-        db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r"$$ e^{i\theta} = \cos\theta + i \sin\theta $$",
+        title = r"Prove that $$ e^{i\theta} = \cos\theta + i \sin\theta $$",
         problem_body = r"",
         answer_body = r"",
         solution_body = r""  ,
@@ -206,6 +222,21 @@ def seed_database():
         status = 'published',
         datetime_created=datetime.now(),
         tags = [tag_complex_numbers, tag_euler_identity]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Rate of radioactive decay $$ A(t) = A_0 e^{-t/\tau} $$",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_decay]
         )
         db.session.add(post)
         db.session.commit()
