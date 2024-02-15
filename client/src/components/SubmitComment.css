@@ -6,3 +6,17 @@ textarea {
 .comment-options.line {
     width: 100%;
 }
+
+.submit-comment input {
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    border: solid;
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+    float: right;
+}
+
+.submit-comment .white-space {
+    height: 40px;
+}

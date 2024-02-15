@@ -11,7 +11,16 @@ html {
   max-width: 1080px;
 }
 
+/* body,
+ span.katex-html * {
+  font-size: 18px;
+} */
 
 body {
-  font-family: "Arial", sans-serif;
+  font-size: 18px;
 }
+
+
+/* body {
+  font-family: "Arial", sans-serif;
+} */

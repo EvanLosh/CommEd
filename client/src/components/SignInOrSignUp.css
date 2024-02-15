@@ -3,8 +3,18 @@
     padding: 10px;
 }
 
-form * {
+#sign-in-or-sign-up form * {
     padding: 5px;
     margin: 5px;
     display: flex;
+}
+
+#sign-in-or-sign-up .submit {
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+    padding: 5px;
+    background-color: green;
+    color: white;
+    border: solid;
+    border-radius: 5px;
 }

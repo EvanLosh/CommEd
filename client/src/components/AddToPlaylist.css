@@ -1,3 +1,38 @@
-select {
+select.add-to-playlist-select {
     margin: 10px;
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+    padding: 5px;
+}
+
+select.add-to-playlist-select option {
+    font-size: 18px;
+    padding: 10px;
+    margin: 10px;
+    height: 30px;
+    font-family: "Computer Modern", serif;
+}
+
+select.add-to-playlist-select .select-selected {
+    background-color: yellow;
+}
+
+select.add-to-playlist-select .select-items div,
+select.add-to-playlist-select .select-selected {
+    color: #ffffff;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+}
+
+form.create-new-playlist-form .create-new-playlist-submit,
+.create-new-playlist-cancel {
+    color: white;
+    background-color: green;
+    border: solid;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+    padding: 10px, 0px;
 }

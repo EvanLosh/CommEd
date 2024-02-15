@@ -8,14 +8,14 @@ function PlaylistFetcher({ commonProps }) {
     const { playlist_id } = useParams()
     const [playlist, setPlaylist] = useState(commonProps.blankPlaylist)
     const [newPost_id, setNewPost_id] = useState('')
-    console.log(playlist)
+
 
     useEffect(() => {
-        console.log('fetching playlist')
+
         fetch(commonProps.serverURL + '/playlists/' + playlist_id)
             .then(r => r.json())
             .then((r) => {
-                console.log(r)
+
                 setPlaylist(r)
             })
     }, [])

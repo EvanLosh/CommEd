@@ -5,6 +5,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    min-width: 900px;
 }
 
 /* a {
@@ -32,19 +33,27 @@
 
 #dashboard {
     display: flex;
-    align-items: flex-end;
+    align-items: baseline;
+}
 
+#dashboard-inner {
+    display: flex;
+    align-items: baseline;
+    margin-top: auto;
 }
 
 #dashboard-links {
     display: flex;
     flex-wrap: wrap;
+
 }
 
 #dashboard-links a {
     color: white;
     padding: 10px;
     text-decoration: none;
+    font-size: 18px;
+
 }
 
 #current-user {
@@ -57,7 +66,11 @@
     padding-top: 0;
     padding-bottom: 0;
     margin: 10px;
-
+    /* display: flex;
+    align-items: flex-end; */
+    /* position: absolute;
+    bottom: 0; */
+    margin-top: auto;
 }
 
 #current-user a {
@@ -73,6 +86,9 @@
     margin: 0;
 }
 
+#current-user a {
+    font-size: 18px;
+}
 
 /* #current-user>p,
 a {
@@ -120,4 +136,19 @@ select * {
     height: 0;
     border: 6px solid transparent;
     border-color: #fff transparent transparent transparent;
+}
+
+select#current-user-menu {
+
+    font-size: 18px;
+    font-family: "Computer Modern", serif;
+    padding: 5px;
+}
+
+select#current-user-menu option {
+    font-size: 18px;
+    padding: 10px;
+
+    height: 30px;
+    font-family: "Computer Modern", serif;
 }

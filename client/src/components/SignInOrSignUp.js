@@ -54,33 +54,33 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 value={formikSignIn.values.username}
             />
             <br></br>
-            <label htmlFor="email">Email (not required):</label>
+            {/* <label htmlFor="email">Email (not required):</label>
             <input
                 type="text"
                 name="email"
                 onChange={formikSignIn.handleChange}
                 value={formikSignIn.values.email}
             />
-            <br></br>
-            <input type="submit" value="Sign in" />
+            <br></br> */}
+            <input className='submit button' type="submit" value="Sign in" />
         </form>
     </div>
 
     const logoutForm = <div><p>You are logged in as {commonProps.user.username}.</p>
         <form onSubmit={logout}>
-            <input type="submit" value="Log out" />
+            <input className='submit button' type="submit" value="Log out" />
         </form>
-        <button onClick={() => window.location.href = commonProps.websiteURL}>Return home</button>
+        <button className='submit button' onClick={() => window.location.href = commonProps.websiteURL}>Return home</button>
     </div >
 
     const loginForm = commonProps.user.id > 0 ? logoutForm : signInForm
 
-    const signUpSuccessMessage = 
-    createdNewUser
-        ?
-        <p id='signup-success-message'>Successfully created new user. You may sign in.</p>
-        :
-        null
+    const signUpSuccessMessage =
+        createdNewUser
+            ?
+            <p id='signup-success-message'>Successfully created new user. You may sign in.</p>
+            :
+            null
 
     const signUpForm = <div>
         <h3>Sign up</h3>
@@ -103,7 +103,7 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
             />
             <br></br>
             {signUpSuccessMessage}
-            <input type="submit" value="Sign up" />
+            <input className='submit button' type="submit" value="Sign up" />
         </form>
     </div>
 

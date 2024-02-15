@@ -38,9 +38,9 @@ function Home({ commonProps }) {
     useEffect(fetchPostsAndPlaylists, [])
 
     const postsElement = <div id='home-posts'>
-        <h2 className='commed-style'>Featured posts</h2>
+        <h3 className='commed-style'>Featured posts</h3>
         {posts.length > 0 ? <PostCardList commonProps={commonProps} renderRemoveButton={renderRemoveButton} posts={[posts[0], posts[1], posts[2]]} removable={false} /> : null}
-        <a href='/posts' className='no-text-decoration'><h3 className="commed-style">{'> View more posts'}</h3></a>
+        <a href='/posts' className='no-text-decoration'><p className="commed-style button">{'> View more posts'}</p></a>
     </div>
 
     function renderRemoveButton(post) {
@@ -48,9 +48,9 @@ function Home({ commonProps }) {
     }
 
     const playlistsElement = <div id='home-playlists'>
-        <h2 className='commed-style'>Featured playlists</h2>
+        <h3 className='commed-style'>Featured playlists</h3>
         {playlists.length > 0 ? <PlaylistCardList commonProps={commonProps} playlists={[playlists[0], playlists[1], playlists[2]]} removable={false} /> : null}
-        <a href='/playlists' className='no-text-decoration'><h3 className="commed-style">{'> View more playlists'}</h3></a>
+        <a href='/playlists' className='no-text-decoration'><p className="commed-style button">{'> View more playlists'}</p></a>
     </div>
 
 

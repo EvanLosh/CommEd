@@ -1,0 +1,10 @@
+#view-playlist-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0px;
+    margin-top: 30px;
+}
+
+#view-playlist-datetime-and-author {
+    margin-bottom: 40px;
+}

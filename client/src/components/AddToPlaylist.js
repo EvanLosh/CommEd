@@ -24,10 +24,9 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
 
 
     function handleChange(e) {
-        console.log('handleChange was called on event:')
-        console.log(e)
+
         const eTargetValue = e.target.value
-        console.log(eTargetValue)
+
         if (eTargetValue === 'Create a new playlist') {
             setCreatingNewPlaylist(true)
             return null
@@ -50,7 +49,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
             })
                 .then(r => r.json())
                 .then((r) => {
-                    console.log('Added post id = ' + post.id + ' to playlist id = ' + eTargetValue)
+
                     window.location.reload()
                 })
         }
@@ -82,7 +81,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         })
             .then(r => r.json())
             .then((r) => {
-                console.log(r)
+
                 window.location.reload()
             })
     }
@@ -91,10 +90,10 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         creatingNewPlaylist
             ?
             <form className='create-new-playlist-form' onSubmit={handleNewPlaylistSubmit}>
-                <label>New playlist title</label>
+                <label>New playlist title:</label>
                 <input className='create-new-playlist-input' name='New playlist title' value={newPlaylistTitle} onChange={handleNewTitleChange}></input>
-                <input type='submit' value='Submit'></input>
-                <button onClick={() => setCreatingNewPlaylist(false)}>Cancel</button>
+                <input className='create-new-playlist-submit button' type='submit' value='Submit'></input>
+                <button className='create-new-playlist-cancel button' onClick={() => setCreatingNewPlaylist(false)}>Cancel</button>
             </form>
             :
             null

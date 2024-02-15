@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostCardList from "./PostCardList";
-import { prepareDataForValidation } from "formik";
+import './Posts.css'
 
 
 function Posts({ commonProps }) {
@@ -80,7 +80,7 @@ function Posts({ commonProps }) {
         <option value='datetime_last_edited' name='datetime_last_edited'>Last edited date</option>
     </select>
 
-    const reverseSortButton = <button onClick={handleReverseSort}>Reverse sort</button>
+    const reverseSortButton = <button className='button' onClick={handleReverseSort}>Reverse order</button>
 
 
     function renderRemoveButton(post) {
@@ -90,12 +90,14 @@ function Posts({ commonProps }) {
 
 
     return <div id="posts">
-        <h2 className="commed-style">Posts</h2>
-        <div id='filter-and-sort'>
-            <p>Filter options:</p>
-            {searchAndFilterForm}
-            <p>Sort options:</p>
-            <div>
+        <h3 className="commed-style">Posts</h3>
+        <div id='filter-and-sort-forms'>
+            <div id='filter-form'>
+                <p>Filter and sort options:</p>
+                {searchAndFilterForm}
+            </div>
+            <div id='sort-form'>
+                <p>Sort by: </p>
                 {sortForm}
                 {reverseSortButton}
             </div>

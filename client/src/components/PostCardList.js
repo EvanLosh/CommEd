@@ -10,13 +10,10 @@ function PostCardList({ posts, commonProps, removable, renderRemoveButton }) {
         fetch(commonProps.serverURL + '/playlists')
             .then(r => r.json())
             .then((playlists) => {
-                console.log('Current user id is ' + commonProps.user.id)
-                console.log('loaded playlists from API:')
-                console.log(playlists)
+
                 if (playlists.length > 0) {
                     playlists = playlists.filter(p => parseInt(p.owner_id) === parseInt(commonProps.user.id))
-                    console.log("setting user's playlists:")
-                    console.log(playlists)
+
                     setUsersPlaylists(playlists)
                 }
             })

@@ -11,14 +11,13 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
             initialValues: {
                 body: '',
                 owner_id: commonProps.user.id,
-                post_id: post_id, // for some crazy reason, post_id is not correct
-                parent_id: parent_id, // same problem
+                post_id: post_id,
+                parent_id: parent_id,
             },
             onSubmit: (values) => {
-                values.post_id = post_id // this post_id is correct
+                values.post_id = post_id
                 values.owner_id = commonProps.user.id
-                // values.parent_id = parent_id // this parent_id is NOT correct
-                console.log(values)
+
                 fetch(commonProps.serverURL + '/comments', {
                     method: 'POST',
                     headers: {
@@ -47,6 +46,7 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
             <br></br>
             <input type="submit" value="Submit comment" />
         </form>
+        <div className="white-space"></div>
     </div>
 
 

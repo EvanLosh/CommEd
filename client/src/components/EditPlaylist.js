@@ -3,7 +3,7 @@ import Edit from "./Edit";
 
 
 
-function EditFetcher({ commonProps, post_id, renderCreateAndEditPostForm, tags }) {
+function EditPlaylistFetcher({ commonProps, post_id, renderCreateAndEditPostForm, tags }) {
     const [originalPost, setOriginalPost] = useState(commonProps.blankPost)
     // const [originalPost, setOriginalPost] = useState({ ...commonProps.blankPost, title: 'gibberish' })
 
@@ -12,7 +12,7 @@ function EditFetcher({ commonProps, post_id, renderCreateAndEditPostForm, tags }
         fetch(url)
             .then(r => r.json())
             .then((r) => {
-                // console.log(r)
+
                 setOriginalPost(r)
             })
     }, [])
@@ -24,4 +24,4 @@ function EditFetcher({ commonProps, post_id, renderCreateAndEditPostForm, tags }
     return <Edit commonProps={commonProps} originalPost={originalPost} renderCreateAndEditPostForm={renderCreateAndEditPostForm} tags={tags} />
 }
 
-export default EditFetcher;
+export default EditPlaylistFetcher;

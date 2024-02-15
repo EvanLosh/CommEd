@@ -8,9 +8,9 @@ function About({ commonProps }) {
         <p>CommEd is a forum where users share and discuss their solutions to math problems. And not just math, but engineering, physics, and chemistry, too. It's perfect for teachers and students who need to write and share solutions to their homework assignments.</p>
         <p>I am creating CommEd by myself as a project for my portfolio as an aspiring software engineer. You can view the source code on <a href={'https://github.com/EvanLosh/CommEd'}>Github</a>. </p>
         <p>On the front-end, I use React, Formik, react-tex, and markdownjs. On the back-end, I use Flask and SQLalchemy.</p>
-        <p>Development to-do list:</p>
+        <p>In development:</p>
         <ul>
-            <li>Add/improve Back-end data validations and error handling</li>
+            <li>Improve data validations and error handling</li>
             <li>Add a search and filter feature to lists of posts or playlists</li>
             <li>In Create/Edit posts, add a button to each tag to remove the tag</li>
             <li>Add a guide for using TeX</li>

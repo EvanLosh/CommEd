@@ -3,7 +3,7 @@ import Edit from "./Edit";
 
 
 
-function EditPostFetcher({ commonProps, post_id, renderCreateAndEditPostForm, tags }) {
+function EditPostFetcher({ commonProps, post_id, renderCreateAndEditPostForm, tags, addTag }) {
     const [originalPost, setOriginalPost] = useState(commonProps.blankPost)
     // const [originalPost, setOriginalPost] = useState({ ...commonProps.blankPost, title: 'gibberish' })
 
@@ -12,10 +12,12 @@ function EditPostFetcher({ commonProps, post_id, renderCreateAndEditPostForm, ta
         fetch(url)
             .then(r => r.json())
             .then((r) => {
-                // console.log(r)
+                console.log(r)
                 setOriginalPost(r)
             })
     }, [])
+
+    useEffect(() => { originalPost.tags.forEach(t => addTag(t)) }, [originalPost])
 
 
 
