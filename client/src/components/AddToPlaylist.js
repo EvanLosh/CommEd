@@ -99,10 +99,11 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
             null
 
 
-    return <div>
+    return commonProps.user.id > 0 ? <div>
         {addToPlaylist}
         {createNewPlaylistForm}
     </div>
+        : <p>Sign in to add this post to a playlist</p>
 }
 
 export default AddToPlaylist;

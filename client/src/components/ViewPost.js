@@ -91,11 +91,12 @@ function ViewPost({ commonProps }) {
                 <div><InlineTex texContent={p.solution_body} /></div>
                 <h3 className='section-title'>Refernces:</h3>
                 <p>{p.references}</p>
-                {p.owner.id === commonProps.user.id ? commonProps.renderDelete(p) : null}
                 <h3 className='section-title'>Comments:</h3>
                 <SubmitComment commonProps={commonProps} parent_id={null} post_id={p.id} />
                 {renderComments(p, 'post')}
-            </div>
+                <div style={{ height: "100px" }}></div>
+                {p.owner.id === commonProps.user.id ? commonProps.renderDelete(p) : null}
+            </div >
             :
             <p>Post not found. <a href='/'>Return home.</a></p>
     }

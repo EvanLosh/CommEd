@@ -192,7 +192,7 @@ function App() {
       item = 'playlist'
     }
     return <div className={'delete'}>
-      <p onClick={() => onDelete(x)} className='commed-style button'>Delete your {item}</p>
+      <p onClick={() => onDelete(x)} className='commed-style button delete'>Delete {item}</p>
     </div >
 
   }

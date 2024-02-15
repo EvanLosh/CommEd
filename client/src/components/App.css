@@ -200,3 +200,7 @@ select option {
     color: purple;
     font-size: 18px;
 }
+
+.button.delete {
+    background-color: rgb(184, 0, 0);
+}

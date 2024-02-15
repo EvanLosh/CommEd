@@ -94,7 +94,45 @@ def seed_database():
         tag_current = Tag(text = 'Current', datetime_created = datetime.now())
         tag_circuits = Tag(text = 'Circuits', datetime_created = datetime.now())
         tag_v_equals_ir = Tag(text = 'V = IR', datetime_created = datetime.now())
+        tag_Newtons_law = Tag(text = "Newton's Laws", datetime_created = datetime.now())
+        tag_sigma_f = Tag(text = 'ΣF', datetime_created = datetime.now())
+        tag_probablity = Tag(text = 'Probability', datetime_created = datetime.now())
+        tag_series = Tag(text = 'Series', datetime_created = datetime.now())
+        tag_Fourrier = Tag(text = 'Fourrier Transform', datetime_created = datetime.now())
+        tag_euler_identity = Tag(text = 'Euler identity', datetime_created = datetime.now())
+        tag_complex_numbers = Tag(text = 'Complex numbers', datetime_created = datetime.now())
+        tag_chemistry = Tag(text = 'Chemistry', datetime_created = datetime.now())
+        tag_decay = Tag(text = 'Decay', datetime_created = datetime.now())
+        
 
+
+
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Show that $$ |\vec{u} \times \vec{v} |^{2}+ (\vec{u} \cdot \vec{v})^{2} = u^{2}v^{2} $$.",
+        problem_body = r"Show that $$ |\vec{u} \times \vec{v} |^{2} + (\vec{u} \cdot \vec{v})^{2} =  u^{2}v^{2} $$.",
+        answer_body = r"Express the products in terms of the magnitudes of $$ \vec{u}$$ and $$\vec{v}$$ and the angle between them.",
+        solution_body = r"Let $$\theta$$ be the the angle between $$\vec{u}$$ and $$\vec{v}$$. Then $$ |\vec{u} \times \vec{v} |^{2} = u^{2} v^{2} \sin^{2} \theta$$. And $$(\vec{u} \cdot \vec{v})^{2} = u^{2} v^{2} \cos^{2} \theta$$. The sum is $$u^{2} v^{2} (\cos^{2} \theta + \sin^{2} \theta)$$ which simplifies to $$ u^{2} v^{2}$$",
+        references = "https://www-users.cse.umn.edu/~akhmedov/samplem1",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_vectors]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Rate of chemical reaction $$  2 Na + 2 H_2 O \rightarrow 2 NaOH + H_2 $$ ?",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_chemistry]
+        )
+        db.session.add(post)
+        db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"Prove that there are no integers between 0 and 1",
@@ -110,14 +148,14 @@ def seed_database():
         db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r"Show that $$ |\vec{u} \times \vec{v} |^{2}+ (\vec{u} \cdot \vec{v})^{2} = u^{2}v^{2} $$.",
-        problem_body = r"Show that $$ |\vec{u} \times \vec{v} |^{2} + (\vec{u} \cdot \vec{v})^{2} =  u^{2}v^{2} $$.",
-        answer_body = r"Express the products in terms of the magnitudes of $$ \vec{u}$$ and $$\vec{v}$$ and the angle between them.",
-        solution_body = r"Let $$\theta$$ be the the angle between $$\vec{u}$$ and $$\vec{v}$$. Then $$ |\vec{u} \times \vec{v} |^{2} = u^{2} v^{2} \sin^{2} \theta$$. And $$(\vec{u} \cdot \vec{v})^{2} = u^{2} v^{2} \cos^{2} \theta$$. The sum is $$u^{2} v^{2} (\cos^{2} \theta + \sin^{2} \theta)$$ which simplifies to $$ u^{2} v^{2}$$",
-        references = "https://www-users.cse.umn.edu/~akhmedov/samplem1",
+        title = r"$$ f(x) = \sum_{n=0}^\infty \left( a_n \cos (n \pi x) + b_n \sin(n \pi x) \right) $$",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
         status = 'published',
         datetime_created=datetime.now(),
-        tags = [tag_vectors]
+        tags = [tag_series, tag_Fourrier]
         )
         db.session.add(post)
         db.session.commit()
@@ -150,28 +188,70 @@ def seed_database():
 
         post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"What is the probability of drawing certain marbles from a bag?",
-        problem_body = r"A bag contains 6 red marbles and 5 blue marbles. If you draw two marbles sequentially, what is the probability they are different colors?",
-        answer_body = r"$$ P = ",
-        solution_body = r"The current through each resistor is found by applying $$ V = IR$$. Thus $$ I_1 = V / R_1 $$ and $$ I_2 = V / R_2 $$. Adding the two currents together yeilds the answer above." ,
+        problem_body = r"A bag contains 6 red marbles and 5 blue marbles. If you draw two marbles, what is the probability they are different colors?",
+        answer_body = r"$$ P = 6/11",
+        solution_body = r"The red marbles are indistinguishable from each other, and the blue marbles are indistinguishable from each other. To draw marbles of different colors, you can draw a red one first and then a blue one, and vice versa. \n\n  The probability of drawing a blue marble first is $$6/11$$ and the probability of drawing a red marble next is $$5/10$$. The events are independent, and so the probability of both events happening is the product of the probability of each event. \n\n The probabilities of drawing a red marble and then a blue one are $$5/11$$ and $$6/10$$ respectfully. \n\n The probability of drawing two different marbles is the sum of the probablities of each sequence of events. $$P = (6/11)(5/10) + (5/11)(6/10) = 6/11"  ,
         references = "",
         status = 'published',
         datetime_created=datetime.now(),
-        tags = [tag_circuits, tag_v_equals_ir, tag_current]
+        tags = [tag_probablity]
         )
         db.session.add(post)
         db.session.commit()
 
-        # generate new posts
-        for i in range(8):
-            post = generate_fake_post()
-            db.session.add(post)
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r" Newton's Law $$ \vec{F} = m \vec{a} $$",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_Newtons_law, tag_vectors]
+        )
+        db.session.add(post)
         db.session.commit()
 
-        # generate new tags
-        for i in range(12):
-            tag = generate_fake_tag()
-            db.session.add(tag)
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Prove that $$ e^{i\theta} = \cos\theta + i \sin\theta $$",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_complex_numbers, tag_euler_identity]
+        )
+        db.session.add(post)
         db.session.commit()
+
+
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Rate of radioactive decay $$ A(t) = A_0 e^{-t/\tau} $$",
+        problem_body = r"",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_decay]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        # # generate new posts
+        # for i in range(8):
+        #     post = generate_fake_post()
+        #     db.session.add(post)
+        # db.session.commit()
+
+        # # generate new tags
+        # for i in range(12):
+        #     tag = generate_fake_tag()
+        #     db.session.add(tag)
+        # db.session.commit()
 
         # generate new root comments
         for i in range(20):
@@ -193,14 +273,14 @@ def seed_database():
         db.session.commit()
 
         # add tags to posts
-        for i in Post.query.all():
-            for j in random.sample(Tag.query.all(), random.choice(range(2,len(Tag.query.all())))):
-                i.tags.append(j)
-        #     post_tag = generate_fake_post_tag()
-        #     db.session.add(post_tag)
+        # for i in Post.query.all():
+        #     for j in random.sample(Tag.query.all(), random.choice(range(2,len(Tag.query.all())))):
+        #         i.tags.append(j)
+        # #     post_tag = generate_fake_post_tag()
+        # #     db.session.add(post_tag)
             
-            # commit one at a time to avoid making duplicates
-            db.session.commit()
+        #     # commit one at a time to avoid making duplicates
+        #     db.session.commit()
         
 
         # add posts to playlists
