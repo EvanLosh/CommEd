@@ -24,10 +24,9 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
 
 
     function handleChange(e) {
-        console.log('handleChange was called on event:')
-        console.log(e)
+
         const eTargetValue = e.target.value
-        console.log(eTargetValue)
+
         if (eTargetValue === 'Create a new playlist') {
             setCreatingNewPlaylist(true)
             return null
@@ -50,7 +49,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
             })
                 .then(r => r.json())
                 .then((r) => {
-                    console.log('Added post id = ' + post.id + ' to playlist id = ' + eTargetValue)
+
                     window.location.reload()
                 })
         }
@@ -82,7 +81,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         })
             .then(r => r.json())
             .then((r) => {
-                console.log(r)
+
                 window.location.reload()
             })
     }

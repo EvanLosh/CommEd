@@ -11,8 +11,6 @@ function Header({ commonProps, getSessionUser, logout }) {
         </div>
         <div id='dashboard'>
             <div id='dashboard-inner'>
-                {/* <a href={commonProps.websiteURL + '/sign-in-or-sign-up'}>Sign in or sign up</a> */}
-                {/* <button onClick={() => getSessionUser()}>who is user</button> */}
                 <div id='dashboard-links'>
                     <a href={commonProps.websiteURL + '/posts'}>Posts</a>
                     <a href={commonProps.websiteURL + '/playlists'}>Playlists</a>

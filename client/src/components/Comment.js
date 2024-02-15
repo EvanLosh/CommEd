@@ -10,7 +10,7 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
     const [editField, setEditField] = useState(comment.body)
 
     function renderReplyElement() {
-        // console.log('rendering reply element on comment parent_id = ' + parent_id)
+
         return replying
             ?
             <div>
@@ -62,8 +62,7 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
 
 
     let commentElement
-    // console.log(comment)
-    // console.log('owner.id is ' + comment.owner.id + '. user.id is ' + commonProps.user.id + '.')
+
     if (comment && comment.owner && comment.id && comment.owner.username) {
         commentElement = <div className="comment" >
             {commonProps.renderDatetimeAndAuthor(comment)}

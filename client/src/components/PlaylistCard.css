@@ -16,6 +16,7 @@
 .playlist-card .playlist-title {
     margin-bottom: 20px;
     padding: 10px;
+    font-weight: bold;
 }
 
 a:-webkit-any-link {

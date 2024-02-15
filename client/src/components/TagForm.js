@@ -3,32 +3,36 @@ import './TagForm.css'
 
 
 
-function TagForm({ commonProps, tags, addTag }) {
+function TagForm({ commonProps, tags, addTag, removeTag }) {
 
     const [newTag, setNewTag] = useState('')
 
     const handleTagSubmit = (e) => {
         e.preventDefault()
-        // console.log('e.target.value is ' + e.target.tag.value)
-        if (!tags.includes(e.target.tag.value)) {
-            addTag({ text: e.target.tag.value })
+
+        if (newTag.length > 0 && !tags.includes(newTag)) {
+            addTag({ text: newTag })
             setNewTag('')
         }
-        // console.log('tags is ' + tags.map(t => t.text))
+
     }
 
     function renderAddTagForm() {
         return <form onSubmit={handleTagSubmit} className='add-tag-form'>
-            {/* <label htmlFor='tag'>Enter a tag:</label> */}
+
             <input type='text' id='tag-input' name='tag' value={newTag} onChange={(e) => setNewTag(e.target.value)}></input>
             <input type='submit' id='tag-submit' value='Add tag' ></input>
         </form>
     }
 
+    function handleRemoveTagClick(text) {
+        removeTag(text)
+    }
+
 
 
     return <div id="tag-form">
-        {commonProps.renderTags(tags)}
+        {commonProps.renderTags(tags, true, handleRemoveTagClick)}
         {renderAddTagForm()}
     </div>;
 }

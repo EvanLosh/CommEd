@@ -11,7 +11,7 @@ function ViewPlaylist({ playlist, commonProps, }) {
     }
 
     function handleDeleteClick(e) {
-        console.log(e)
+
         fetch(commonProps.serverURL + '/playlists/' + playlist.id, {
             method: 'DELETE'
         })
@@ -41,7 +41,7 @@ function ViewPlaylist({ playlist, commonProps, }) {
                 })
                     .then(r => r.json())
                     .then((r) => {
-                        console.log('Removed post id = ' + post.id + ' from playlist id = ' + playlist.id)
+
                         window.location.reload()
                     })
             }
@@ -52,12 +52,13 @@ function ViewPlaylist({ playlist, commonProps, }) {
 
 
 
-    console.log(playlist)
+
     return <div id="view-playlist">
-        {playlist.title ? <div><p id='view-playlist-title'>Playlist: {playlist.title}</p>{commonProps.renderDatetimeAndAuthor(playlist)}</div> : <div><h3>Playlist not found</h3> <button className='button' onClick={() => window.location.href = '/'}>Return home</button> </div>}
+        {playlist.title ? <div><p id='view-playlist-title'>Playlist: {playlist.title}</p><div id='view-playlist-datetime-and-author'> {commonProps.renderDatetimeAndAuthor(playlist)}</div></div> : <div><h3>Playlist not found</h3> <button className='button' onClick={() => window.location.href = '/'}>Return home</button> </div>
+        }
         {deleteButton}
         <PostCardList posts={playlist.posts} commonProps={commonProps} removable={commonProps.user.id === playlist.owner_id} renderRemoveButton={renderRemoveButton} />
-    </div>;
+    </div >;
 }
 
 export default ViewPlaylist;

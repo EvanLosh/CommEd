@@ -7,9 +7,9 @@ import AddToPlaylist from "./AddToPlaylist";
 
 function PostCard({ post, commonProps, removable, renderRemoveButton, usersPlaylists }) {
 
-    const handleClick = (e) => {
-        window.location.href = commonProps.websiteURL + '/view-post/' + post.id
-    }
+    // const handleClick = (e) => {
+    //     window.location.href = commonProps.websiteURL + '/view-post/' + post.id
+    // }
 
     if (!usersPlaylists) {
         usersPlaylists = []
@@ -19,7 +19,7 @@ function PostCard({ post, commonProps, removable, renderRemoveButton, usersPlayl
         <a href={'/view-post/' + post.id} className='post-title'><InlineTex texContent={post.title} /></a>
         {/* <div onClick={handleClick} className='post-title'><InlineTex texContent={post.title} /></div> */}
         {commonProps.renderDatetimeAndAuthor(post)}
-        {commonProps.renderTags(post.tags)}
+        {commonProps.renderTags(post.tags, false)}
         <AddToPlaylist commonProps={commonProps} post={post} usersPlaylists={usersPlaylists} />
         {renderRemoveButton(post)}
     </div>

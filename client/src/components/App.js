@@ -54,7 +54,7 @@ const blankPlaylist = [{
   posts: [],
   status: ''
 }]
-function renderTags(listOfTags = []) {
+function renderTags(listOfTags = [], removable = false, handleClick = null) {
   let tagElements = listOfTags
     // .filter((tag) => {
     //   return !(tag.text in )
@@ -63,7 +63,8 @@ function renderTags(listOfTags = []) {
       if (!('id' in tag)) {
         tag.id = tag.text
       }
-      return <p key={tag.id} className="tag">{tag.text}</p>
+      const removeButton = removable ? <button className='tag-remove-button' onClick={() => handleClick(tag.text)}> 🗙 </button> : null
+      return <div key={tag.id} className="tag"><p>{tag.text} </p>{removeButton} </div>
     })
   return <div className="tag-list ">
     <p className='tag-label commed-style'>Tags: </p>
@@ -118,6 +119,7 @@ function App() {
   function logout() {
     setSessionUser(blankUser)
     setUser(getSessionUser())
+    window.location.reload()
   }
   useEffect(() => {
     const sessionUser = getSessionUser()
@@ -153,8 +155,7 @@ function App() {
 
   function renderDelete(x) {
     function onDelete(x) {
-      console.log('Deleteing: ')
-      console.log(x)
+
       let route = ''
       if ('problem_body' in x) {
         route = '/posts/'
@@ -166,7 +167,7 @@ function App() {
         route = '/playlists/'
       }
       const url = serverURL + route + x.id
-      console.log('Requesting delete at ' + url)
+
       fetch(url,
         {
           method: 'DELETE',
@@ -191,7 +192,7 @@ function App() {
       item = 'playlist'
     }
     return <div className={'delete'}>
-      <p onClick={() => onDelete(x)} className='commed-style'>Delete your {item}</p>
+      <p onClick={() => onDelete(x)} className='commed-style button'>Delete your {item}</p>
     </div >
 
   }

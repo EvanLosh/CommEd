@@ -80,7 +80,7 @@ function Posts({ commonProps }) {
         <option value='datetime_last_edited' name='datetime_last_edited'>Last edited date</option>
     </select>
 
-    const reverseSortButton = <button onClick={handleReverseSort}>Reverse order</button>
+    const reverseSortButton = <button className='button' onClick={handleReverseSort}>Reverse order</button>
 
 
     function renderRemoveButton(post) {
@@ -90,7 +90,7 @@ function Posts({ commonProps }) {
 
 
     return <div id="posts">
-        <h2 className="commed-style">Posts</h2>
+        <h3 className="commed-style">Posts</h3>
         <div id='filter-and-sort-forms'>
             <div id='filter-form'>
                 <p>Filter and sort options:</p>

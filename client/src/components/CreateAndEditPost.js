@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Create from './Create'
-import EditFetcher from "./EditPostFetcher";
+import EditPostFetcher from "./EditPostFetcher";
 import TagForm from "./TagForm";
 import './CreateAndEditPost.css';
 
@@ -12,11 +12,12 @@ function CreateAndEditPost({ commonProps, child }) {
     const [tags, setTags] = useState([])
 
     function addTag(tag) {
-        setTags([...tags, tag])
+        setTags((previousTags) => [...previousTags, tag])
+
     }
 
-    function removeTag(tag) {
-        const remainingTags = tags.remove(tag)
+    function removeTag(tag_text) {
+        const remainingTags = tags.filter(t => t.text !== tag_text)
         setTags(remainingTags)
     }
 
@@ -24,9 +25,9 @@ function CreateAndEditPost({ commonProps, child }) {
     function renderCreateAndEditPostForm(formik) {
         const handleStatusRadio = (e) => {
             formik.values.status = e.target.value
-            console.log(e.target.value)
-            console.log(formik.values.status)
         }
+
+        // if (formik)
 
         return <div className='create-and-edit-form'>
             <div className='create-and-edit-tips'>
@@ -77,7 +78,7 @@ function CreateAndEditPost({ commonProps, child }) {
         childComponent = <Create commonProps={commonProps} renderCreateAndEditPostForm={renderCreateAndEditPostForm} tags={tags} />
     }
     if (child === 'edit') {
-        childComponent = <EditFetcher post_id={post_id} commonProps={commonProps} renderCreateAndEditPostForm={renderCreateAndEditPostForm} tags={tags} />
+        childComponent = <EditPostFetcher post_id={post_id} commonProps={commonProps} renderCreateAndEditPostForm={renderCreateAndEditPostForm} tags={tags} addTag={addTag} />
     }
 
 

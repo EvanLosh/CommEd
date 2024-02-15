@@ -5,14 +5,15 @@ import './Edit.css'
 
 
 function Edit({ commonProps, originalPost, renderCreateAndEditPostForm, tags }) {
-    console.log(originalPost)
+    // console.log(originalPost)
+
+    let initialValues = { ...originalPost, tags: tags }
 
     const formik = useFormik({
-        initialValues: originalPost,
+        initialValues: initialValues,
         onSubmit: (values) => {
-            values.tags = tags
-            console.log('Submitting post: ')
-            console.log(values)
+            // values.tags = tags
+
             fetch(commonProps.serverURL + '/posts/' + originalPost.id,
                 {
                     method: 'PATCH',
@@ -23,14 +24,13 @@ function Edit({ commonProps, originalPost, renderCreateAndEditPostForm, tags }) 
                 })
                 .then((r) => {
                     if (!r.ok) {
-                        console.log(r.json())
+                        // console.log(r.json())
                         throw new Error('Network response was not ok');
                     }
                     return r.json()
                 })
                 .then((r) => {
-                    console.log('received OK response from server')
-                    console.log(r)
+
                     window.location.href = commonProps.websiteURL + '/view-post/' + r.id
                 })
         }
@@ -41,8 +41,14 @@ function Edit({ commonProps, originalPost, renderCreateAndEditPostForm, tags }) 
 
 
     return <div id="edit-form">
-        <h3 className='commed-style'>Use this form to edit your post</h3>
-        {renderCreateAndEditPostForm(formik)}
+        {commonProps.user.id === originalPost.owner_id ?
+            <div>
+                <h3 className='commed-style'>Use this form to edit your post</h3>
+                {renderCreateAndEditPostForm(formik)}
+            </div>
+            :
+            <p>You do not have permission to edit this post. <a href='/sign-in-or-sign-up'>Sign in</a> or <a href='/'>Return home</a></p>
+        }
     </div>;
 }
 

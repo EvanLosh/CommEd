@@ -6,12 +6,12 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
 
     const initialValues = commonProps.blankPost
     initialValues.owner_id = commonProps.user.id
+    initialValues.tags = tags
 
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values) => {
             values.tags = tags
-            console.log(values)
             fetch(commonProps.serverURL + '/posts', {
                 method: 'POST',
                 headers: {
@@ -21,13 +21,13 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
             })
                 .then((r) => {
                     if (!r.ok) {
-                        console.log(r.json())
+
                         throw new Error('Network response was not ok');
                     }
                     return r.json()
                 })
                 .then((r) => {
-                    console.log('Created new posts: ' + r.id)
+
                     window.location.href = commonProps.websiteURL + '/view-post/' + r.id
                 })
         }
@@ -36,8 +36,8 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
 
 
     return <div id="create-form">
-        <h3 className='commed-style'>Use this form to create a new post</h3>
-        {commonProps.user.id > 0 ? renderCreateAndEditPostForm(formik) : <a href='/sign-in-or-sign-up'>Sign in to create posts</a>}
+
+        {commonProps.user.id > 0 ? <div><h3 className='commed-style'>Use this form to create a new post</h3>{renderCreateAndEditPostForm(formik)} </div> : <a href='/sign-in-or-sign-up'>Sign in to create posts</a>}
     </div>;
 }
 

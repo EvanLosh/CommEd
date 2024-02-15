@@ -12,6 +12,12 @@
 #view-post-title {
     font-size: 30px;
     margin-top: 30px;
+    /* margin-bottom: 10px; */
+    font-weight: bold;
+}
+
+#view-post .datetime-and-author {
+    margin-bottom: 40px;
 }
 
 textarea {
