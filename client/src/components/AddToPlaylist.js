@@ -58,10 +58,10 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         // }
     }
 
-    const addToPlaylist = <select className='add-to-playlist-select' onChange={handleChange}>
-        <option value=''>Add to playlist</option>
+    const addToPlaylist = <select name='add-to-playlist-select' className='add-to-playlist-select' onChange={handleChange}>
+        <option name='add-to-playlist' value=''>Add to playlist</option>
         {usersPlaylists.map((playlist) => {
-            return <option key={playlist.id} name='playlist' value={playlist.id}>{playlist.postIsInPlaylist ? '✓  ' : null} {playlist.title}</option>
+            return <option key={playlist.id} name={`playlist-${playlist.id}`} id={`playlist-${playlist.id}`} value={playlist.id}>{playlist.postIsInPlaylist ? '✓  ' : null} {playlist.title}</option>
         })}
         <option name='Create a new playlist' value='Create a new playlist'>+ Create a new playlist</option>
     </select>
