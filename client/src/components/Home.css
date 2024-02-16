@@ -9,3 +9,62 @@
 #home-playlists {
     width: 100%;
 }
+
+#tex-demonstration {
+    display: flex;
+    align-items: baseline;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#tex-demonstration .tex {
+    font-size: 30px;
+}
+
+#tex-demonstration .white-space {
+    width: 20px;
+}
+
+.home-intro-welcome-message {
+    display: inline;
+}
+
+h1.home-intro-welcome-message {
+    padding-left: 30px;
+    margin-top: 20px;
+}
+
+#home-intro {
+    border: solid;
+    border-color: navy;
+    border-radius: 10px;
+    border-width: 3px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-top: 30px;
+}
+
+#tex-demonstration p {
+    margin: 0;
+    padding: 10px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+#tex-demonstration-raw-tex {
+    border: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    border-color: green;
+}
+
+#tex-demonstration-rendered-tex {
+    border: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    border-color: green;
+    padding-top: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 22px;
+}

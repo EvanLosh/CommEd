@@ -76,8 +76,8 @@ class Post(db.Model, SerializerMixin):
     status = (db.Column(db.String(100))) # draft / published / hidden
 
     owner = db.relationship('User', backref="posts")
-
     tags = db.relationship('Tag', secondary='post_tags', back_populates="posts")
+
     serialize_rules = (
         '-owner.posts',
         '-owner.playlists',
@@ -111,8 +111,6 @@ class Post(db.Model, SerializerMixin):
         # status can have only two values
         if (value == 'draft') or (value == 'published') or (value == None):
             return value
-        # if value:
-        #     return value
         else: 
             raise ValueError('Status can only be draft or published')
     
@@ -168,19 +166,28 @@ class Comment(db.Model, SerializerMixin):
             else:
                 return value
         elif value > 0:
-            return value
+            if self.parent_id == None:
+                return value
+            else:
+                raise ValueError('Comments cannot have both a post_id and a parent_id')
         else: 
-            raise ValueError('Invalid owner id')
+            raise ValueError('Invalid post id')
         
     @validates('parent_id')
     # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
     def validate_parent_id(self, key, value):
         if value == None:
-            return value
+            if self.post_id == None:
+                raise ValueError('post_id and parent_id cannot both be None')
+            else:
+                return value
         elif value > 0:
-            return value
+            if self.post_id == None:
+                return value
+            else:
+                raise ValueError('Comments cannot have both a post_id and a parent_id')
         else: 
-            raise ValueError('Invalid owner id')
+            raise ValueError('Invalid parent id')
         
     @validates('status')
     def validate_status(self, key,value):

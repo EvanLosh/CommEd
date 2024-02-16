@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forceUpdate } from "react";
+import React, { useEffect, useState, } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import About from './About'
@@ -12,7 +12,7 @@ import CreateAndEditPost from "./CreateAndEditPost";
 import ErrorBoundary from "./ErrorBoundary";
 import Posts from "./Posts";
 import Playlists from "./Playlists";
-import Profile from './Profile'
+// import Profile from './Profile'
 
 
 
