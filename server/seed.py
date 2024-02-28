@@ -81,7 +81,7 @@ def seed_database():
         for i in range(8):
             user = generate_fake_user()
             db.session.add(user)
-        # db.session.add(User(username='dev', email='dev@example.com', datetime_created=datetime.now()))
+        # db.session.add(User(username='dev', email='dev@fake-email.com', datetime_created=datetime.now()))
         db.session.commit()
 
         tag_proofs = Tag(text = 'Proofs', datetime_created = datetime.now())
@@ -122,14 +122,14 @@ def seed_database():
         db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r"Rate of chemical reaction $$  2 Na + 2 H_2 O \rightarrow 2 NaOH + H_2 $$ ?",
-        problem_body = r"",
-        answer_body = r"",
-        solution_body = r""  ,
+        title = r"What is the current through two parallel resistors?",
+        problem_body = r"Two resistors $$R_1$$ and $$R_2$$ are connected in parallel with a voltage $$V$$ across them. In terms of these variables, what is the total current through the resistors? ",
+        answer_body = r"$$ I = V (R_1 + R_2) / (R_1 R_2)$$",
+        solution_body = r"The current through each resistor is found by applying $$ V = IR$$. Thus $$ I_1 = V / R_1 $$ and $$ I_2 = V / R_2 $$. Adding the two currents together yeilds the answer above." ,
         references = "",
         status = 'published',
         datetime_created=datetime.now(),
-        tags = [tag_chemistry]
+        tags = [tag_circuits, tag_v_equals_ir, tag_current]
         )
         db.session.add(post)
         db.session.commit()
@@ -148,8 +148,21 @@ def seed_database():
         db.session.commit()
 
         post = Post(owner_id = random.choice(User.query.all()).id,
+        title = r"Rate of chemical reaction $$  2 Na + 2 H_2 O \rightarrow 2 NaOH + H_2 $$ ?",
+        problem_body = r"$$  2 Na + 2 H_2 O \rightarrow 2 NaOH + H_2 $$",
+        answer_body = r"",
+        solution_body = r""  ,
+        references = "",
+        status = 'published',
+        datetime_created=datetime.now(),
+        tags = [tag_chemistry]
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"$$ f(x) = \sum_{n=0}^\infty \left( a_n \cos (n \pi x) + b_n \sin(n \pi x) \right) $$",
-        problem_body = r"",
+        problem_body = r"$$ \vec \nabla \times \vec B = \mu_{0} \epsilon_{0} \frac{\partial \vec{E}}{\partial t} + \mu_{0} \vec{J}$$",
         answer_body = r"",
         solution_body = r""  ,
         references = "",
@@ -173,24 +186,13 @@ def seed_database():
         db.session.add(post)
         db.session.commit()
 
-        post = Post(owner_id = random.choice(User.query.all()).id,
-        title = r"What is the current through two parallel resistors?",
-        problem_body = r"Two resistors $$R_1$$ and $$R_2$$ are connected in parallel with a voltage $$V$$ across them. In terms of these variables, what is the total current through the resistors? ",
-        answer_body = r"$$ I = V (R_1 + R_2) / (R_1 R_2)$$",
-        solution_body = r"The current through each resistor is found by applying $$ V = IR$$. Thus $$ I_1 = V / R_1 $$ and $$ I_2 = V / R_2 $$. Adding the two currents together yeilds the answer above." ,
-        references = "",
-        status = 'published',
-        datetime_created=datetime.now(),
-        tags = [tag_circuits, tag_v_equals_ir, tag_current]
-        )
-        db.session.add(post)
-        db.session.commit()
+
 
         post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"What is the probability of drawing certain marbles from a bag?",
         problem_body = r"A bag contains 6 red marbles and 5 blue marbles. If you draw two marbles, what is the probability they are different colors?",
-        answer_body = r"$$ P = 6/11",
-        solution_body = r"The red marbles are indistinguishable from each other, and the blue marbles are indistinguishable from each other. To draw marbles of different colors, you can draw a red one first and then a blue one, and vice versa. \n\n  The probability of drawing a blue marble first is $$6/11$$ and the probability of drawing a red marble next is $$5/10$$. The events are independent, and so the probability of both events happening is the product of the probability of each event. \n\n The probabilities of drawing a red marble and then a blue one are $$5/11$$ and $$6/10$$ respectfully. \n\n The probability of drawing two different marbles is the sum of the probablities of each sequence of events. $$P = (6/11)(5/10) + (5/11)(6/10) = 6/11"  ,
+        answer_body = r"$$ P = 6/11 $$",
+        solution_body = r"The red marbles are indistinguishable from each other, and the blue marbles are indistinguishable from each other. To draw marbles of different colors, you can draw a red one first and then a blue one, and vice versa. \n\n  The probability of drawing a blue marble first is $$6/11$$ and the probability of drawing a red marble next is $$5/10$$. The events are independent, and so the probability of both events happening is the product of the probability of each event. \n\n The probabilities of drawing a red marble and then a blue one are $$5/11$$ and $$6/10$$ respectfully. \n\n The probability of drawing two different marbles is the sum of the probablities of each sequence of events. $$P = (6/11)(5/10) + (5/11)(6/10) = 6/11 $$"  ,
         references = "",
         status = 'published',
         datetime_created=datetime.now(),
@@ -201,7 +203,7 @@ def seed_database():
 
         post = Post(owner_id = random.choice(User.query.all()).id,
         title = r" Newton's Law $$ \vec{F} = m \vec{a} $$",
-        problem_body = r"",
+        problem_body = r"$$ \Phi_E = \int \vec{E} \mathrm{d} \vec{A} ; \quad \Phi_B = \int \vec{B} \mathrm{d} \vec{A}  $$",
         answer_body = r"",
         solution_body = r""  ,
         references = "",
@@ -215,7 +217,7 @@ def seed_database():
 
         post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"Prove that $$ e^{i\theta} = \cos\theta + i \sin\theta $$",
-        problem_body = r"",
+        problem_body = r"$$ \sum_{n=0}^\infty \frac{1}{n!} = \lim_{n \rightarrow \infty} (1 + 1/n)^n $$",
         answer_body = r"",
         solution_body = r""  ,
         references = "",
@@ -230,7 +232,7 @@ def seed_database():
 
         post = Post(owner_id = random.choice(User.query.all()).id,
         title = r"Rate of radioactive decay $$ A(t) = A_0 e^{-t/\tau} $$",
-        problem_body = r"",
+        problem_body = r"$$ \frac{ \mathrm{d} y(x)}{\mathrm{d} x} = \lim_{\epsilon \rightarrow 0} \frac{ y(x+\epsilon) - y(x)}{\epsilon} $$",
         answer_body = r"",
         solution_body = r""  ,
         references = "",

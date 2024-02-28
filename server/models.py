@@ -174,8 +174,8 @@ class Comment(db.Model, SerializerMixin):
             raise ValueError('Invalid post id')
         
     @validates('parent_id')
-    # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
     def validate_parent_id(self, key, value):
+        # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
         if value == None:
             if self.post_id == None:
                 raise ValueError('post_id and parent_id cannot both be None')

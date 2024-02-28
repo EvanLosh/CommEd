@@ -296,7 +296,7 @@ api.add_resource(CommentsResource, '/comments') # Post
 api.add_resource(CommentResource, '/comments/<int:id>') # Patch, Delete
 api.add_resource(PlaylistsResource, '/playlists') # Get, Post
 api.add_resource(PlaylistResource, '/playlists/<int:id>') # Get, Patch, Delete
-api.add_resource(TagsResource, '/tags') # Get
+# api.add_resource(TagsResource, '/tags') # Get
 api.add_resource(SignInResource, '/signin') # Post
 
 
