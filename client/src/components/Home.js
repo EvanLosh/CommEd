@@ -65,7 +65,9 @@ function Home({ commonProps }) {
     const introElement = <div id='home-intro'>
         <div >
 
-            <h1 className='home-intro-welcome-message'>Welcome to CommEd,</h1> <p className='home-intro-welcome-message'>a forum for community-powered education. CommEd makes it easy to type up your math homework using TeX code for typesetting. </p>
+            <h1 className='home-intro-welcome-message'>Welcome to CommEd,</h1> 
+            <br></br>
+            <p className='home-intro-welcome-message'>a forum for community-powered education. CommEd makes it easy to type up your math homework using TeX code for typesetting. </p>
             <p>Example:</p>
         </div>
         {texDemonstration}
