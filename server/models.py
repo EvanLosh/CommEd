@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates, backref
+import bcrypt
 
 db = SQLAlchemy()
 
@@ -10,9 +11,9 @@ class User(db.Model, SerializerMixin):
    
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(20), nullable=False)
+    password_hash = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(1000), nullable=False)
-    email_verified = db.Column(db.Boolean, nullable=False)
+    email_is_verified = db.Column(db.Boolean, nullable=False)
     datetime_created = db.Column(db.DateTime, nullable=False)
     
     serialize_rules = (
@@ -49,14 +50,14 @@ class User(db.Model, SerializerMixin):
             return ValueError('Usernames cannot contain commas, semicolons, slashes, and brackets')
         return value
     
-    @validates('password')
+    @validates('password_hash')
     def validate_password(self, key, value):
         if not value:
-            raise ValueError('Invalid password')
-        if 1 > len(value) > 20:
-            raise ValueError('Password length must be between 1 and 20 characters')
-        if ',' in value or '\\' in value or '/' in value or ';' in value or "{" in value or "}" in value:
-            return ValueError('Passwords cannot contain commas, seimcolons, slashes, and brackets')
+            raise ValueError('Password hash cannot be empty')
+        # if 1 > len(value) > 20:
+        #     raise ValueError('Password length must be between 1 and 20 characters')
+        # if ',' in value or '\\' in value or '/' in value or ';' in value or "{" in value or "}" in value:
+        #     return ValueError('Passwords cannot contain commas, seimcolons, slashes, and brackets')
         return value
 
     @validates('email')
@@ -72,6 +73,10 @@ class User(db.Model, SerializerMixin):
         elif ',' in value or '\\' in value or '/' in value:
             return ValueError('Emails cannot contain commas and slashes')
         return value
+    
+    def verify_password(self, password):
+        password_bytes = password.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, self.password_hash)
     
 class Post(db.Model, SerializerMixin):
     __tablename__ = 'posts'

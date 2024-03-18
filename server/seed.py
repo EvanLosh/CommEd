@@ -6,6 +6,7 @@ import random
 import math
 # Remote library imports
 from faker import Faker
+import bcrypt
 
 # Local imports
 from app import app
@@ -16,16 +17,17 @@ fake = Faker()
 # Function to generate fake users
 def generate_fake_user():
     username=fake.name()
-    password=fake.password()
+    password=random.choice(['123', 'abc'])
+    password_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    password_hash = bcrypt.hashpw(password_bytes, salt)
     if len(username) > 20:
         username = username[0:20]
-    if len(password) > 20:
-        password = password[0:20]
     return User(
         username=username,
-        password=password,
+        password_hash=password_hash,
         email=fake.email(),
-        email_verified=False,
+        email_is_verified=False,
         datetime_created=datetime.now()
     )
 

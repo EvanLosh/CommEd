@@ -16,6 +16,8 @@ marshmallow = "3.18.0"
 faker = "*"
 requests = "*"
 bcrypt = "*"
+pyjwt = "*"
+flask_jwt = "*"
 
 [dev-packages]
 
