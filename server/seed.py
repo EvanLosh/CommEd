@@ -16,11 +16,16 @@ fake = Faker()
 # Function to generate fake users
 def generate_fake_user():
     username=fake.name()
+    password=fake.password()
     if len(username) > 20:
         username = username[0:20]
+    if len(password) > 20:
+        password = password[0:20]
     return User(
         username=username,
+        password=password,
         email=fake.email(),
+        email_verified=False,
         datetime_created=datetime.now()
     )
 

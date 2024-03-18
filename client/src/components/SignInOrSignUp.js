@@ -9,8 +9,8 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
     const formikSignIn = useFormik({
         initialValues: {
             username: '',
+            password: '',
             email: '',
-            password: ''
         },
         onSubmit: values => {
             login(values)
@@ -20,7 +20,8 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
     const formikSignUp = useFormik({
         initialValues: {
             username: '',
-            email: ''
+            password: '',
+            email: '',
         },
         onSubmit: values => {
             console.log(`Creating new user: ${values}`)
@@ -52,6 +53,14 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 name="username"
                 onChange={formikSignIn.handleChange}
                 value={formikSignIn.values.username}
+            />
+            <br></br>
+            <label htmlFor="password">Password:</label>
+            <input
+                type="text"
+                name="password"
+                onChange={formikSignIn.handleChange}
+                value={formikSignIn.values.password}
             />
             <br></br>
             {/* <label htmlFor="email">Email (not required):</label>

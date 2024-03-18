@@ -10,7 +10,9 @@ class User(db.Model, SerializerMixin):
    
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(1000), nullable=False)
+    email_verified = db.Column(db.Boolean, nullable=False)
     datetime_created = db.Column(db.DateTime, nullable=False)
     
     serialize_rules = (
@@ -42,11 +44,21 @@ class User(db.Model, SerializerMixin):
         if not value:
             raise ValueError('Invalid username')
         if 1 > len(value) > 20:
-            raise ValueError('Username must have 1 to 20 characters')
-        if ',' in value or '\\' in value or '/' in value:
-            return ValueError('Usernames cannot contain commas and slashes')
+            raise ValueError('Username length must be between 1 and 20 characters')
+        if ',' in value or '\\' in value or '/' in value or ';' in value or "{" in value or "}" in value:
+            return ValueError('Usernames cannot contain commas, semicolons, slashes, and brackets')
         return value
     
+    @validates('password')
+    def validate_password(self, key, value):
+        if not value:
+            raise ValueError('Invalid password')
+        if 1 > len(value) > 20:
+            raise ValueError('Password length must be between 1 and 20 characters')
+        if ',' in value or '\\' in value or '/' in value or ';' in value or "{" in value or "}" in value:
+            return ValueError('Passwords cannot contain commas, seimcolons, slashes, and brackets')
+        return value
+
     @validates('email')
     def validate_email(self, key, value):
         if not value:
