@@ -5,7 +5,7 @@ from flask_restful import Resource, Api
 from models import User, db, Post, Comment, Tag, Playlist
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import requests
+# import requests
 from datetime import datetime
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ class SignInResource(Resource):
         # TODO: This is not RESTful. replace this endpoint with one that gets a user by using the username as a route parameter.
         form_data = request.get_json()
         print(form_data)
-        user = User.query.filter_by(username = form_data['username']).first()
+        user = User.query.filter_by(username = form_data['username']).filter_by(password= form_data['password']).first()
         print(user)
         if user:
             return user.to_dict(), 200
@@ -44,7 +44,7 @@ class UsersResource(Resource):
     def post(self):
         # create a new user
         form_data = request.get_json()
-        new_user = User(username=form_data['username'], email=form_data['email'], datetime_created=datetime.now())
+        new_user = User(username=form_data['username'], password=form_data['password'], email=form_data['email'], email_verified=False, datetime_created=datetime.now())
         db.session.add(new_user)
         db.session.commit()
         return new_user.to_dict(), 201

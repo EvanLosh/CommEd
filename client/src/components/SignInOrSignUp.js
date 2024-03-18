@@ -103,6 +103,14 @@ function SignInOrSignUp({ commonProps, login, logout, }) {
                 value={formikSignUp.values.username}
             />
             <br></br>
+            <label htmlFor="password">Password:</label>
+            <input
+                type="text"
+                name="password"
+                onChange={formikSignUp.handleChange}
+                value={formikSignUp.values.password}
+            />
+            <br></br>
             <label htmlFor="email">Email (required):</label>
             <input
                 type="text"
