@@ -12,7 +12,26 @@ import bcrypt
 import jwt
 
 app = Flask(__name__)
-# app.secret_key = 
+app.config['SECRET_KEY'] = 'secret-key'
+# app.config['JWT_AUTH_URL_RULE'] = '/signin'
+
+# def authenticate(username, password):
+#     print('authenticating user')
+#     user = User.query.filter_by(username=username).first()
+#     if not user:
+#         return None
+#     if bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
+#         return user
+#     return None
+
+# def identity(payload):
+#     user_id = payload['identity']
+#     user = User.query.filter_by(id=user_id).first()
+#     if user:
+#         return user.id
+#     return None
+
+# jwt = JWT(app, authenticate, identity)
 api = Api(app)
 cors = CORS(app, resources={r'/*': {"origins": "*"}})
 # configure the database connection to the local file app.db
@@ -20,7 +39,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
 # configure flag to disable modification tracking and use less memory
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# Session(app)
 
 # create a Migrate object to manage schema modifications
 migrate = Migrate(app, db)
@@ -28,23 +46,34 @@ migrate = Migrate(app, db)
 # initialize the Flask application to use the database
 db.init_app(app)
 
-# def verify_password()
+def generate_jwt(user):
+    return str(jwt.encode(user.generate_session_data(), 'secret-key', algorithm='HS256'))
+
+def decode_jwt(token):
+    return jwt.decode(token, 'secret-key', algorithms=['HS256'])
 
 class SignInResource(Resource):
-    @jwt_required()
     def post(self):
-        # TODO: This is not RESTful. replace this endpoint with one that gets a user by using the username as a route parameter.
         form_data = request.get_json()
- 
-        password = form_data['password']
         user = User.query.filter_by(username = form_data['username']).first()
         if user:
+            password = form_data['password']
             if user.verify_password(password):
-                return {'user': user.to_dict(), 'user_access_token': user.generate_token()}, 200
+                print(generate_jwt(user))
+                return {
+                    'user': {
+                        'username': user.username,
+                        'id': user.id,
+                        # 'email': user.email,
+                        'email_is_verified': user.email_is_verified,
+                        'datetime_created': str(user.datetime_created),
+                        },
+                    'access_token': generate_jwt(user)
+                    }, 200
             else:
-                return {'message': 'Username or password is incorrect'}, 204
+                return {'message': 'Username or password is incorrect'}, 401
         else:
-            return {'message': 'Username or password is incorrect'}, 204
+            return {'message': 'Username or password is incorrect'}, 401
 
 
 class UsersResource(Resource):
@@ -56,7 +85,7 @@ class UsersResource(Resource):
         password_bytes = password.encode('utf-8')
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password_bytes, salt)
-        new_user = User(username=form_data['username'], password_hash=password_hash, email=form_data['email'], email_is_verified=False, datetime_created=datetime.now())
+        new_user = User(username=form_data['username'], password_hash=password_hash, email=form_data['email'], email_is_verified=False)
         db.session.add(new_user)
         db.session.commit()
         return new_user.to_dict(), 201
@@ -91,14 +120,13 @@ class PostsResource(Resource):
                 # db.session.add(existing_tag)
             else:
                 # if no Tag object already exists, create it
-                new_tag = Tag(text = t['text'], datetime_created = datetime.now())
+                new_tag = Tag(text = t['text'], )
                 tags.append(new_tag)
                 db.session.add(new_tag)
                 # commit one at a time to avoid duplicates
                 db.session.commit()
         try:
-            newPost = Post(datetime_created = datetime.now(),
-                           tags = tags,
+            newPost = Post(                           tags = tags,
                            owner_id = form_data['owner_id'],
                            title = form_data['title'],
                            problem_body = form_data['problem_body'],
@@ -138,7 +166,7 @@ class PostResource(Resource):
                 db.session.add(existing_tag)
             else:
                 # if no Tag object already exists, create it
-                new_tag = Tag(text = t['text'], datetime_created = datetime.now())
+                new_tag = Tag(text = t['text'])
                 tags.append(new_tag)
                 db.session.add(new_tag)
             # commit one at a time to avoid duplicates
@@ -189,14 +217,12 @@ class CommentsResource(Resource):
             if form_data['parent_id']:
                 # a comment must have either a parent_id or a post_id, not both
                 # a not-None parent_id makes the comment a child of another comment
-                newComment = Comment(datetime_created = datetime.now(),
-                           owner_id = form_data['owner_id'],
+                newComment = Comment(                           owner_id = form_data['owner_id'],
                            body = form_data['body'],
                            parent_id = form_data['parent_id'],
                            )
             else:
-                newComment = Comment(datetime_created = datetime.now(),
-                           owner_id = form_data['owner_id'],
+                newComment = Comment(                           owner_id = form_data['owner_id'],
                            body = form_data['body'],
                            post_id = form_data['post_id'],
                            )
@@ -242,7 +268,7 @@ class PlaylistsResource(Resource):
         # Create a new playlist
         form_data = request.get_json()
         first_post = Post.query.filter_by(id = form_data['post_id']).first()
-        new_playlist = Playlist(owner_id = form_data['owner_id'], title = form_data['title'], posts = [first_post], datetime_created = datetime.now())
+        new_playlist = Playlist(owner_id = form_data['owner_id'], title = form_data['title'], posts = [first_post])
         db.session.add(new_playlist)
         db.session.commit()
         return new_playlist.to_dict(), 201

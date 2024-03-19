@@ -15,6 +15,7 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
             fetch(commonProps.serverURL + '/posts', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${commonProps.authJWT}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(values)

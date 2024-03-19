@@ -31,6 +31,7 @@ function Comment({ commonProps, comment, renderComments, parent_id, post_id }) {
             {
                 method: 'PATCH',
                 headers: {
+                    'Authorization': `Bearer ${commonProps.authJWT}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ body: editField })

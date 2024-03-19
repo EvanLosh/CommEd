@@ -13,7 +13,10 @@ function ViewPlaylist({ playlist, commonProps, }) {
     function handleDeleteClick(e) {
 
         fetch(commonProps.serverURL + '/playlists/' + playlist.id, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${commonProps.authJWT}`,
+            }
         })
             // .then(r => r.json())
             .then(r => window.location.reload())

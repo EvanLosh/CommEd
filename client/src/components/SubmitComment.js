@@ -21,6 +21,7 @@ function SubmitComment({ commonProps, parent_id, post_id }) {
                 fetch(commonProps.serverURL + '/comments', {
                     method: 'POST',
                     headers: {
+                        'Authorization': `Bearer ${commonProps.authJWT}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(values)

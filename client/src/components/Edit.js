@@ -18,6 +18,7 @@ function Edit({ commonProps, originalPost, renderCreateAndEditPostForm, tags }) 
                 {
                     method: 'PATCH',
                     headers: {
+                        'Authorization': `Bearer ${commonProps.authJWT}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(values)

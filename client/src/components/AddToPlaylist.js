@@ -43,6 +43,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
             fetch(commonProps.serverURL + '/playlists/' + eTargetValue, {
                 method: 'PATCH',
                 headers: {
+                    'Authorization': `Bearer ${commonProps.jwtAuth}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(values)
@@ -75,6 +76,7 @@ function AddToPlaylist({ commonProps, usersPlaylists, post }) {
         fetch(commonProps.serverURL + '/playlists', {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${commonProps.authJWT}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ owner_id: commonProps.user.id, title: newPlaylistTitle, post_id: post.id })

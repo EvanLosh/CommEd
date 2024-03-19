@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates, backref
 import bcrypt
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -14,7 +15,7 @@ class User(db.Model, SerializerMixin):
     password_hash = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(1000), nullable=False)
     email_is_verified = db.Column(db.Boolean, nullable=False)
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     
     serialize_rules = (
         "-posts.owner",  
@@ -78,6 +79,18 @@ class User(db.Model, SerializerMixin):
         password_bytes = password.encode('utf-8')
         return bcrypt.checkpw(password_bytes, self.password_hash)
     
+    def generate_session_data(self):
+        userdata = {
+            'username': self.username,
+            'email': self.email,
+            'email_is_verified': str(self.email_is_verified),
+            'id': self.id,
+            'datetime_created': str(self.datetime_created),
+            'datetime_session_start': str(datetime.now(timezone.utc))
+        }
+        # print(userdata)
+        return userdata
+    
 class Post(db.Model, SerializerMixin):
     __tablename__ = 'posts'
 
@@ -88,7 +101,7 @@ class Post(db.Model, SerializerMixin):
     answer_body = db.Column(db.String(10000))
     solution_body = db.Column(db.String(10000))
     references  = db.Column(db.String(10000))
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     datetime_last_edited = db.Column(db.DateTime)
     status = (db.Column(db.String(100))) # draft / published / hidden
 
@@ -140,7 +153,7 @@ class Comment(db.Model, SerializerMixin):
     body = db.Column(db.String(10000))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     parent_id = db.Column(db.Integer,  db.ForeignKey('comments.id'))
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     datetime_last_edited = db.Column(db.DateTime)
     status = (db.Column(db.String(100))) # draft / published / hidden
 
@@ -219,7 +232,7 @@ class Tag(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(40), nullable=False)
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
 
     posts = db.relationship('Post', secondary='post_tags', back_populates='tags')
@@ -246,7 +259,7 @@ class Playlist(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer,  db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(150))
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     datetime_last_edited = db.Column(db.DateTime)
     status = (db.Column(db.String(100))) # draft / published / hidden
 
@@ -297,7 +310,7 @@ class Playlist(db.Model, SerializerMixin):
             raise ValueError('Status can only be draft or published')
         
 
-# post_tag table intermediates the many to many relationship between posts and tags 
+# post_tag table mediates the many to many relationship between posts and tags 
 post_tag = db.Table(
 'post_tags', 
 db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
@@ -305,7 +318,7 @@ db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
 )
     
 
-# playlist_post table intermediates the many to many relationship between playlists and posts    
+# playlist_post table mediates the many to many relationship between playlists and posts    
 playlist_post = db.Table(
 'playlist_posts', 
 db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
