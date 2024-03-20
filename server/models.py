@@ -82,6 +82,7 @@ class User(db.Model, SerializerMixin):
     def generate_session_data(self):
         userdata = {
             'username': self.username,
+            'password': str(self.password_hash),
             'email': self.email,
             'email_is_verified': str(self.email_is_verified),
             'id': self.id,

@@ -1,34 +1,44 @@
-from flask import Flask, request, make_response, session
+from flask import Flask, jsonify, request, make_response, session
 # from flask_session import Session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
 from models import User, db, Post, Comment, Tag, Playlist
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from flask_jwt import jwt_required, current_identity
+# from flask_jwt import jwt_required, current_identity, JWT
 # import requests
 from datetime import datetime
 import bcrypt
-import jwt
+import werkzeug
+from werkzeug import security
+# import jwt as pyjwt
+
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
+# app.config["JWT_HEADER_TYPE"] = "JWT"
+jwt = JWTManager(app)
 # app.config['JWT_AUTH_URL_RULE'] = '/signin'
 
 # def authenticate(username, password):
-#     print('authenticating user')
+#     print('Authenticating user ', username)
 #     user = User.query.filter_by(username=username).first()
 #     if not user:
+#         print('User not found')
 #         return None
-#     if bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
+#     print('Checking password')
+#     if bcrypt.checkpw(password, user.password_hash):
 #         return user
 #     return None
 
 # def identity(payload):
+#     print('Payload is ')
+#     print(payload)
 #     user_id = payload['identity']
 #     user = User.query.filter_by(id=user_id).first()
 #     if user:
-#         return user.id
+#         return user
 #     return None
 
 # jwt = JWT(app, authenticate, identity)
@@ -47,10 +57,10 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 def generate_jwt(user):
-    return str(jwt.encode(user.generate_session_data(), 'secret-key', algorithm='HS256'))
+    return str(pyjwt.encode(user.generate_session_data(), 'secret-key', algorithm='HS256'))
 
 def decode_jwt(token):
-    return jwt.decode(token, 'secret-key', algorithms=['HS256'])
+    return pyjwt.decode(token, 'secret-key', algorithms=['HS256'])
 
 class SignInResource(Resource):
     def post(self):
@@ -59,7 +69,7 @@ class SignInResource(Resource):
         if user:
             password = form_data['password']
             if user.verify_password(password):
-                print(generate_jwt(user))
+                # print(generate_jwt(user))
                 return {
                     'user': {
                         'username': user.username,
@@ -68,7 +78,7 @@ class SignInResource(Resource):
                         'email_is_verified': user.email_is_verified,
                         'datetime_created': str(user.datetime_created),
                         },
-                    'access_token': generate_jwt(user)
+                    'access_token': create_access_token(identity=user.username)
                     }, 200
             else:
                 return {'message': 'Username or password is incorrect'}, 401
@@ -92,7 +102,7 @@ class UsersResource(Resource):
     
 class UserResource(Resource):
     # return full details of the specified user 
-    @jwt_required()
+    # @jwt_required()
     def get(self, id):
         user = User.query.filter_by(id = id).first()
         return user.to_dict(), 200
@@ -106,8 +116,13 @@ class PostsResource(Resource):
     
     @jwt_required()
     def post(self):
+        
         # create a new post
         form_data = request.get_json()
+        # username = get_jwt_identity()
+        # print('POST method on /posts was requested by: ' + username)
+
+
         if form_data['owner_id'] < 1:
             return {'errors': 'Invalid user id'}, 500
         # make a list of the Tag objects
@@ -126,7 +141,7 @@ class PostsResource(Resource):
                 # commit one at a time to avoid duplicates
                 db.session.commit()
         try:
-            newPost = Post(                           tags = tags,
+            newPost = Post(tags = tags,
                            owner_id = form_data['owner_id'],
                            title = form_data['title'],
                            problem_body = form_data['problem_body'],
@@ -150,7 +165,7 @@ class PostResource(Resource):
         else:
             return {}, 404
     
-    @jwt_required()
+    # @jwt_required()
     def patch(self, id):
         # post = Post.query.filter_by(id = id).first()
         post = Post.query.get_or_404(id)
@@ -195,7 +210,7 @@ class PostResource(Resource):
         #     return {}, 404
         # print(form_data)
 
-    @jwt_required()
+    # @jwt_required()
     def delete(self, id):
         post = Post.query.filter_by(id = id).first()
         if post:
@@ -206,7 +221,7 @@ class PostResource(Resource):
             return {}, 404
 
 class CommentsResource(Resource):
-    @jwt_required()
+    # @jwt_required()
     def post(self):
         # create a new comment
         form_data = request.get_json()
@@ -235,7 +250,7 @@ class CommentsResource(Resource):
     
 
 class CommentResource(Resource): 
-    @jwt_required()
+    # @jwt_required()
     def patch(self, id):
         # update the body of a comment
         form_data = request.get_json()
@@ -248,7 +263,7 @@ class CommentResource(Resource):
         else:
             return {}, 404
 
-    @jwt_required()
+    # @jwt_required()
     def delete(self, id):
         # delete a comment
         comment = Comment.query.filter_by(id = id).first()
@@ -263,7 +278,7 @@ class PlaylistsResource(Resource):
         playlists = [p.to_dict() for p in Playlist.query.all()]
         return playlists, 200
     
-    @jwt_required()
+    # @jwt_required()
     def post(self):
         # Create a new playlist
         form_data = request.get_json()
@@ -282,7 +297,7 @@ class PlaylistResource(Resource):
         else:
             return {}, 404
     
-    @jwt_required()
+    # @jwt_required()
     def patch(self, id):
         # Add or remove a post to a playlist
         form_data = request.get_json()
@@ -314,7 +329,7 @@ class PlaylistResource(Resource):
             else:
                 return {}, 404      
     
-    @jwt_required()
+    # @jwt_required()
     def delete(self, id):
         # delete a playlist
         playlist = Playlist.query.filter_by(id = id).first()

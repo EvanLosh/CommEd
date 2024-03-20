@@ -18,6 +18,7 @@ requests = "*"
 bcrypt = "*"
 pyjwt = "*"
 flask_jwt = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 

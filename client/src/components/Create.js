@@ -11,15 +11,19 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values) => {
+            // debugger
             values.tags = tags
-            fetch(commonProps.serverURL + '/posts', {
+            const stuffToSend = {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${commonProps.authJWT}`,
+                    'Authorization': "Bearer " + commonProps.getAccessToken(),
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(values)
-            })
+            }
+            console.log(commonProps.getAccessToken())
+            console.log(stuffToSend)
+            fetch(commonProps.serverURL + '/posts', stuffToSend)
                 .then((r) => {
                     if (!r.ok) {
 
@@ -28,7 +32,7 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
                     return r.json()
                 })
                 .then((r) => {
-
+                    debugger
                     window.location.href = commonProps.websiteURL + '/view-post/' + r.id
                 })
         }
@@ -37,8 +41,16 @@ function Create({ commonProps, renderCreateAndEditPostForm, tags }) {
 
 
     return <div id="create-form">
-
-        {commonProps.user.id > 0 ? <div><h3 className='commed-style'>Use this form to create a new post</h3>{renderCreateAndEditPostForm(formik)} </div> : <a href='/sign-in-or-sign-up'>Sign in to create posts</a>}
+        {
+            commonProps.user.id > 0
+                ?
+                <div>
+                    <h3 className='commed-style'>Use this form to create a new post</h3>
+                    {renderCreateAndEditPostForm(formik)}
+                </div>
+                :
+                <a href='/sign-in-or-sign-up'>Sign in to create posts</a>
+        }
     </div>;
 }
 

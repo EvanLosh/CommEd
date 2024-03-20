@@ -77,8 +77,7 @@ function App() {
   function getAccessToken() {
     const authJWTString = sessionStorage.getItem('access_token')
     if (authJWTString) {
-      const authJWT = JSON.parse(authJWTString)
-      return authJWT
+      return authJWTString
     }
     else {
       return null
@@ -86,6 +85,8 @@ function App() {
   }
 
   function setAccessToken(x) {
+    // console.log('setting access token to ', JSON.stringify(x))
+    // sessionStorage.setItem('access_token', JSON.stringify(x))
     sessionStorage.setItem('access_token', x)
   }
 
@@ -234,7 +235,7 @@ function App() {
     blankPost: blankPost,
     blankPlaylist: blankPlaylist,
     user: user,
-    authJWT: 'authJWT', //TODO: replace string with local storage or session storage token
+    getAccessToken: getAccessToken,
     renderDatetimeAndAuthor: renderDatetimeAndAuthor,
     renderTags: renderTags,
     renderDelete: renderDelete
