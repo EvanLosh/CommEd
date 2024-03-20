@@ -27,7 +27,7 @@ function CreateAndEditPost({ commonProps, child }) {
             formik.values.status = e.target.value
         }
 
-        // if (formik)
+   
 
         return <div className='create-and-edit-form'>
             <div className='create-and-edit-tips'>

@@ -1,16 +1,27 @@
 # CommEd
-Write your own math problems and solutions with MathJax, share them with the world, and learn from other users.
 
-1. A SCREENSHOT of your wireframe
+CommEd is a full-stack web app and a forum that offers enrichment and convenience for teachers and students who solve math problems. Users can write their solutions to math problems with professional quality typesetting of mathematical expressions. They can share, browse, and save solutions. They can also discuss solutions with each other.
 
-<img width="848" alt="Phase-5-home" src="https://github.com/EvanLosh/CommEd/assets/134793412/7f27938a-543e-4a08-853c-d986c8c9736a">
+CommEd was my capstone project for Flatiron School's bootcamp for software engineering. It uses React on the front-end and Flask on the back-end. It uses a Node package called react-tex to render TeX typesetting.
 
-<img width="851" alt="Phase-5-new-post" src="https://github.com/EvanLosh/CommEd/assets/134793412/3e6c0e5b-b778-4933-96fe-a594bf76b91e">
+# How to run this app
+ 
+In a terminal in the project directory:
 
-<img width="846" alt="Phase-5-view-post" src="https://github.com/EvanLosh/CommEd/assets/134793412/f613c0c4-7089-476a-b80d-e32332bafb62">
+    pipenv install
+    pipenv shell
+    cd server
+    python seed.py # Performs the initial migration of the database and enters some data
+    python app.py
+
+In a second terminal in the project directory:
+
+    cd client
+    npm install
+    npm run start
 
 
-2. User stories
+<!-- # User stories
    * User can post a math problem with an answer, a solution, and references.
    * Post are written in markdown, with TeX-styled equations, and links to graphics.
    * User can edit their posts.
@@ -18,68 +29,92 @@ Write your own math problems and solutions with MathJax, share them with the wor
    * User can search for posts, filter posts, and sort posts. 
    * User can comment on posts.
    * User can reply to comments.
-   * User can save posts to a new playlist or an existing playlist.
+   * User can save posts to a new playlist or an existing playlist. -->
 
-3. A SCREENSHOT of a React tree diagram
 
-<img width="918" alt="Phase-5-React-Tree-2" src="https://github.com/EvanLosh/CommEd/assets/134793412/cbcd61df-00e7-4ae8-a9bb-e31238043a40">
+# React component tree
 
-4. A list of your React Router ROUTES and the component it will go to
+![React component tree](CommEd-react-tree.png)
+
+# React routes
 
 | React routes | component |
 |--- | --- |
 | / | Home.js |
+| /sign-in-or-sign-up | SignUpOrSignIn.js |
 | /about | About.js |
-| /new-post | CreateAndEditPost.js |
+| /posts | Posts.js |
+| /playlists | Playlist.js |
+| /create | CreateAndEditPost.js |
+| /edit-post/:id | CreateAndEditPost.js |
 | /view-post/:id | ViewPost.js |
-| /sign-in | SignUpOrSignIn.js |
-| /playlist/:id | Playlist.js |
+| /playlist/:id | PlaylistFetcher.js |
 
-6. A SCREENSHOT of your schema (includes relationships, columns, validations)
+# Database schema, relationships
 
-<img width="798" alt="Phase-5-db-schema" src="https://github.com/EvanLosh/CommEd/assets/134793412/644fcf45-3121-42ef-87fb-1954ce35b9e5">
+<img width="798" alt="CommEd-db-schema" src="https://github.com/EvanLosh/CommEd/assets/134793412/644fcf45-3121-42ef-87fb-1954ce35b9e5">
 
 
-7. A list of your API routes (HTTP Verb, Endpoint, Purpose, Response Structure)
+# API routes 
 
 | Verb | Endpoint | Purpose | Response structure |
 | --- | --- | --- | --- |
-| GET | /users | Show the owners of posts and comments | a list of user objects |
+| POST | /sign-in | user signs in (This will be replaecd with implementation of user account security and privacy) | a user object |
 | POST | /users | Create a new user account | a user object |
-| GET | /users/int:id | Get a user by id | a user object |
-| GET | /posts | Render cards for posts matching the request criteria | a list of posts (Only the attributes needed for front-end cards) |
-| GET | /posts/<int:id> | View a post | a post object |
+| GET | /posts | Render cards for posts | a list of post objects |
+| GET | /posts/int:id | View a post | a post object |
 | POST | /posts | Submit a new post | a post object |
-| PATCH | /posts/<int:id> | Edit a post | a post object |
-| DELETE | /posts/<int:id> | Delete a post | an empty object |
-| GET | /posts/int:id/comments | Render the comments on a post | a list of comments |
-| POST | /post/int:id/comments | Submit a comment to a post| a comment object |
-| PATCH | /posts/int:id/comments/int:id | Edit a comment | a comment object |
-| DELETE | /post/int:id/comments/int:id | Delete at comment | an empty object |
-| GET | /playlists | Get a list of playlists matching search and filter options | a list of playlist objects |
+| PATCH | /posts/int:id | Edit a post | a post object |
+| DELETE | /posts/int:id | Delete a post | an empty object |
+| POST | /comments | Submit a comment to a post| a comment object | 
+| PATCH | /comments/int:id | Edit a comment | a comment object |
+| DELETE | /comments/int:id | Delete at comment | an empty object | 
+| GET | /playlists | Get a list of playlists | a list of playlist 
+objects |
 | POST | /playlists | Create a new playlist | a playlist object |
 | GET | /playlists/int:id | Get a playlist by id | a playlist object |
+| PATCH | /playlists/int:id | Add or remove a post to a playlist | a playlist object |
 | DELETE | /playlists/int:id | Delete a playlist | an empty object |
-| GET | /playlists/int:id/posts | Get a list of posts in a playlist | a list of post objects |
-| POST | /playlists/int:id | Add a post to a playlist | a post object |
-| DELETE | /playlists/int:id/posts/int:id | Remove a post from a playlist | an empty object |
-| GET | /tags | Get a list of all tags | a list of tag objects |
-| POST | /tags | Create a new tag | a tag object |
-| GET | /posts/int:id/tags | Get a list tags on a post | a list of tag objects |
+
+
+
+<!-- | GET | /posts/int:id/comments | Render the comments on a post | a list of comments | -->
+<!-- | GET | /tags | Get a list of all tags | a list of tag objects |
+| POST | /tags | Create a new tag | a tag object | -->
+<!-- | GET | /posts/int:id/tags | Get a list tags on a post | a list of tag objects |
 | POST | /posts/int:id/tags | Add a tag to a post | a tag object |
-| DELETE | /posts/int:id/tags/int:id | Remove a tag from a post | an empty object |
+| DELETE | /posts/int:id/tags/int:id | Remove a tag from a post | an empty object | -->
+<!-- | GET | /users | Show the owners of posts and comments | a list of user objects | -->
+<!-- | GET | /users/int:id | Get a user by id | a user object | -->
 
-8. What new technologies you will use (Redux and useContext will count)
-   * MathJax
-   * markdown-to-jsx
 
-9. Three stretch goals
-    * User can favorite posts and see a list of their favorites.
-    * User can like posts and can see how many likes each post has.
-    * User can preview their post before submitting it.
-    * User can make custom graphics (relevant to math problems) and include them in their post.
+# Development goals
 
-11. A Kanban board
+* Add privacy and security to user sessions (JWT, password hashing, encryption)
+* Improve data validations and error handling
+* Add a search and filter feature to lists of playlists
+* Add a guide for using TeX
+* Add live preview of posts and comments during creation and editing
+* On the homepage, add a list of posts that the user recently viewed, so the user can easily view them again
+* Add a user profile page with a history of the user's posts, playlists, and comments
+* Allow users to hide their posts and playlists
+* Overhaul the body structure of posts: Allow the user to add sections of certain types (heading, paragraph, equation, figure)
+* Render markdown in posts and comments
+* Render block-style Tex (currently rendering only inline-style TeX)
+* Add a print button to posts that opens a new tab with a printer-friendly version of the post
+* Implement notifications to the user when a post or comment belonging to the user receives a reply
+* Enable users to show diagrams in their posts
+* Enable users to show charts in their posts
+* Add a view-random-post button on the homepage
+* Add a 'like' feature to posts and playlists
+* Allow the user to view a list of posts that they liked
+* Add a Groups feature. Users can create groups and invite other users. Users can make their posts viewable only by members of certain groups.
+* Overhaul styling with Tailwind or Bootstrap
 
-<img width="632" alt="Phase-5-kanban-board" src="https://github.com/EvanLosh/CommEd/assets/134793412/0719b7f0-644d-45bc-b90e-d84efbd5e771">
+# Known issues:
 
+* Sorting post list alphabetically by author's name does not work
+* Deleting a comment with children also severs the relationship of those children to the post object
+* Sign Up and Sign In error messages are not displaying
+* InlineTex's formatting of fractions is ugly
+* User cannot use line breaks in their posts and comments

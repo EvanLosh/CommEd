@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates, backref
+import bcrypt
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -10,8 +12,10 @@ class User(db.Model, SerializerMixin):
    
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False)
+    password_hash = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(1000), nullable=False)
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    email_is_verified = db.Column(db.Boolean, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     
     serialize_rules = (
         "-posts.owner",  
@@ -42,11 +46,21 @@ class User(db.Model, SerializerMixin):
         if not value:
             raise ValueError('Invalid username')
         if 1 > len(value) > 20:
-            raise ValueError('Username must have 1 to 20 characters')
-        if ',' in value or '\\' in value or '/' in value:
-            return ValueError('Usernames cannot contain commas and slashes')
+            raise ValueError('Username length must be between 1 and 20 characters')
+        if ',' in value or '\\' in value or '/' in value or ';' in value or "{" in value or "}" in value:
+            return ValueError('Usernames cannot contain commas, semicolons, slashes, and brackets')
         return value
     
+    @validates('password_hash')
+    def validate_password(self, key, value):
+        if not value:
+            raise ValueError('Password hash cannot be empty')
+        # if 1 > len(value) > 20:
+        #     raise ValueError('Password length must be between 1 and 20 characters')
+        # if ',' in value or '\\' in value or '/' in value or ';' in value or "{" in value or "}" in value:
+        #     return ValueError('Passwords cannot contain commas, seimcolons, slashes, and brackets')
+        return value
+
     @validates('email')
     def validate_email(self, key, value):
         if not value:
@@ -61,6 +75,23 @@ class User(db.Model, SerializerMixin):
             return ValueError('Emails cannot contain commas and slashes')
         return value
     
+    def verify_password(self, password):
+        password_bytes = password.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, self.password_hash)
+    
+    def generate_session_data(self):
+        userdata = {
+            'username': self.username,
+            'password': str(self.password_hash),
+            'email': self.email,
+            'email_is_verified': str(self.email_is_verified),
+            'id': self.id,
+            'datetime_created': str(self.datetime_created),
+            'datetime_session_start': str(datetime.now(timezone.utc))
+        }
+        # print(userdata)
+        return userdata
+    
 class Post(db.Model, SerializerMixin):
     __tablename__ = 'posts'
 
@@ -71,13 +102,13 @@ class Post(db.Model, SerializerMixin):
     answer_body = db.Column(db.String(10000))
     solution_body = db.Column(db.String(10000))
     references  = db.Column(db.String(10000))
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     datetime_last_edited = db.Column(db.DateTime)
     status = (db.Column(db.String(100))) # draft / published / hidden
 
     owner = db.relationship('User', backref="posts")
-
     tags = db.relationship('Tag', secondary='post_tags', back_populates="posts")
+
     serialize_rules = (
         '-owner.posts',
         '-owner.playlists',
@@ -111,8 +142,6 @@ class Post(db.Model, SerializerMixin):
         # status can have only two values
         if (value == 'draft') or (value == 'published') or (value == None):
             return value
-        # if value:
-        #     return value
         else: 
             raise ValueError('Status can only be draft or published')
     
@@ -125,7 +154,7 @@ class Comment(db.Model, SerializerMixin):
     body = db.Column(db.String(10000))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     parent_id = db.Column(db.Integer,  db.ForeignKey('comments.id'))
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     datetime_last_edited = db.Column(db.DateTime)
     status = (db.Column(db.String(100))) # draft / published / hidden
 
@@ -168,19 +197,28 @@ class Comment(db.Model, SerializerMixin):
             else:
                 return value
         elif value > 0:
-            return value
+            if self.parent_id == None:
+                return value
+            else:
+                raise ValueError('Comments cannot have both a post_id and a parent_id')
         else: 
-            raise ValueError('Invalid owner id')
+            raise ValueError('Invalid post id')
         
     @validates('parent_id')
-    # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
     def validate_parent_id(self, key, value):
+        # a comment must have either a post_id or a parent_id. A not-None parent_id makes the comment a child of another comment.
         if value == None:
-            return value
+            if self.post_id == None:
+                raise ValueError('post_id and parent_id cannot both be None')
+            else:
+                return value
         elif value > 0:
-            return value
+            if self.post_id == None:
+                return value
+            else:
+                raise ValueError('Comments cannot have both a post_id and a parent_id')
         else: 
-            raise ValueError('Invalid owner id')
+            raise ValueError('Invalid parent id')
         
     @validates('status')
     def validate_status(self, key,value):
@@ -195,7 +233,7 @@ class Tag(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(40), nullable=False)
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
 
     posts = db.relationship('Post', secondary='post_tags', back_populates='tags')
@@ -222,7 +260,7 @@ class Playlist(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer,  db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(150))
-    datetime_created = db.Column(db.DateTime, nullable=False)
+    datetime_created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     datetime_last_edited = db.Column(db.DateTime)
     status = (db.Column(db.String(100))) # draft / published / hidden
 
@@ -273,7 +311,7 @@ class Playlist(db.Model, SerializerMixin):
             raise ValueError('Status can only be draft or published')
         
 
-# post_tag table intermediates the many to many relationship between posts and tags 
+# post_tag table mediates the many to many relationship between posts and tags 
 post_tag = db.Table(
 'post_tags', 
 db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
@@ -281,7 +319,7 @@ db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
 )
     
 
-# playlist_post table intermediates the many to many relationship between playlists and posts    
+# playlist_post table mediates the many to many relationship between playlists and posts    
 playlist_post = db.Table(
 'playlist_posts', 
 db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),

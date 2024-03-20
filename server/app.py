@@ -1,15 +1,47 @@
-from flask import Flask, request, make_response, session
+from flask import Flask, jsonify, request, make_response, session
 # from flask_session import Session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
 from models import User, db, Post, Comment, Tag, Playlist
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import requests
+# from flask_jwt import jwt_required, current_identity, JWT
+# import requests
 from datetime import datetime
+import bcrypt
+import werkzeug
+from werkzeug import security
+# import jwt as pyjwt
+
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 
 app = Flask(__name__)
-# app.secret_key = 
+app.config['SECRET_KEY'] = 'secret-key'
+# app.config["JWT_HEADER_TYPE"] = "JWT"
+jwt = JWTManager(app)
+# app.config['JWT_AUTH_URL_RULE'] = '/signin'
+
+# def authenticate(username, password):
+#     print('Authenticating user ', username)
+#     user = User.query.filter_by(username=username).first()
+#     if not user:
+#         print('User not found')
+#         return None
+#     print('Checking password')
+#     if bcrypt.checkpw(password, user.password_hash):
+#         return user
+#     return None
+
+# def identity(payload):
+#     print('Payload is ')
+#     print(payload)
+#     user_id = payload['identity']
+#     user = User.query.filter_by(id=user_id).first()
+#     if user:
+#         return user
+#     return None
+
+# jwt = JWT(app, authenticate, identity)
 api = Api(app)
 cors = CORS(app, resources={r'/*': {"origins": "*"}})
 # configure the database connection to the local file app.db
@@ -17,7 +49,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
 # configure flag to disable modification tracking and use less memory
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# Session(app)
 
 # create a Migrate object to manage schema modifications
 migrate = Migrate(app, db)
@@ -25,18 +56,34 @@ migrate = Migrate(app, db)
 # initialize the Flask application to use the database
 db.init_app(app)
 
-class SignInResource(Resource):
+def generate_jwt(user):
+    return str(pyjwt.encode(user.generate_session_data(), 'secret-key', algorithm='HS256'))
 
+def decode_jwt(token):
+    return pyjwt.decode(token, 'secret-key', algorithms=['HS256'])
+
+class SignInResource(Resource):
     def post(self):
-        # TODO: This is not RESTful. replace this endpoint with one that gets a user by using the username as a route parameter.
         form_data = request.get_json()
-        print(form_data)
         user = User.query.filter_by(username = form_data['username']).first()
-        print(user)
         if user:
-            return user.to_dict(), 200
+            password = form_data['password']
+            if user.verify_password(password):
+                # print(generate_jwt(user))
+                return {
+                    'user': {
+                        'username': user.username,
+                        'id': user.id,
+                        # 'email': user.email,
+                        'email_is_verified': user.email_is_verified,
+                        'datetime_created': str(user.datetime_created),
+                        },
+                    'access_token': create_access_token(identity=user.username)
+                    }, 200
+            else:
+                return {'message': 'Username or password is incorrect'}, 401
         else:
-            return {}, 200
+            return {'message': 'Username or password is incorrect'}, 401
 
 
 class UsersResource(Resource):
@@ -44,13 +91,18 @@ class UsersResource(Resource):
     def post(self):
         # create a new user
         form_data = request.get_json()
-        new_user = User(username=form_data['username'], email=form_data['email'], datetime_created=datetime.now())
+        password = form_data['password']
+        password_bytes = password.encode('utf-8')
+        salt = bcrypt.gensalt()
+        password_hash = bcrypt.hashpw(password_bytes, salt)
+        new_user = User(username=form_data['username'], password_hash=password_hash, email=form_data['email'], email_is_verified=False)
         db.session.add(new_user)
         db.session.commit()
         return new_user.to_dict(), 201
     
 class UserResource(Resource):
     # return full details of the specified user 
+    # @jwt_required()
     def get(self, id):
         user = User.query.filter_by(id = id).first()
         return user.to_dict(), 200
@@ -62,9 +114,15 @@ class PostsResource(Resource):
         posts = [p.to_dict() for p in Post.query.all()]
         return posts, 200  
     
+    @jwt_required()
     def post(self):
+        
         # create a new post
         form_data = request.get_json()
+        # username = get_jwt_identity()
+        # print('POST method on /posts was requested by: ' + username)
+
+
         if form_data['owner_id'] < 1:
             return {'errors': 'Invalid user id'}, 500
         # make a list of the Tag objects
@@ -77,14 +135,13 @@ class PostsResource(Resource):
                 # db.session.add(existing_tag)
             else:
                 # if no Tag object already exists, create it
-                new_tag = Tag(text = t['text'], datetime_created = datetime.now())
+                new_tag = Tag(text = t['text'], )
                 tags.append(new_tag)
                 db.session.add(new_tag)
                 # commit one at a time to avoid duplicates
                 db.session.commit()
         try:
-            newPost = Post(datetime_created = datetime.now(),
-                           tags = tags,
+            newPost = Post(tags = tags,
                            owner_id = form_data['owner_id'],
                            title = form_data['title'],
                            problem_body = form_data['problem_body'],
@@ -108,6 +165,7 @@ class PostResource(Resource):
         else:
             return {}, 404
     
+    # @jwt_required()
     def patch(self, id):
         # post = Post.query.filter_by(id = id).first()
         post = Post.query.get_or_404(id)
@@ -123,7 +181,7 @@ class PostResource(Resource):
                 db.session.add(existing_tag)
             else:
                 # if no Tag object already exists, create it
-                new_tag = Tag(text = t['text'], datetime_created = datetime.now())
+                new_tag = Tag(text = t['text'])
                 tags.append(new_tag)
                 db.session.add(new_tag)
             # commit one at a time to avoid duplicates
@@ -152,6 +210,7 @@ class PostResource(Resource):
         #     return {}, 404
         # print(form_data)
 
+    # @jwt_required()
     def delete(self, id):
         post = Post.query.filter_by(id = id).first()
         if post:
@@ -162,6 +221,7 @@ class PostResource(Resource):
             return {}, 404
 
 class CommentsResource(Resource):
+    # @jwt_required()
     def post(self):
         # create a new comment
         form_data = request.get_json()
@@ -172,14 +232,12 @@ class CommentsResource(Resource):
             if form_data['parent_id']:
                 # a comment must have either a parent_id or a post_id, not both
                 # a not-None parent_id makes the comment a child of another comment
-                newComment = Comment(datetime_created = datetime.now(),
-                           owner_id = form_data['owner_id'],
+                newComment = Comment(                           owner_id = form_data['owner_id'],
                            body = form_data['body'],
                            parent_id = form_data['parent_id'],
                            )
             else:
-                newComment = Comment(datetime_created = datetime.now(),
-                           owner_id = form_data['owner_id'],
+                newComment = Comment(                           owner_id = form_data['owner_id'],
                            body = form_data['body'],
                            post_id = form_data['post_id'],
                            )
@@ -192,7 +250,7 @@ class CommentsResource(Resource):
     
 
 class CommentResource(Resource): 
-    
+    # @jwt_required()
     def patch(self, id):
         # update the body of a comment
         form_data = request.get_json()
@@ -205,7 +263,7 @@ class CommentResource(Resource):
         else:
             return {}, 404
 
-    
+    # @jwt_required()
     def delete(self, id):
         # delete a comment
         comment = Comment.query.filter_by(id = id).first()
@@ -220,11 +278,12 @@ class PlaylistsResource(Resource):
         playlists = [p.to_dict() for p in Playlist.query.all()]
         return playlists, 200
     
+    # @jwt_required()
     def post(self):
         # Create a new playlist
         form_data = request.get_json()
         first_post = Post.query.filter_by(id = form_data['post_id']).first()
-        new_playlist = Playlist(owner_id = form_data['owner_id'], title = form_data['title'], posts = [first_post], datetime_created = datetime.now())
+        new_playlist = Playlist(owner_id = form_data['owner_id'], title = form_data['title'], posts = [first_post])
         db.session.add(new_playlist)
         db.session.commit()
         return new_playlist.to_dict(), 201
@@ -238,6 +297,7 @@ class PlaylistResource(Resource):
         else:
             return {}, 404
     
+    # @jwt_required()
     def patch(self, id):
         # Add or remove a post to a playlist
         form_data = request.get_json()
@@ -269,6 +329,7 @@ class PlaylistResource(Resource):
             else:
                 return {}, 404      
     
+    # @jwt_required()
     def delete(self, id):
         # delete a playlist
         playlist = Playlist.query.filter_by(id = id).first()
@@ -284,7 +345,8 @@ class TagsResource(Resource):
         tags = [t.to_dict() for t in Tag.query.all()]
         return tags, 200
     
-    # Tags are created when creating or editing posts
+    # DO NOT make an endpoint for creating new tags
+    # New tags are created when a post is created or edited
 
     
 
@@ -296,7 +358,7 @@ api.add_resource(CommentsResource, '/comments') # Post
 api.add_resource(CommentResource, '/comments/<int:id>') # Patch, Delete
 api.add_resource(PlaylistsResource, '/playlists') # Get, Post
 api.add_resource(PlaylistResource, '/playlists/<int:id>') # Get, Patch, Delete
-api.add_resource(TagsResource, '/tags') # Get
+# api.add_resource(TagsResource, '/tags') # Get
 api.add_resource(SignInResource, '/signin') # Post
 
 

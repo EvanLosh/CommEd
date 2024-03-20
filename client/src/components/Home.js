@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import PostCardList from "./PostCardList";
 import PlaylistCardList from "./PlaylistCardList";
+import { InlineTex } from 'react-tex'
 
 function Home({ commonProps }) {
 
@@ -53,10 +54,29 @@ function Home({ commonProps }) {
         <a href='/playlists' className='no-text-decoration'><p className="commed-style button">{'> View more playlists'}</p></a>
     </div>
 
+    const texDemonstration = <div id='tex-demonstration'>
+        <p id='tex-demonstration-raw-tex' className='code'>{"$$ \\int_a^b f(x) \\mathrm{d} x  $$"}</p>
+        <div className='white-space'></div>
+        <div className='arrow tex'><InlineTex texContent={" $$ \\longrightarrow $$"} /></div>
+        <div className='white-space'></div>
+        <div id='tex-demonstration-rendered-tex' className='tex'><InlineTex texContent={"$$ \\int_a^b f(x) \\mathrm{d} x  $$"} /></div>
+    </div>
 
+    const introElement = <div id='home-intro'>
+        <div >
+
+            <h1 className='home-intro-welcome-message'>Welcome to CommEd,</h1> 
+            <br></br>
+            <p className='home-intro-welcome-message'>a forum for community-powered education. CommEd makes it easy to type up your math homework using TeX code for typesetting. </p>
+            <p>Example:</p>
+        </div>
+        {texDemonstration}
+        <p> You can write beautiful, professional quality solutions to math problems, and share them with the world!</p>
+    </div>
 
     return (
         <div id="home">
+            {introElement}
             {postsElement}
 
             {playlistsElement}

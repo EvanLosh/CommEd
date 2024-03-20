@@ -61,6 +61,7 @@ function PlaylistFetcher({ commonProps }) {
                 {
                     method: 'PATCH',
                     headers: {
+                        'Authorization': `Bearer ${commonProps.authJWT}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ action: 'add', post_id: post_id })

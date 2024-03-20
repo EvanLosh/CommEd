@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forceUpdate } from "react";
+import React, { useEffect, useState, } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import About from './About'
@@ -12,11 +12,11 @@ import CreateAndEditPost from "./CreateAndEditPost";
 import ErrorBoundary from "./ErrorBoundary";
 import Posts from "./Posts";
 import Playlists from "./Playlists";
-import Profile from './Profile'
+// import Profile from './Profile'
 
 
 
-const serverURL = "http://127.0.0.1:5000";
+const serverURL = "http://127.0.0.1:5000"
 const websiteURL = "http://127.0.0.1:3000"
 const blankUser = {
   id: -1,
@@ -74,6 +74,22 @@ function renderTags(listOfTags = [], removable = false, handleClick = null) {
 
 function App() {
 
+  function getAccessToken() {
+    const authJWTString = sessionStorage.getItem('access_token')
+    if (authJWTString) {
+      return authJWTString
+    }
+    else {
+      return null
+    }
+  }
+
+  function setAccessToken(x) {
+    // console.log('setting access token to ', JSON.stringify(x))
+    // sessionStorage.setItem('access_token', JSON.stringify(x))
+    sessionStorage.setItem('access_token', x)
+  }
+
   function getSessionUser() {
     const sessionUserString = sessionStorage.getItem('sessionUser');
     if (sessionUserString) {
@@ -89,7 +105,14 @@ function App() {
 
 
   function setSessionUser(user) {
-    sessionStorage.setItem('sessionUser', JSON.stringify(user))
+    const sessionUser = {
+      username: user.username,
+      email: user.email,
+      email_is_verified: user.email_is_verified,
+      datetime_created: user.datetime_created,
+      id: user.id
+    }
+    sessionStorage.setItem('sessionUser', JSON.stringify(sessionUser))
   }
 
   function login(user) {
@@ -102,11 +125,15 @@ function App() {
     })
       .then(r => r.json())
       .then(data => {
-
-        if ('id' in data) {
-          setSessionUser(data)
-          setUser(data)
+        console.log(data)
+        // Handle successful response
+        if ('access_token' in data) {
+          // save user in sessionStorage, save access token in sessionStorage, and set user state
+          setSessionUser(data.user)
+          setAccessToken(data.access_token)
+          setUser(data.user)
         }
+
         else {
           console.log('login failed')
         }
@@ -171,6 +198,9 @@ function App() {
       fetch(url,
         {
           method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${commonProps.authJWT}`,
+          }
         })
         .then(() => {
           if (route === 'posts') {
@@ -205,6 +235,7 @@ function App() {
     blankPost: blankPost,
     blankPlaylist: blankPlaylist,
     user: user,
+    getAccessToken: getAccessToken,
     renderDatetimeAndAuthor: renderDatetimeAndAuthor,
     renderTags: renderTags,
     renderDelete: renderDelete

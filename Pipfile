@@ -15,6 +15,10 @@ flask-restful = "0.3.9"
 marshmallow = "3.18.0"
 faker = "*"
 requests = "*"
+bcrypt = "*"
+pyjwt = "*"
+flask_jwt = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 
